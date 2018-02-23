@@ -19,9 +19,10 @@ This script is not intended to be shared with third parties.
 Every receiving party agrees to use it solely for own purposes
 and purposes that are intended by the original author (Caplena GmbH).
 
-Copyright 2018 Caplena Gmbh, Zurich.
+Copyright 2018 Caplena GmbH, Zurich.
 """
 
+import time
 import json
 import requests
 
@@ -316,6 +317,82 @@ class CoditAPI(object):
         else:
             return r.json()
 
+    def listAnswers(self, survey_id):
+        """
+        API method to list all answers of a specific survey.
+
+        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand
+
+        Parameters
+        ----------
+        survey_id : int
+            ID of the survey of which to return the answers
+
+        Returns
+        -------
+        answers : list(:class:`.Answer`)
+            A list of all answers belonging to the survey if the call was successful, `False` otherwise
+
+        """
+        r = self._makeRequest('get', '/surveys/{}/answers'.format(survey_id))
+
+        if (r.status_code != 200):
+            return self._handleBadResponse(r)
+        else:
+            return r.json()
+
+    def requestPredictions(self, survey_id):
+        """
+        API method to request model training for specific survey.
+
+        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand
+
+        Parameters
+        ----------
+        survey_id : int
+            ID of the survey of which to return the answers
+
+        Returns
+        -------
+        success : boolean
+            True if request successful, False otherwise
+
+        """
+        r = self._makeRequest('post', '/surveys/{}/request-training'.format(survey_id))
+
+        if (r.status_code != 200):
+            return self._handleBadResponse(r)
+        else:
+            return r.json()
+
+    def getPredictions(self, survey_id):
+        """
+        API method to get the prediction results for a previously requested training.
+
+        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand
+
+        Parameters
+        ----------
+        survey_id : int
+            ID of the survey of which to return the predictions
+
+        Returns
+        -------
+        result : dict
+            None if no predictions are available (response code 204)
+            Otherwise contains keys `answers` (with itself has keys `id` and `codes`) which are the predictions, n_trainings (counter), training_completed (iso timestamp), model (meta information on model performance)
+
+        """
+        r = self._makeRequest('get', '/surveys/{}/codes-predicted'.format(survey_id))
+
+        if (r.status_code == 204):
+            # No content is available, i.e. no predictions are ready for this answer
+            return None
+        elif (r.status_code == 200):
+            return r.json()
+        else:
+            return self._handleBadResponse(r)
+
 
 class Answer(dict):
     """
@@ -324,7 +401,7 @@ class Answer(dict):
     Attributes
     ----------
     text : str, required
-        Human readable string describing the exception.
+        Text of the answer.
     auxiliary_columns: list(str), optional
         Only required if survey has `len(auxiliary_column_names)>0`
     reviewed : bool, optional
@@ -410,3 +487,37 @@ if __name__ == '__main__':
     new_answers = api.addAnswersToSurvey(new_survey['id'], answers)
     if new_answers is not False:
         print("Added {} new answers to survey {}".format(len(new_answers), new_survey['id']))
+
+    ###########################################################
+    # LIST ANSWERS: Get all answers of a specific survey
+    ###########################################################
+    answers = api.listAnswers(new_survey['id'])
+
+    print("The first answer ('{}') has been assigned the codes: {}".format(answers[0]['text'],
+                                                                           answers[0]['codes']))
+
+    ###########################################################
+    # REQUEST PREDICTIONS: Instruct backend to make code predictions for survey
+    ###########################################################
+
+    if api.requestPredictions(new_survey['id']):
+        print("Training request made, results will soon be available")
+    else:
+        print("An error occurred when requesting training")
+
+    ###########################################################
+    # GET PREDICTIONS: Return the predictions made by the model
+    ###########################################################
+
+    # In a practical setting, there needs to be some time in between requesting the predictions
+    # and getting them back. In most cases, they will be ready within ~20s, but to be sure a value
+    # of around 250s is recommended
+    # time.sleep(250)
+
+    predictions = api.getPredictions(new_survey['id'])
+
+    if predictions is None:
+        print("No predictions are ready for this survey")
+    elif 'answers' in predictions and len(predictions['answers']) > 0:
+        print("For answer {} the codes {} were predicted".format(predictions['answers'][0]['id'],
+                                                                 predictions['answers'][0]['codes']))
