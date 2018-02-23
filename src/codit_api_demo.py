@@ -22,8 +22,6 @@ and purposes that are intended by the original author (Caplena GmbH).
 Copyright 2018 Caplena GmbH, Zurich.
 """
 
-import time
-import json
 import requests
 
 
@@ -203,7 +201,8 @@ class CoditAPI(object):
         List all surveys of the user.
 
         *Note:* The returned surveys only contain global meta information to the surveys and not the response texts.
-        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
 
         Parameters
         ----------
@@ -232,7 +231,8 @@ class CoditAPI(object):
         """
         API method to create a new survey.
 
-        *Note:* For this method to work, a successfull call to `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
 
         Parameters
         ----------
@@ -293,7 +293,8 @@ class CoditAPI(object):
         """
         API method to add answers to a previously created survey.
 
-        *Note:* For this method to work, a successfull call to `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
 
         Parameters
         ----------
@@ -321,7 +322,8 @@ class CoditAPI(object):
         """
         API method to list all answers of a specific survey.
 
-        *Note:* For this method to work, a successfull call to `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
 
         Parameters
         ----------
@@ -343,14 +345,16 @@ class CoditAPI(object):
 
     def requestPredictions(self, survey_id):
         """
-        API method to request model training for specific survey.
+        API method to request the AI-assistant to train itself based on coded answers of specified survey. Only works
+        if at least 6 answers have been coded.
 
-        *Note:* For this method to work, a successfull call to `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
 
         Parameters
         ----------
         survey_id : int
-            ID of the survey of which to return the answers
+            ID of the survey of which to request AI to make predictions
 
         Returns
         -------
@@ -367,14 +371,16 @@ class CoditAPI(object):
 
     def getPredictions(self, survey_id):
         """
-        API method to get the prediction results for a previously requested training.
+        API method to get AI-coded codes and respective answers. Requires previous call to
+        :func:`~codit_api_demo.CoditAPI.requestPredictions`.
 
-        *Note:* For this method to work, a successfull call to `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
 
         Parameters
         ----------
         survey_id : int
-            ID of the survey of which to return the predictions
+            ID of the survey of which to return the code predictions made by AI
 
         Returns
         -------

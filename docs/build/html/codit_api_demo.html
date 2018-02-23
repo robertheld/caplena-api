@@ -165,7 +165,8 @@ Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
 <dd><p>API method to list all surveys that belong to this user.</p>
 <p>List all surveys of the user.</p>
 <p><em>Note:</em> The returned surveys only contain global meta information to the surveys and not the response texts.
-<em>Note:</em> For this method to work, a successfull call go <cite>login(...)</cite> is required beforehand</p>
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -182,7 +183,8 @@ Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
 <dt id="codit_api_demo.CoditAPI.createSurvey">
 <code class="descname">createSurvey</code><span class="sig-paren">(</span><em>name</em>, <em>codebook</em>, <em>language</em>, <em>auxiliary_column_names=[]</em>, <em>description=''</em>, <em>inherits_from=None</em>, <em>translate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.createSurvey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.createSurvey" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to create a new survey.</p>
-<p><em>Note:</em> For this method to work, a successfull call go <cite>login(...)</cite> is required beforehand</p>
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -221,7 +223,8 @@ using the Google API.</li>
 <dt id="codit_api_demo.CoditAPI.addAnswersToSurvey">
 <code class="descname">addAnswersToSurvey</code><span class="sig-paren">(</span><em>survey_id</em>, <em>answers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.addAnswersToSurvey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.addAnswersToSurvey" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to add answers to a previously created survey.</p>
-<p><em>Note:</em> For this method to work, a successfull call go <cite>login(...)</cite> is required beforehand</p>
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -248,7 +251,8 @@ using the Google API.</li>
 <dt id="codit_api_demo.CoditAPI.listAnswers">
 <code class="descname">listAnswers</code><span class="sig-paren">(</span><em>survey_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listAnswers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listAnswers" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to list all answers of a specific survey.</p>
-<p><em>Note:</em> For this method to work, a successfull call go <cite>login(...)</cite> is required beforehand</p>
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -266,13 +270,15 @@ using the Google API.</li>
 <dl class="method">
 <dt id="codit_api_demo.CoditAPI.requestPredictions">
 <code class="descname">requestPredictions</code><span class="sig-paren">(</span><em>survey_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.requestPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.requestPredictions" title="Permalink to this definition">¶</a></dt>
-<dd><p>API method to request model training for specific survey.</p>
-<p><em>Note:</em> For this method to work, a successfull call go <cite>login(...)</cite> is required beforehand</p>
+<dd><p>API method to request the AI-assistant to train itself based on coded answers of specified survey. Only works
+if at least 6 answers have been coded.</p>
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) &#8211; ID of the survey of which to return the answers</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) &#8211; ID of the survey of which to request AI to make predictions</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211; True if request successful, False otherwise</td>
 </tr>
@@ -285,13 +291,15 @@ using the Google API.</li>
 <dl class="method">
 <dt id="codit_api_demo.CoditAPI.getPredictions">
 <code class="descname">getPredictions</code><span class="sig-paren">(</span><em>survey_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.getPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.getPredictions" title="Permalink to this definition">¶</a></dt>
-<dd><p>API method to get the prediction results for a previously requested training.</p>
-<p><em>Note:</em> For this method to work, a successfull call go <cite>login(...)</cite> is required beforehand</p>
+<dd><p>API method to get AI-coded codes and respective answers. Requires previous call to
+<a class="reference internal" href="#codit_api_demo.CoditAPI.requestPredictions" title="codit_api_demo.CoditAPI.requestPredictions"><code class="xref py py-func docutils literal"><span class="pre">requestPredictions()</span></code></a>.</p>
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) &#8211; ID of the survey of which to return the predictions</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) &#8211; ID of the survey of which to return the code predictions made by AI</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>result</strong> &#8211; None if no predictions are available (response code 204)
 Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cite> and <cite>codes</cite>) which are the predictions, n_trainings (counter), training_completed (iso timestamp), model (meta information on model performance)</td>

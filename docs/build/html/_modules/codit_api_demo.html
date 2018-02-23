@@ -91,8 +91,6 @@
 <span class="sd">Copyright 2018 Caplena GmbH, Zurich.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 
 
@@ -272,7 +270,8 @@
 <span class="sd">        List all surveys of the user.</span>
 
 <span class="sd">        *Note:* The returned surveys only contain global meta information to the surveys and not the response texts.</span>
-<span class="sd">        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -301,7 +300,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to create a new survey.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -362,7 +362,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to add answers to a previously created survey.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -390,7 +391,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to list all answers of a specific survey.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -412,14 +414,16 @@
 
 <div class="viewcode-block" id="CoditAPI.requestPredictions"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.requestPredictions">[docs]</a>    <span class="k">def</span> <span class="nf">requestPredictions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">survey_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        API method to request model training for specific survey.</span>
+<span class="sd">        API method to request the AI-assistant to train itself based on coded answers of specified survey. Only works</span>
+<span class="sd">        if at least 6 answers have been coded.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        survey_id : int</span>
-<span class="sd">            ID of the survey of which to return the answers</span>
+<span class="sd">            ID of the survey of which to request AI to make predictions</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -436,14 +440,16 @@
 
 <div class="viewcode-block" id="CoditAPI.getPredictions"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.getPredictions">[docs]</a>    <span class="k">def</span> <span class="nf">getPredictions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">survey_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        API method to get the prediction results for a previously requested training.</span>
+<span class="sd">        API method to get AI-coded codes and respective answers. Requires previous call to</span>
+<span class="sd">        :func:`~codit_api_demo.CoditAPI.requestPredictions`.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        survey_id : int</span>
-<span class="sd">            ID of the survey of which to return the predictions</span>
+<span class="sd">            ID of the survey of which to return the code predictions made by AI</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
