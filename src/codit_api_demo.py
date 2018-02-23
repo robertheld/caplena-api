@@ -232,7 +232,7 @@ class CoditAPI(object):
         """
         API method to create a new survey.
 
-        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to `login(...)` is required beforehand
 
         Parameters
         ----------
@@ -293,7 +293,7 @@ class CoditAPI(object):
         """
         API method to add answers to a previously created survey.
 
-        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to `login(...)` is required beforehand
 
         Parameters
         ----------
@@ -321,7 +321,7 @@ class CoditAPI(object):
         """
         API method to list all answers of a specific survey.
 
-        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to `login(...)` is required beforehand
 
         Parameters
         ----------
@@ -345,7 +345,7 @@ class CoditAPI(object):
         """
         API method to request model training for specific survey.
 
-        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to `login(...)` is required beforehand
 
         Parameters
         ----------
@@ -369,7 +369,7 @@ class CoditAPI(object):
         """
         API method to get the prediction results for a previously requested training.
 
-        *Note:* For this method to work, a successfull call go `login(...)` is required beforehand
+        *Note:* For this method to work, a successfull call to `login(...)` is required beforehand
 
         Parameters
         ----------
