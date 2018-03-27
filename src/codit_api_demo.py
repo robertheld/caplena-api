@@ -224,7 +224,7 @@ class CoditAPI(object):
         """
         API method to list all surveys of which inheritance is possible.
 
-        List all surveys of the user.
+        List contains all surveys belonging to user, as well as codit.co provided models.
 
         *Note:* The returned surveys only contain basic meta information and not the response texts. To get more detailed information about a certain survey call the `listSurveys` method.
         *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
