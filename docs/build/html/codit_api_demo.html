@@ -2,37 +2,35 @@
 
 <!doctype html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>codit_api_demo module &#8212; Codit API Demo</title>
-    
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/bizstyle.js"></script>
-    <link rel="top" title="Codit API Demo" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Welcome to src’s documentation!" href="index.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -52,11 +50,11 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to src&#8217;s documentation!</a></p>
+                        title="previous chapter">Welcome to src’s documentation!</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/codit_api_demo.txt"
+      <li><a href="_sources/codit_api_demo.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -83,25 +81,21 @@
 <p>Demo script illustrating how to do basic operations on the Codit API</p>
 <p class="rubric">Example</p>
 <p>Steps to run:</p>
-<ol class="arabic">
+<ol class="arabic simple">
 <li><dl class="first docutils">
 <dt>Make sure you have a compatible (version &gt;= 2.7) python environment</dt>
-<dd><p class="first last">$ python &#8211;version</p>
-</dd>
+<dd>$ python –version</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>Make sure you have installed the requests library (if not, install using <cite>pip install requests</cite>)</dt>
-<dd><p class="first last">$ pip install requests</p>
-</dd>
+<dd>$ pip install requests</dd>
 </dl>
 </li>
-<li><p class="first">Adapt the <cite>CODIT_EMAIL</cite> and <cite>CODIT_PASSWORD</cite> variables at the bottom of this script</p>
-</li>
+<li>Adapt the <cite>CODIT_EMAIL</cite> and <cite>CODIT_PASSWORD</cite> variables at the bottom of this script</li>
 <li><dl class="first docutils">
 <dt>Call the script</dt>
-<dd><p class="first last">$ python codit_api_demo.py</p>
-</dd>
+<dd>$ python codit_api_demo.py</dd>
 </dl>
 </li>
 </ol>
@@ -141,15 +135,15 @@ We also use this function to retrieve the CSRF-Token from the cookies.
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>email</strong> (<em>str</em>) &#8211; Email of the user to be logged in</li>
-<li><strong>password</strong> (<em>str</em>) &#8211; Password of the user to be logged in</li>
-<li><strong>data</strong> (<em>dict</em>) &#8211; Data to be sent to API as json. Dictionary of key/value pairs (not-serialized!)
+<li><strong>email</strong> (<em>str</em>) – Email of the user to be logged in</li>
+<li><strong>password</strong> (<em>str</em>) – Password of the user to be logged in</li>
+<li><strong>data</strong> (<em>dict</em>) – Data to be sent to API as json. Dictionary of key/value pairs (not-serialized!)
 Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
 <cite>str|float|int|long|list|dictionary|bool|None</cite></li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> &#8211; True if login was successful, <cite>False</cite> otherwise</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> – True if login was successful, <cite>False</cite> otherwise</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
@@ -164,14 +158,34 @@ Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
 <code class="descname">listSurveys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listSurveys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listSurveys" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to list all surveys that belong to this user.</p>
 <p>List all surveys of the user.</p>
-<p><em>Note:</em> The returned surveys only contain global meta information to the surveys and not the response texts.
+<p><em>Note:</em> The returned surveys only contain global meta information of the surveys and not the response texts.
 <em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>surveys</strong> &#8211; A list of all surveys belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>surveys</strong> – A list of all surveys belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of survey objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.listInheritableSurveys">
+<code class="descname">listInheritableSurveys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listInheritableSurveys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listInheritableSurveys" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to list all surveys of which inheritance is possible.</p>
+<p>List all surveys of the user.</p>
+<p><em>Note:</em> The returned surveys only contain basic meta information and not the response texts. To get more detailed information about a certain survey call the <cite>listSurveys</cite> method.
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>surveys</strong> – A list of all surveys that can be used for inheritance. This is the concatenation of all surveys owned by the user and global codit.co models.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of survey objects</td>
 </tr>
@@ -190,25 +204,25 @@ required beforehand</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str, required</em>) &#8211; Name of the new survey</li>
-<li><strong>codebook</strong> (<em>list, required</em>) &#8211; List of codes (dictionaries), each containing the keys <cite>id</cite>, <cite>label</cite> and <cite>category</cite>
+<li><strong>name</strong> (<em>str</em><em>, </em><em>required</em>) – Name of the new survey</li>
+<li><strong>codebook</strong> (<em>list</em><em>, </em><em>required</em>) – List of codes (dictionaries), each containing the keys <cite>id</cite>, <cite>label</cite> and <cite>category</cite>
 Can also be an empty list.</li>
-<li><strong>language</strong> (<em>str, required</em>) &#8211; Language of the survey, valid choices are {en|de}
+<li><strong>language</strong> (<em>str</em><em>, </em><em>required</em>) – Language of the survey, valid choices are {en|de}
 Has nothing to do with the language the API is set to (the attribute <cite>language</cite>.)</li>
-<li><strong>auxiliary_column_names</strong> (<em>list, optional</em>) &#8211; List of strings, naming additional columns that will be sent with each answer.
+<li><strong>auxiliary_column_names</strong> (<em>list</em><em>, </em><em>optional</em>) – List of strings, naming additional columns that will be sent with each answer.
 Can also be an empty list.
 The number of elements in this list must match the number of elements
 in the <cite>auxiliary_columns</cite> field when adding answers later on.</li>
-<li><strong>description</strong> (<em>str, optional</em>) &#8211; String describing this survey</li>
-<li><strong>inherits_from</strong> (<em>int, optional</em>) &#8211; ID of another survey of this user, that the model should be based on.
+<li><strong>description</strong> (<em>str</em><em>, </em><em>optional</em>) – String describing this survey</li>
+<li><strong>inherits_from</strong> (<em>int</em><em>, </em><em>optional</em>) – ID of another survey of this user, that the model should be based on.
 The codebook of that survey should be <em>identical</em> or <em>almost</em> identical
 in order for the AI to deliver good results.</li>
-<li><strong>translate</strong> (<em>bool, optional</em>) &#8211; Flat indicating whether to translate this survey (where other language than <cite>language</cite> detected)
+<li><strong>translate</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flat indicating whether to translate this survey (where other language than <cite>language</cite> detected)
 using the Google API.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>survey</strong> &#8211; A dictionary containing all attributes of the newly created survey if the call was successful
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>survey</strong> – A dictionary containing all attributes of the newly created survey if the call was successful
 <cite>False</cite> otherwise</p>
 </td>
 </tr>
@@ -230,12 +244,12 @@ required beforehand</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>survey_id</strong> (<em>int</em>) &#8211; ID of the survey to add the answers to</li>
-<li><strong>answers</strong> (list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)) &#8211; List of objects of type Answer</li>
+<li><strong>survey_id</strong> (<em>int</em>) – ID of the survey to add the answers to</li>
+<li><strong>answers</strong> (list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)) – List of objects of type Answer</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> &#8211; A list of dictionaries containing attributes of the newly created answers if the call was successful
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> – A list of dictionaries containing attributes of the newly created answers if the call was successful
 <cite>False</cite> otherwise
 <em>Note:</em> When bulk creating multiple answers, no id is return for these elements</p>
 </td>
@@ -257,9 +271,9 @@ required beforehand</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) &#8211; ID of the survey of which to return the answers</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to return the answers</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> &#8211; A list of all answers belonging to the survey if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> – A list of all answers belonging to the survey if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)</td>
 </tr>
@@ -278,9 +292,9 @@ required beforehand</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) &#8211; ID of the survey of which to request AI to make predictions</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to request AI to make predictions</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211; True if request successful, False otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> – True if request successful, False otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
 </tr>
@@ -299,9 +313,9 @@ required beforehand</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) &#8211; ID of the survey of which to return the code predictions made by AI</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to return the code predictions made by AI</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>result</strong> &#8211; None if no predictions are available (response code 204)
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>result</strong> – None if no predictions are available (response code 204)
 Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cite> and <cite>codes</cite>) which are the predictions, n_trainings (counter), training_completed (iso timestamp), model (meta information on model performance)</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
@@ -320,27 +334,34 @@ Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cit
 <dl class="attribute">
 <dt id="codit_api_demo.Answer.text">
 <code class="descname">text</code><a class="headerlink" href="#codit_api_demo.Answer.text" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, required</em> &#8211; Text of the answer.</p>
+<dd><p><em>str, required</em> – Text of the answer.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Answer.auxiliary_columns">
 <code class="descname">auxiliary_columns</code><a class="headerlink" href="#codit_api_demo.Answer.auxiliary_columns" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list(str), optional</em> &#8211; Only required if survey has <cite>len(auxiliary_column_names)&gt;0</cite></p>
+<dd><p><em>list(str), optional</em> – Only required if survey has <cite>len(auxiliary_column_names)&gt;0</cite></p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Answer.reviewed">
 <code class="descname">reviewed</code><a class="headerlink" href="#codit_api_demo.Answer.reviewed" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool, optional</em> &#8211; Answers having the &#8220;reviewed&#8221; are assumed to have all codes correct
+<dd><p><em>bool, optional</em> – Answers having the “reviewed” are assumed to have all codes correct
 and will be used to train the AI.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Answer.codes">
 <code class="descname">codes</code><a class="headerlink" href="#codit_api_demo.Answer.codes" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list, optional</em> &#8211; List of integers (code IDs). Assigning codes to an answer.
+<dd><p><em>list, optional</em> – List of integers (code IDs). Assigning codes to an answer.
 Will be used to train the AI.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="codit_api_demo.Answer.source_language">
+<code class="descname">source_language</code><a class="headerlink" href="#codit_api_demo.Answer.source_language" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str, optional</em> – ISO Code (2 characters, e.g. ‘de’ or ‘en’) specifying in which language the text is written.
+Relevant for translation, taking precedance over automatic language detection</p>
 </dd></dl>
 
 </dd></dl>
@@ -370,7 +391,7 @@ Will be used to train the AI.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
   </body>
 </html>

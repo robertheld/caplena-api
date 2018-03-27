@@ -1,0 +1,362 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>codit_api_demo module &#8212; Codit API Demo</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to src’s documentation!" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to src’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Codit API Demo</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to src’s documentation!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/codit_api_demo.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-codit_api_demo">
+<span id="codit-api-demo-module"></span><h1>codit_api_demo module<a class="headerlink" href="#module-codit_api_demo" title="Permalink to this headline">¶</a></h1>
+<p>Demo script illustrating how to do basic operations on the Codit API</p>
+<p class="rubric">Example</p>
+<p>Steps to run:</p>
+<ol class="arabic simple">
+<li><dl class="first docutils">
+<dt>Make sure you have a compatible (version &gt;= 2.7) python environment</dt>
+<dd>$ python –version</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Make sure you have installed the requests library (if not, install using <cite>pip install requests</cite>)</dt>
+<dd>$ pip install requests</dd>
+</dl>
+</li>
+<li>Adapt the <cite>CODIT_EMAIL</cite> and <cite>CODIT_PASSWORD</cite> variables at the bottom of this script</li>
+<li><dl class="first docutils">
+<dt>Call the script</dt>
+<dd>$ python codit_api_demo.py</dd>
+</dl>
+</li>
+</ol>
+<p class="rubric">Notes</p>
+<p>This script is not intended to be shared with third parties.
+Every receiving party agrees to use it solely for own purposes
+and purposes that are intended by the original author (Caplena GmbH).</p>
+<p>Copyright 2018 Caplena GmbH, Zurich.</p>
+<dl class="class">
+<dt id="codit_api_demo.CoditAPI">
+<em class="property">class </em><code class="descclassname">codit_api_demo.</code><code class="descname">CoditAPI</code><span class="sig-paren">(</span><em>language</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Class enabling interaction with (parts of) the Codit.co API</p>
+<p class="rubric">Example</p>
+<dl class="docutils">
+<dt>To call an API instantiate a CoditAPI object and then call its methods</dt>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span> <span class="o">=</span> <span class="n">CoditAPI</span><span class="p">(</span><span class="s1">&#39;de&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s1">&#39;my_username&#39;</span><span class="p">,</span> <span class="s1">&#39;my_password&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">listSurveys</span><span class="p">()</span>
+<span class="go">[{&quot;name&quot;: &quot;survey 1&quot;, &quot;codebook&quot;: [{...}]}, {&quot;name&quot;: &quot;Survey 2&quot;, ...}, ...]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.login">
+<code class="descname">login</code><span class="sig-paren">(</span><em>email</em>, <em>password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to authenticate user.</p>
+<p>Validates email &amp; password credentials with server.
+If the login is successful, all subsequent API calls will be made as this user.
+The email &amp; password are not saved, for authentication the session cookie is relevant.
+We also use this function to retrieve the CSRF-Token from the cookies.
+(see <cite>_getHeaders()</cite> for more information on the CSRF-Token)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>email</strong> (<em>str</em>) – Email of the user to be logged in</li>
+<li><strong>password</strong> (<em>str</em>) – Password of the user to be logged in</li>
+<li><strong>data</strong> (<em>dict</em>) – Data to be sent to API as json. Dictionary of key/value pairs (not-serialized!)
+Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
+<cite>str|float|int|long|list|dictionary|bool|None</cite></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> – True if login was successful, <cite>False</cite> otherwise</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.listSurveys">
+<code class="descname">listSurveys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listSurveys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listSurveys" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to list all surveys that belong to this user.</p>
+<p>List all surveys of the user.</p>
+<p><em>Note:</em> The returned surveys only contain global meta information to the surveys and not the response texts.
+<em>Note:</em> For this method to work, a successfull call go <cite>login(…)</cite> is required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>surveys</strong> – A list of all surveys belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of survey objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.createSurvey">
+<code class="descname">createSurvey</code><span class="sig-paren">(</span><em>name</em>, <em>codebook</em>, <em>language</em>, <em>auxiliary_column_names=[]</em>, <em>description=''</em>, <em>inherits_from=None</em>, <em>translate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.createSurvey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.createSurvey" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to create a new survey.</p>
+<p><em>Note:</em> For this method to work, a successfull call go <cite>login(…)</cite> is required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em><em>, </em><em>required</em>) – Name of the new survey</li>
+<li><strong>codebook</strong> (<em>list</em><em>, </em><em>required</em>) – List of codes (dictionaries), each containing the keys <cite>id</cite>, <cite>label</cite> and <cite>category</cite>
+Can also be an empty list.</li>
+<li><strong>language</strong> (<em>str</em><em>, </em><em>required</em>) – Language of the survey, valid choices are {en|de}
+Has nothing to do with the language the API is set to (the attribute <cite>language</cite>.)</li>
+<li><strong>auxiliary_column_names</strong> (<em>list</em><em>, </em><em>optional</em>) – List of strings, naming additional columns that will be sent with each answer.
+Can also be an empty list.
+The number of elements in this list must match the number of elements
+in the <cite>auxiliary_columns</cite> field when adding answers later on.</li>
+<li><strong>description</strong> (<em>str</em><em>, </em><em>optional</em>) – String describing this survey</li>
+<li><strong>inherits_from</strong> (<em>int</em><em>, </em><em>optional</em>) – ID of another survey of this user, that the model should be based on.
+The codebook of that survey should be <em>identical</em> or <em>almost</em> identical
+in order for the AI to deliver good results.</li>
+<li><strong>translate</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flat indicating whether to translate this survey (where other language than <cite>language</cite> detected)
+using the Google API.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>survey</strong> – A dictionary containing all attributes of the newly created survey if the call was successful
+<cite>False</cite> otherwise</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">survey object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.addAnswersToSurvey">
+<code class="descname">addAnswersToSurvey</code><span class="sig-paren">(</span><em>survey_id</em>, <em>answers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.addAnswersToSurvey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.addAnswersToSurvey" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to add answers to a previously created survey.</p>
+<p><em>Note:</em> For this method to work, a successfull call go <cite>login(…)</cite> is required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>survey_id</strong> (<em>int</em>) – ID of the survey to add the answers to</li>
+<li><strong>answers</strong> (list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)) – List of objects of type Answer</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> – A list of dictionaries containing attributes of the newly created answers if the call was successful
+<cite>False</cite> otherwise
+<em>Note:</em> When bulk creating multiple answers, no id is return for these elements</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of answer objects</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.listAnswers">
+<code class="descname">listAnswers</code><span class="sig-paren">(</span><em>survey_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listAnswers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listAnswers" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to list all answers of a specific survey.</p>
+<p><em>Note:</em> For this method to work, a successfull call go <cite>login(…)</cite> is required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to return the answers</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> – A list of all answers belonging to the survey if the call was successful, <cite>False</cite> otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.requestPredictions">
+<code class="descname">requestPredictions</code><span class="sig-paren">(</span><em>survey_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.requestPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.requestPredictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to request model training for specific survey.</p>
+<p><em>Note:</em> For this method to work, a successfull call go <cite>login(…)</cite> is required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to return the answers</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> – True if request successful, False otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.getPredictions">
+<code class="descname">getPredictions</code><span class="sig-paren">(</span><em>survey_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.getPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.getPredictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to get the prediction results for a previously requested training.</p>
+<p><em>Note:</em> For this method to work, a successfull call go <cite>login(…)</cite> is required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to return the predictions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>result</strong> – None if no predictions are available (response code 204)
+Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cite> and <cite>codes</cite>) which are the predictions, n_trainings (counter), training_completed (iso timestamp), model (meta information on model performance)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="codit_api_demo.Answer">
+<em class="property">class </em><code class="descclassname">codit_api_demo.</code><code class="descname">Answer</code><a class="reference internal" href="_modules/codit_api_demo.html#Answer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.Answer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<p>Answer object, purely for reference</p>
+<dl class="attribute">
+<dt id="codit_api_demo.Answer.text">
+<code class="descname">text</code><a class="headerlink" href="#codit_api_demo.Answer.text" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str, required</em> – Text of the answer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="codit_api_demo.Answer.auxiliary_columns">
+<code class="descname">auxiliary_columns</code><a class="headerlink" href="#codit_api_demo.Answer.auxiliary_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list(str), optional</em> – Only required if survey has <cite>len(auxiliary_column_names)&gt;0</cite></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="codit_api_demo.Answer.reviewed">
+<code class="descname">reviewed</code><a class="headerlink" href="#codit_api_demo.Answer.reviewed" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool, optional</em> – Answers having the “reviewed” are assumed to have all codes correct
+and will be used to train the AI.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="codit_api_demo.Answer.codes">
+<code class="descname">codes</code><a class="headerlink" href="#codit_api_demo.Answer.codes" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list, optional</em> – List of integers (code IDs). Assigning codes to an answer.
+Will be used to train the AI.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to src’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Codit API Demo</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>

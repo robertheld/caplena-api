@@ -2,37 +2,34 @@
 
 <!doctype html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>codit_api_demo &#8212; Codit API Demo</title>
-    
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bizstyle.js"></script>
-    <link rel="top" title="Codit API Demo" href="../index.html" />
-    <link rel="up" title="Module code" href="index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -126,7 +123,7 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CoditAPI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CoditAPI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">csrftoken</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">authenticated</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span> <span class="o">=</span> <span class="s2">&quot;https://api.codit.co/api&quot;</span>
@@ -269,7 +266,7 @@
 
 <span class="sd">        List all surveys of the user.</span>
 
-<span class="sd">        *Note:* The returned surveys only contain global meta information to the surveys and not the response texts.</span>
+<span class="sd">        *Note:* The returned surveys only contain global meta information of the surveys and not the response texts.</span>
 <span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
 <span class="sd">        required beforehand</span>
 
@@ -283,6 +280,32 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys/&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CoditAPI.listInheritableSurveys"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listInheritableSurveys">[docs]</a>    <span class="k">def</span> <span class="nf">listInheritableSurveys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        API method to list all surveys of which inheritance is possible.</span>
+
+<span class="sd">        List all surveys of the user.</span>
+
+<span class="sd">        *Note:* The returned surveys only contain basic meta information and not the response texts. To get more detailed information about a certain survey call the `listSurveys` method.</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        surveys : list of survey objects</span>
+<span class="sd">            A list of all surveys that can be used for inheritance. This is the concatenation of all surveys owned by the user and global codit.co models.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys-inheritable/&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
@@ -485,11 +508,14 @@
 <span class="sd">    codes : list, optional</span>
 <span class="sd">        List of integers (code IDs). Assigning codes to an answer.</span>
 <span class="sd">        Will be used to train the AI.</span>
+<span class="sd">    source_language: str, optional</span>
+<span class="sd">        ISO Code (2 characters, e.g. &#39;de&#39; or &#39;en&#39;) specifying in which language the text is written.</span>
+<span class="sd">        Relevant for translation, taking precedance over automatic language detection</span>
 
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; The main function invoked when calling this script directly&quot;&quot;&quot;</span>
 
     <span class="c1">###########################################################</span>
@@ -618,7 +644,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
   </body>
 </html>
