@@ -200,7 +200,7 @@ class CoditAPI(object):
 
         List all surveys of the user.
 
-        *Note:* The returned surveys only contain global meta information to the surveys and not the response texts.
+        *Note:* The returned surveys only contain global meta information of the surveys and not the response texts.
         *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
         required beforehand
 
@@ -214,6 +214,32 @@ class CoditAPI(object):
 
         """
         r = self._makeRequest('get', '/surveys/')
+
+        if (r.status_code != 200):
+            return self._handleBadResponse(r)
+        else:
+            return r.json()
+
+    def listInheritableSurveys(self):
+        """
+        API method to list all surveys of which inheritance is possible.
+
+        List all surveys of the user.
+
+        *Note:* The returned surveys only contain basic meta information and not the response texts. To get more detailed information about a certain survey call the `listSurveys` method.
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        surveys : list of survey objects
+            A list of all surveys that can be used for inheritance. This is the concatenation of all surveys owned by the user and global codit.co models.
+
+        """
+        r = self._makeRequest('get', '/surveys-inheritable/')
 
         if (r.status_code != 200):
             return self._handleBadResponse(r)
@@ -416,6 +442,9 @@ class Answer(dict):
     codes : list, optional
         List of integers (code IDs). Assigning codes to an answer.
         Will be used to train the AI.
+    source_language: str, optional
+        ISO Code (2 characters, e.g. 'de' or 'en') specifying in which language the text is written.
+        Relevant for translation, taking precedance over automatic language detection
 
     """
 
