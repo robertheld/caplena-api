@@ -63,8 +63,11 @@ class CoditAPI(object):
         self.baseURI = "https://api.codit.co/api"
 
         if language not in self._valid_languages:
-            raise ValueError("Invalid language '{}', accepted values are {{{}}}".format(
-                language, ",".join(self._valid_languages)))
+            raise ValueError(
+                "Invalid language '{}', accepted values are {{{}}}".format(
+                    language, ",".join(self._valid_languages)
+                )
+            )
         else:
             self.language = language
 
@@ -95,7 +98,8 @@ class CoditAPI(object):
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Accept-Language": self.language,
-            "X-CSRFTOKEN": self.csrftoken
+            "X-CSRFTOKEN": self.csrftoken,
+            "Referer": self.baseURI
         }
         return headers
 
@@ -152,9 +156,11 @@ class CoditAPI(object):
 
         if not publicmethod and (self.csrftoken is None or not self.authenticated):
             raise Exception(
-                "CSRF-Token / authentication not set. Call login(..) before invoking other API calls")
+                "CSRF-Token / authentication not set. Call login(..) before invoking other API calls"
+            )
         return getattr(self.sess, method)(
-            "{}{}".format(self.baseURI, apiURI), json=data, headers=self._getHeaders())
+            "{}{}".format(self.baseURI, apiURI), json=data, headers=self._getHeaders()
+        )
 
     def login(self, email, password):
         """
@@ -184,8 +190,11 @@ class CoditAPI(object):
 
         """
         r = self._makeRequest(
-            'post', '/auth/login/', {"email": email,
-                                     "password": password}, publicmethod=True)
+            'post', '/auth/login/', {
+                "email": email,
+                "password": password
+            }, publicmethod=True
+        )
 
         if (r.status_code != 200):
             return self._handleBadResponse(r)
@@ -246,14 +255,18 @@ class CoditAPI(object):
         else:
             return r.json()
 
-    def createSurvey(self,
-                     name,
-                     codebook,
-                     language,
-                     auxiliary_column_names=[],
-                     description='',
-                     inherits_from=None,
-                     translate=False):
+    def createSurvey(
+        self,
+        name,
+        codebook,
+        language,
+        auxiliary_column_names=[],
+        description='',
+        inherits_from=None,
+        translate=False,
+        group_identical=True,
+        group_identical_exclude=''
+    ):
         """
         API method to create a new survey.
 
@@ -282,8 +295,12 @@ class CoditAPI(object):
             The codebook of that survey should be *identical* or *almost* identical
             in order for the AI to deliver good results.
         translate : bool, optional
-            Flat indicating whether to translate this survey (where other language than `language` detected)
+            Flag indicating whether to translate this survey (where other language than `language` detected)
             using the Google API.
+        group_identical : bool, optional
+            Flag indicating whether to group identical answers in coding view and when listing answers.
+        group_identical_exclude : str, optional
+            All answer texts matching this regular expression won't be grouped
 
         Returns
         -------
@@ -294,8 +311,11 @@ class CoditAPI(object):
         """
 
         if language not in self._valid_languages:
-            raise ValueError("Invalid language '{}', accepted values are {{{}}}".format(
-                language, ",".join(self._valid_languages)))
+            raise ValueError(
+                "Invalid language '{}', accepted values are {{{}}}".format(
+                    language, ",".join(self._valid_languages)
+                )
+            )
 
         data = {
             "name": name,
@@ -305,7 +325,9 @@ class CoditAPI(object):
             "auxiliary_column_names": auxiliary_column_names,
             "description": description,
             "inherits_from": inherits_from,
-            "translated": 1 if translate else 0
+            "translated": 1 if translate else 0,
+            "group_identical": group_identical,
+            "group_identical_exclude": group_identical_exclude
         }
 
         r = self._makeRequest('post', '/surveys/', data)
@@ -344,7 +366,7 @@ class CoditAPI(object):
         else:
             return r.json()
 
-    def listAnswers(self, survey_id):
+    def listAnswers(self, survey_id, no_group=False):
         """
         API method to list all answers of a specific survey.
 
@@ -355,6 +377,9 @@ class CoditAPI(object):
         ----------
         survey_id : int
             ID of the survey of which to return the answers
+        no_group : bool
+            If true, no grouping will be applied to answers list,
+            overriding the `group_identical` property of the survey
 
         Returns
         -------
@@ -362,7 +387,8 @@ class CoditAPI(object):
             A list of all answers belonging to the survey if the call was successful, `False` otherwise
 
         """
-        r = self._makeRequest('get', '/surveys/{}/answers'.format(survey_id))
+        get_params = '?no_group' if no_group else ''
+        r = self._makeRequest('get', '/surveys/{}/answers{}'.format(survey_id, get_params))
 
         if (r.status_code != 200):
             return self._handleBadResponse(r)
@@ -484,15 +510,17 @@ if __name__ == '__main__':
     ###########################################################
     # CREATE SURVEY: Create new survey and get its ID
     ###########################################################
-    codebook = [{
-        'id': 1,
-        'label': 'Code 1',
-        'category': 'CATEGORY 1'
-    }, {
-        'id': 20,
-        'label': 'Code 2',
-        'category': 'CATEGORY 2'
-    }]
+    codebook = [
+        {
+            'id': 1,
+            'label': 'Code 1',
+            'category': 'CATEGORY 1'
+        }, {
+            'id': 20,
+            'label': 'Code 2',
+            'category': 'CATEGORY 2'
+        }
+    ]
 
     new_survey = api.createSurvey(
         "My new survey",
@@ -500,7 +528,8 @@ if __name__ == '__main__':
         "de",
         auxiliary_column_names=['ID', 'some other column'],
         description="Some description of survey",
-        translate=True)
+        translate=True
+    )
     if new_survey is not False:
         print("Created new survey with id {}".format(new_survey['id']))
 
@@ -528,8 +557,11 @@ if __name__ == '__main__':
     ###########################################################
     answers = api.listAnswers(new_survey['id'])
 
-    print("The first answer ('{}') has been assigned the codes: {}".format(answers[0]['text'],
-                                                                           answers[0]['codes']))
+    print(
+        "The first answer ('{}') has been assigned the codes: {}".format(
+            answers[0]['text'], answers[0]['codes']
+        )
+    )
 
     ###########################################################
     # REQUEST PREDICTIONS: Instruct backend to make code predictions for survey
@@ -554,5 +586,8 @@ if __name__ == '__main__':
     if predictions is None:
         print("No predictions are ready for this survey")
     elif 'answers' in predictions and len(predictions['answers']) > 0:
-        print("For answer {} the codes {} were predicted".format(predictions['answers'][0]['id'],
-                                                                 predictions['answers'][0]['codes']))
+        print(
+            "For answer {} the codes {} were predicted".format(
+                predictions['answers'][0]['id'], predictions['answers'][0]['codes']
+            )
+        )
