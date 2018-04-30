@@ -195,7 +195,7 @@ required beforehand</p>
 
 <dl class="method">
 <dt id="codit_api_demo.CoditAPI.createSurvey">
-<code class="descname">createSurvey</code><span class="sig-paren">(</span><em>name</em>, <em>codebook</em>, <em>language</em>, <em>auxiliary_column_names=[]</em>, <em>description=''</em>, <em>inherits_from=None</em>, <em>translate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.createSurvey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.createSurvey" title="Permalink to this definition">¶</a></dt>
+<code class="descname">createSurvey</code><span class="sig-paren">(</span><em>name</em>, <em>codebook</em>, <em>language</em>, <em>auxiliary_column_names=[]</em>, <em>description=''</em>, <em>inherits_from=None</em>, <em>translate=False</em>, <em>group_identical=True</em>, <em>group_identical_exclude=''</em>, <em>labels=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.createSurvey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.createSurvey" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to create a new survey.</p>
 <p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
@@ -217,8 +217,11 @@ in the <cite>auxiliary_columns</cite> field when adding answers later on.</li>
 <li><strong>inherits_from</strong> (<em>int</em><em>, </em><em>optional</em>) – ID of another survey of this user, that the model should be based on.
 The codebook of that survey should be <em>identical</em> or <em>almost</em> identical
 in order for the AI to deliver good results.</li>
-<li><strong>translate</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flat indicating whether to translate this survey (where other language than <cite>language</cite> detected)
+<li><strong>translate</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag indicating whether to translate this survey (where other language than <cite>language</cite> detected)
 using the Google API.</li>
+<li><strong>group_identical</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag indicating whether to group identical answers in coding view and when listing answers.</li>
+<li><strong>group_identical_exclude</strong> (<em>str</em><em>, </em><em>optional</em>) – All answer texts matching this regular expression won’t be grouped</li>
+<li><strong>labels</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of strings with labels to be attached to the survey.</li>
 </ul>
 </td>
 </tr>
@@ -263,7 +266,7 @@ required beforehand</p>
 
 <dl class="method">
 <dt id="codit_api_demo.CoditAPI.listAnswers">
-<code class="descname">listAnswers</code><span class="sig-paren">(</span><em>survey_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listAnswers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listAnswers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">listAnswers</code><span class="sig-paren">(</span><em>survey_id</em>, <em>no_group=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listAnswers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listAnswers" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to list all answers of a specific survey.</p>
 <p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
@@ -271,11 +274,18 @@ required beforehand</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to return the answers</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to return the answers</li>
+<li><strong>no_group</strong> (<em>bool</em>) – If true, no grouping will be applied to answers list,
+overriding the <cite>group_identical</cite> property of the survey</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> – A list of all answers belonging to the survey if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> – A list of all answers belonging to the survey if the call was successful, <cite>False</cite> otherwise</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)</p>
+</td>
 </tr>
 </tbody>
 </table>

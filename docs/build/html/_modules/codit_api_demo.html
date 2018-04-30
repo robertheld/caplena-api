@@ -129,8 +129,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span> <span class="o">=</span> <span class="s2">&quot;https://api.codit.co/api&quot;</span>
 
         <span class="k">if</span> <span class="n">language</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_languages</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid language &#39;</span><span class="si">{}</span><span class="s2">&#39;, accepted values are {{</span><span class="si">{}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">language</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valid_languages</span><span class="p">)))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid language &#39;</span><span class="si">{}</span><span class="s2">&#39;, accepted values are {{</span><span class="si">{}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">language</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valid_languages</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">language</span>
 
@@ -161,7 +164,8 @@
             <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Accept-Language&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">language</span><span class="p">,</span>
-            <span class="s2">&quot;X-CSRFTOKEN&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">csrftoken</span>
+            <span class="s2">&quot;X-CSRFTOKEN&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">csrftoken</span><span class="p">,</span>
+            <span class="s2">&quot;Referer&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">headers</span>
 
@@ -218,9 +222,11 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">publicmethod</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csrftoken</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">authenticated</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="s2">&quot;CSRF-Token / authentication not set. Call login(..) before invoking other API calls&quot;</span><span class="p">)</span>
+                <span class="s2">&quot;CSRF-Token / authentication not set. Call login(..) before invoking other API calls&quot;</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="p">,</span> <span class="n">method</span><span class="p">)(</span>
-            <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span><span class="p">,</span> <span class="n">apiURI</span><span class="p">),</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getHeaders</span><span class="p">())</span>
+            <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span><span class="p">,</span> <span class="n">apiURI</span><span class="p">),</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getHeaders</span><span class="p">()</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="CoditAPI.login"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.login">[docs]</a>    <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -250,8 +256,11 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span>
-            <span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/auth/login/&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">email</span><span class="p">,</span>
-                                     <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="n">password</span><span class="p">},</span> <span class="n">publicmethod</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/auth/login/&#39;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">email</span><span class="p">,</span>
+                <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="n">password</span>
+            <span class="p">},</span> <span class="n">publicmethod</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
@@ -312,14 +321,19 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CoditAPI.createSurvey"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.createSurvey">[docs]</a>    <span class="k">def</span> <span class="nf">createSurvey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                     <span class="n">name</span><span class="p">,</span>
-                     <span class="n">codebook</span><span class="p">,</span>
-                     <span class="n">language</span><span class="p">,</span>
-                     <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[],</span>
-                     <span class="n">description</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-                     <span class="n">inherits_from</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">translate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CoditAPI.createSurvey"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.createSurvey">[docs]</a>    <span class="k">def</span> <span class="nf">createSurvey</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">codebook</span><span class="p">,</span>
+        <span class="n">language</span><span class="p">,</span>
+        <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">inherits_from</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">translate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">group_identical</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">group_identical_exclude</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="p">[]</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to create a new survey.</span>
 
@@ -348,8 +362,14 @@
 <span class="sd">            The codebook of that survey should be *identical* or *almost* identical</span>
 <span class="sd">            in order for the AI to deliver good results.</span>
 <span class="sd">        translate : bool, optional</span>
-<span class="sd">            Flat indicating whether to translate this survey (where other language than `language` detected)</span>
+<span class="sd">            Flag indicating whether to translate this survey (where other language than `language` detected)</span>
 <span class="sd">            using the Google API.</span>
+<span class="sd">        group_identical : bool, optional</span>
+<span class="sd">            Flag indicating whether to group identical answers in coding view and when listing answers.</span>
+<span class="sd">        group_identical_exclude : str, optional</span>
+<span class="sd">            All answer texts matching this regular expression won&#39;t be grouped</span>
+<span class="sd">        labels : list, optional</span>
+<span class="sd">            A list of strings with labels to be attached to the survey.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -360,8 +380,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">language</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_languages</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid language &#39;</span><span class="si">{}</span><span class="s2">&#39;, accepted values are {{</span><span class="si">{}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">language</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valid_languages</span><span class="p">)))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid language &#39;</span><span class="si">{}</span><span class="s2">&#39;, accepted values are {{</span><span class="si">{}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">language</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valid_languages</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
@@ -371,7 +394,10 @@
             <span class="s2">&quot;auxiliary_column_names&quot;</span><span class="p">:</span> <span class="n">auxiliary_column_names</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
             <span class="s2">&quot;inherits_from&quot;</span><span class="p">:</span> <span class="n">inherits_from</span><span class="p">,</span>
-            <span class="s2">&quot;translated&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">translate</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="s2">&quot;translated&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">translate</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;group_identical&quot;</span><span class="p">:</span> <span class="n">group_identical</span><span class="p">,</span>
+            <span class="s2">&quot;group_identical_exclude&quot;</span><span class="p">:</span> <span class="n">group_identical_exclude</span><span class="p">,</span>
+            <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span>
         <span class="p">}</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys/&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
@@ -410,7 +436,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CoditAPI.listAnswers"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listAnswers">[docs]</a>    <span class="k">def</span> <span class="nf">listAnswers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">survey_id</span><span class="p">):</span>
+<div class="viewcode-block" id="CoditAPI.listAnswers"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listAnswers">[docs]</a>    <span class="k">def</span> <span class="nf">listAnswers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">survey_id</span><span class="p">,</span> <span class="n">no_group</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to list all answers of a specific survey.</span>
 
@@ -421,6 +447,9 @@
 <span class="sd">        ----------</span>
 <span class="sd">        survey_id : int</span>
 <span class="sd">            ID of the survey of which to return the answers</span>
+<span class="sd">        no_group : bool</span>
+<span class="sd">            If true, no grouping will be applied to answers list,</span>
+<span class="sd">            overriding the `group_identical` property of the survey</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -428,7 +457,8 @@
 <span class="sd">            A list of all answers belonging to the survey if the call was successful, `False` otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys/</span><span class="si">{}</span><span class="s1">/answers&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">survey_id</span><span class="p">))</span>
+        <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?no_group&#39;</span> <span class="k">if</span> <span class="n">no_group</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys/</span><span class="si">{}</span><span class="s1">/answers</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">survey_id</span><span class="p">,</span> <span class="n">get_params</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
@@ -550,15 +580,17 @@
     <span class="c1">###########################################################</span>
     <span class="c1"># CREATE SURVEY: Create new survey and get its ID</span>
     <span class="c1">###########################################################</span>
-    <span class="n">codebook</span> <span class="o">=</span> <span class="p">[{</span>
-        <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-        <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Code 1&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;CATEGORY 1&#39;</span>
-    <span class="p">},</span> <span class="p">{</span>
-        <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
-        <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Code 2&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;CATEGORY 2&#39;</span>
-    <span class="p">}]</span>
+    <span class="n">codebook</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Code 1&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;CATEGORY 1&#39;</span>
+        <span class="p">},</span> <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Code 2&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;CATEGORY 2&#39;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
 
     <span class="n">new_survey</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">createSurvey</span><span class="p">(</span>
         <span class="s2">&quot;My new survey&quot;</span><span class="p">,</span>
@@ -566,7 +598,9 @@
         <span class="s2">&quot;de&quot;</span><span class="p">,</span>
         <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="s1">&#39;some other column&#39;</span><span class="p">],</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Some description of survey&quot;</span><span class="p">,</span>
-        <span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;label 1&#39;</span><span class="p">,</span> <span class="s1">&#39;label 2&#39;</span><span class="p">]</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="n">new_survey</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Created new survey with id </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_survey</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]))</span>
 
@@ -594,8 +628,11 @@
     <span class="c1">###########################################################</span>
     <span class="n">answers</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">listAnswers</span><span class="p">(</span><span class="n">new_survey</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The first answer (&#39;</span><span class="si">{}</span><span class="s2">&#39;) has been assigned the codes: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">answers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">],</span>
-                                                                           <span class="n">answers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;codes&#39;</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;The first answer (&#39;</span><span class="si">{}</span><span class="s2">&#39;) has been assigned the codes: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">answers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">],</span> <span class="n">answers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;codes&#39;</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="c1">###########################################################</span>
     <span class="c1"># REQUEST PREDICTIONS: Instruct backend to make code predictions for survey</span>
@@ -620,8 +657,11 @@
     <span class="k">if</span> <span class="n">predictions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No predictions are ready for this survey&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="s1">&#39;answers&#39;</span> <span class="ow">in</span> <span class="n">predictions</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">predictions</span><span class="p">[</span><span class="s1">&#39;answers&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For answer </span><span class="si">{}</span><span class="s2"> the codes </span><span class="si">{}</span><span class="s2"> were predicted&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">predictions</span><span class="p">[</span><span class="s1">&#39;answers&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
-                                                                 <span class="n">predictions</span><span class="p">[</span><span class="s1">&#39;answers&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;codes&#39;</span><span class="p">]))</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;For answer </span><span class="si">{}</span><span class="s2"> the codes </span><span class="si">{}</span><span class="s2"> were predicted&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">predictions</span><span class="p">[</span><span class="s1">&#39;answers&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">predictions</span><span class="p">[</span><span class="s1">&#39;answers&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;codes&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 </pre></div>
 
           </div>
