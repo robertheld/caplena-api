@@ -265,7 +265,8 @@ class CoditAPI(object):
         inherits_from=None,
         translate=False,
         group_identical=True,
-        group_identical_exclude=''
+        group_identical_exclude='',
+        labels=[]
     ):
         """
         API method to create a new survey.
@@ -301,6 +302,8 @@ class CoditAPI(object):
             Flag indicating whether to group identical answers in coding view and when listing answers.
         group_identical_exclude : str, optional
             All answer texts matching this regular expression won't be grouped
+        labels : list, optional
+            A list of strings with labels to be attached to the survey.
 
         Returns
         -------
@@ -327,7 +330,8 @@ class CoditAPI(object):
             "inherits_from": inherits_from,
             "translated": 1 if translate else 0,
             "group_identical": group_identical,
-            "group_identical_exclude": group_identical_exclude
+            "group_identical_exclude": group_identical_exclude,
+            "labels": labels
         }
 
         r = self._makeRequest('post', '/surveys/', data)
@@ -528,7 +532,8 @@ if __name__ == '__main__':
         "de",
         auxiliary_column_names=['ID', 'some other column'],
         description="Some description of survey",
-        translate=True
+        translate=True,
+        labels=['label 1', 'label 2']
     )
     if new_survey is not False:
         print("Created new survey with id {}".format(new_survey['id']))
