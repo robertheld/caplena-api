@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import argparse
+import getpass
 
 from src.codit_api_demo import CoditAPI
 
@@ -8,7 +9,9 @@ parser = argparse.ArgumentParser('Script to add Answers with their respective co
                                  'Requires setting credentials to codit.co via the environment variables CODIT_EMAIL and'\
                                  'CODIT_PW.')
 parser.add_argument('--xls', type=str, help='Excel file to parse answers from')
-parser.add_argument('--sheet_number', default=0, type=int, help='Sheet number to parse in Excel file (starting from 0)')
+parser.add_argument(
+    '--sheet_number', default=0, type=int, help='Sheet number to parse in Excel file (starting from 0)'
+)
 parser.add_argument('--text_col', type=str, help='Column name of the answers text in the Excel file')
 parser.add_argument('--codes_substring', type=str, help='Substring of code-columns (sparse format).'\
                     'Example: Excel contains columns "Code_1", "Code_2", ...' \
@@ -16,28 +19,26 @@ parser.add_argument('--codes_substring', type=str, help='Substring of code-colum
 parser.add_argument('--sourcelanguage_col', type=str, help='Source language column (optional),'\
                                                            ' language-tags need to be ISO tags')
 parser.add_argument('--survey_id', type=int, help='ID of survey to append answers to')
-parser.add_argument('--dry_run', action='store_true', help='If set, do not upload data but show what would be uploaded')
+parser.add_argument(
+    '--dry_run', action='store_true', help='If set, do not upload data but show what would be uploaded'
+)
 args = parser.parse_args()
 
 # parse credentials from environment variables
-email = os.environ['CODIT_EMAIL']
-pw = os.environ['CODIT_PW']
+email = os.environ.get('CODIT_EMAIL', None)
+pw = os.environ.get('CODIT_PW', None)
 
 survey_id = args.survey_id
 
-
 if __name__ == '__main__':
-    # login
-    api = CoditAPI('en')
-    login = api.login(email, pw)
-
     # read data
-    df_in= pd.read_excel(args.xls, sheetname=args.sheet_number)
+    df_in = pd.read_excel(args.xls, sheetname=args.sheet_number)
     print('Adding {} answers'.format(len(df_in)))
 
     # renaming columns, parsing codes and separating the auxillary-columns
     answer_cols = []
-    df_in= df_in.rename(columns={args.text_col: 'text'})
+    df_in = df_in.rename(columns={args.text_col: 'text'})
+    df_in['text'].fillna(value='', inplace=True)
     answer_cols.append('text')
 
     if args.sourcelanguage_col:
@@ -67,8 +68,18 @@ if __name__ == '__main__':
 
     # add the answers using the api
     if args.dry_run:
-        print('Adding the following answers: ',data)
+        print('Adding the following answers: ', data)
     else:
+        # login
+        api = CoditAPI('en')
+
+        if email is None:
+            email = input('Enter your email: ')
+        if pw is None:
+            pw = getpass.getpass(prompt='Enter your password (not displayed): ')
+
+        login = api.login(email, pw)
+
         new_answers = api.addAnswersToSurvey(survey_id, answers)
         if new_answers is not False:
             print("Added {} new answers to survey {}".format(len(new_answers), survey_id))
