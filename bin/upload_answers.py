@@ -8,19 +8,21 @@ from src.codit_api_demo import CoditAPI
 parser = argparse.ArgumentParser('Script to add Answers with their respective codes to survey from Excel.'\
                                  'Requires setting credentials to codit.co via the environment variables CODIT_EMAIL and'\
                                  'CODIT_PW.')
-parser.add_argument('--xls', type=str, help='Excel file to parse answers from')
+parser.add_argument('--xls', required=True, type=str, help='Excel file to parse answers from')
 parser.add_argument(
-    '--sheet_number', default=0, type=int, help='Sheet number to parse in Excel file (starting from 0)'
+    '--sheet-number', default=0, type=int, help='Sheet number to parse in Excel file (starting from 0)'
 )
-parser.add_argument('--text_col', type=str, help='Column name of the answers text in the Excel file')
-parser.add_argument('--codes_substring', type=str, help='Substring of code-columns (sparse format).'\
-                    'Example: Excel contains columns "Code_1", "Code_2", ...' \
-                    'Parse these codes by setting --codes_substring="Code"')
-parser.add_argument('--sourcelanguage_col', type=str, help='Source language column (optional),'\
-                                                           ' language-tags need to be ISO tags')
-parser.add_argument('--survey_id', type=int, help='ID of survey to append answers to')
 parser.add_argument(
-    '--dry_run', action='store_true', help='If set, do not upload data but show what would be uploaded'
+    '--text-col', required=True, type=str, help='Column name of the answers text in the Excel file'
+)
+parser.add_argument('--codes-substring', required=True,type=str, help='Substring of code-columns (sparse format).'\
+                    'Example: Excel contains columns "Code_1", "Code_2", ...' \
+                    'Parse these codes by setting --codes-substring="Code"')
+parser.add_argument('--sourcelanguage-col', type=str, help='Source language column (optional),'\
+                                                           ' language-tags need to be ISO tags')
+parser.add_argument('--survey-id', type=int, required=True, help='ID of survey to append answers to')
+parser.add_argument(
+    '--dry-run', action='store_true', help='If set, do not upload data but show what would be uploaded'
 )
 args = parser.parse_args()
 
