@@ -22,6 +22,12 @@ parser.add_argument('--sourcelanguage-col', type=str, help='Source language colu
                                                            ' language-tags need to be ISO tags')
 parser.add_argument('--survey-id', type=int, required=True, help='ID of survey to append answers to')
 parser.add_argument(
+    '--codes-binary',
+    action='store_true',
+    help=
+    'If set, codes are expected to be in binary format. The code ids are assumed to be continuous and start from zero'
+)
+parser.add_argument(
     '--dry-run', action='store_true', help='If set, do not upload data but show what would be uploaded'
 )
 args = parser.parse_args()
@@ -39,6 +45,10 @@ if __name__ == '__main__':
 
     # renaming columns, parsing codes and separating the auxillary-columns
     answer_cols = []
+
+    if args.text_col not in df_in.columns:
+        raise AttributeError('Text column doesn\'t exist: {}'.format(args.text_col))
+
     df_in = df_in.rename(columns={args.text_col: 'text'})
     df_in['text'].fillna(value='', inplace=True)
     answer_cols.append('text')
@@ -49,8 +59,28 @@ if __name__ == '__main__':
 
     if args.codes_substring:
         codes_cols = [col for col in df_in.columns if args.codes_substring in col]
-        df_in['codes'] = df_in[codes_cols].values.tolist()
-        df_in['codes'] = df_in['codes'].apply(lambda x: [int(it) for it in x if not pd.isnull(it)])
+
+        if args.codes_binary:
+            # The codes are in binary format, i.e. [0 0 1 0]
+            from sklearn.preprocessing import MultiLabelBinarizer
+            import numpy as np
+
+            # Instantiate the binarizer
+            binarizer = MultiLabelBinarizer()
+            # Convert NAs to 0, concatenate columns to one list per row
+            df_in['codes'] = df_in[codes_cols].fillna(0).values.tolist()
+            # Prepare the binarizer: Our code IDs are 0:len(code_cols)-1
+            binarizer.fit(np.asarray([range(len(codes_cols))]))
+
+            def codes_from_binary(row):
+                binary_mat = np.asarray([[int(el) for el in row]])
+                return [int(res) for res in binarizer.inverse_transform(binary_mat)[0]]
+
+            df_in['codes'] = df_in['codes'].apply(codes_from_binary)
+        else:
+            # The codes are in "list" format, i.e. for every row [code_id1, code_id2] (different lengths for rows possible)
+            df_in['codes'] = df_in[codes_cols].values.tolist()
+            df_in['codes'] = df_in['codes'].apply(lambda x: [int(it) for it in x if not pd.isnull(it)])
         df_in['reviewed'] = True
         answer_cols.append('codes')
         answer_cols.append('reviewed')
