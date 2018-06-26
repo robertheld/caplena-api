@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import pandas as pd
 import argparse
 import getpass
@@ -40,10 +41,10 @@ survey_id = args.survey_id
 
 if __name__ == '__main__':
     # read data
-    df_in = pd.read_excel(args.xls, sheetname=args.sheet_number)
+    df_in = pd.read_excel(args.xls, sheet_name=args.sheet_number)
     print('Adding {} answers'.format(len(df_in)))
 
-    # renaming columns, parsing codes and separating the auxillary-columns
+    # renaming columns, parsing codes and separating the auxiliary-columns
     answer_cols = []
 
     if args.text_col not in df_in.columns:
@@ -59,6 +60,8 @@ if __name__ == '__main__':
 
     if args.codes_substring:
         codes_cols = [col for col in df_in.columns if args.codes_substring in col]
+
+        print("Discovered {} code columns".format(len(codes_cols)))
 
         if args.codes_binary:
             # The codes are in binary format, i.e. [0 0 1 0]
@@ -86,16 +89,23 @@ if __name__ == '__main__':
         answer_cols.append('reviewed')
         df_in = df_in.drop(codes_cols, axis=1)
 
-    # all the other columns are auxillary columns
-    auxillary_column_names = [col_name for col_name in df_in.columns if col_name not in answer_cols]
-    auxillary_cols = df_in[auxillary_column_names]
+    # all the other columns are auxiliary columns
+    auxiliary_col_names = [col_name for col_name in df_in.columns if col_name not in answer_cols]
+    auxiliary_cols = df_in[auxiliary_col_names]
+
+    print("Appending {} auxiliary columns: {}".format(len(auxiliary_col_names), auxiliary_col_names))
+
+    # Convert all non-numeric columns to strings (e.g. timestamps, datetime)
+    for col_name in auxiliary_col_names:
+        if not np.issubdtype(auxiliary_cols[col_name].dtype, np.number):
+            auxiliary_cols[col_name] = auxiliary_cols[col_name].astype(str, copy=False)
 
     # preparing request data
-    df_answers = df_in.drop(auxillary_cols, axis=1)
+    df_answers = df_in.drop(auxiliary_cols, axis=1)
     answers = df_answers.to_dict(orient='records')
     data = []
     for i, textrow in enumerate(answers):
-        textrow['auxiliary_columns'] = auxillary_cols.values[i].tolist()
+        textrow['auxiliary_columns'] = auxiliary_cols.values[i].tolist()
         data.append(textrow)
 
     # add the answers using the api
