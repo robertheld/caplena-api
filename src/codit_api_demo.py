@@ -451,6 +451,31 @@ class CoditAPI(object):
         else:
             return self._handleBadResponse(r)
 
+    def deleteSurvey(self, survey_id):
+        """
+        API method to delete survey and its answers.
+
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
+
+        Parameters
+        ----------
+        survey_id : int
+            ID of the survey to delete
+
+        Returns
+        -------
+        success : boolean
+            True if request successful, False otherwise
+
+        """
+        r = self._makeRequest('delete', '/surveys/{}'.format(survey_id))
+
+        if (not r.ok):
+            return self._handleBadResponse(r)
+        else:
+            return True
+
 
 class Answer(dict):
     """
