@@ -9,15 +9,13 @@ from src.codit_api_demo import CoditAPI
 
 parser = argparse.ArgumentParser(
     description='Script to add Answers with their respective codes to survey from Excel '
-                'or JSON. Requires setting credentials to codit.co via the environment '
-                'variables CODIT_EMAIL and CODIT_PW or entering them when required.\n'
-)
+    'or JSON. Requires setting credentials to codit.co via the environment '
+    'variables CODIT_EMAIL and CODIT_PW or entering them when required.\n')
 
 parser.add_argument('survey_id', type=int, help='ID of survey to append answers to')
 parser.add_argument('input', type=str, help='File to parse')
 parser.add_argument(
-    '--dry-run', action='store_true', help='If set, do not upload data but show what would be uploaded'
-)
+    '--dry-run', action='store_true', help='If set, do not upload data but show what would be uploaded')
 parser.add_argument('--batch_size', type=int, help='Number of answers to upload in one batch', default=5000)
 
 subparsers = parser.add_subparsers(dest='inputtype')
@@ -26,29 +24,24 @@ jsongroup = subparsers.add_parser('json')
 
 excelgroup = subparsers.add_parser('xlsx')
 excelgroup.add_argument(
-    '--sheet-number', default=0, type=int, help='Sheet number to parse in Excel file (starting from 0)'
-)
+    '--sheet-number', default=0, type=int, help='Sheet number to parse in Excel file (starting from 0)')
 excelgroup.add_argument(
-    '--text-col', required=True, type=str, help='Column name of the answers text in the Excel file'
-)
+    '--text-col', required=True, type=str, help='Column name of the answers text in the Excel file')
 excelgroup.add_argument(
     '--codes-substring',
     required=True,
     type=str,
     help='Substring of code-columns (sparse format). Example: Excel contains columns "Code_1", "Code_2" '
-         ', ...Parse these codes by setting --codes-substring="Code"'
-)
+    ', ...Parse these codes by setting --codes-substring="Code"')
 excelgroup.add_argument(
     '--sourcelanguage-col',
     type=str,
-    help='Source language column (optional), language-tags need to be ISO tags'
-)
+    help='Source language column (optional), language-tags need to be ISO tags')
 excelgroup.add_argument(
     '--codes-binary',
     action='store_true',
     help='If set, codes are expected to be in binary format. '
-         'The code ids are assumed to be continuous and start from zero'
-)
+    'The code ids are assumed to be continuous and start from zero')
 
 args = parser.parse_args()
 
@@ -95,11 +88,9 @@ if __name__ == '__main__':
                 # Prepare the binarizer: Our code IDs are 0:len(code_cols)-1
                 binarizer.fit(np.asarray([range(len(codes_cols))]))
 
-
                 def codes_from_binary(row):
                     binary_mat = np.asarray([[int(el) for el in row]])
                     return [int(res) for res in binarizer.inverse_transform(binary_mat)[0]]
-
 
                 df_in['codes'] = df_in['codes'].apply(codes_from_binary)
             else:
@@ -113,7 +104,8 @@ if __name__ == '__main__':
 
         # all the other columns are auxiliary columns
         auxiliary_col_names = [col_name for col_name in df_in.columns if col_name not in answer_cols]
-        auxiliary_cols = df_in[auxiliary_col_names]
+        # also fill NaN's in auxiliary columns
+        auxiliary_cols = df_in[auxiliary_col_names].fillna(value='')
 
         print("Appending {} auxiliary columns: {}".format(len(auxiliary_col_names), auxiliary_col_names))
 
@@ -132,7 +124,16 @@ if __name__ == '__main__':
     elif args.inputtype == 'json':
         with open(args.input, 'r') as f:
             data = json.loads(f.read())
-        answers = data
+        answers = []
+        parsing_json = False
+        for answer in data:
+            if isinstance(answer['codes'], str):
+                parsing_json = True
+                answer['codes'] = json.loads(answer['codes'])
+                answer['reviewed'] = True
+            answers.append(answer)
+        if parsing_json:
+            print('transformed codes from str to array')
     else:
         raise ValueError('Must supply either json or xls')
 
@@ -168,8 +169,8 @@ if __name__ == '__main__':
                 new_answers = api.addAnswersToSurvey(survey_id, answers[min_idx:max_idx])
                 j = max_idx
                 if new_answers is not False:
-                    print("Added batch {} with {} new answers to survey {}".format(batch_number, len(new_answers),
-                                                                                   survey_id))
+                    print("Added batch {} with {} new answers to survey {}".format(
+                        batch_number, len(new_answers), survey_id))
                 else:
-                    print('error on batch {}: {}'.format(batch_number,new_answers))
+                    print('error on batch {}: {}'.format(batch_number, new_answers))
                 batch_number += 1
