@@ -16,6 +16,9 @@ parser.add_argument('survey_id', type=int, help='ID of survey to append answers 
 parser.add_argument('input', type=str, help='File to parse')
 parser.add_argument(
     '--dry-run', action='store_true', help='If set, do not upload data but show what would be uploaded')
+
+parser.add_argument('--not-reviewed', dest='reviewed', action='store_false')
+
 parser.add_argument('--batch_size', type=int, help='Number of answers to upload in one batch', default=5000)
 
 subparsers = parser.add_subparsers(dest='inputtype')
@@ -97,7 +100,7 @@ if __name__ == '__main__':
                 # The codes are in "list" format, i.e. for every row [code_id1, code_id2] (different lengths for rows possible)
                 df_in['codes'] = df_in[codes_cols].values.tolist()
                 df_in['codes'] = df_in['codes'].apply(lambda x: [int(it) for it in x if not pd.isnull(it)])
-            df_in['reviewed'] = True
+            df_in['reviewed'] = args.reviewed
             answer_cols.append('codes')
             answer_cols.append('reviewed')
             df_in = df_in.drop(codes_cols, axis=1)
@@ -116,11 +119,9 @@ if __name__ == '__main__':
 
         # preparing request data
         df_answers = df_in.drop(auxiliary_cols, axis=1)
+        df_answers['auxiliary_columns'] = auxiliary_cols.values.tolist()
         answers = df_answers.to_dict(orient='records')
-        data = []
-        for i, textrow in enumerate(answers):
-            textrow['auxiliary_columns'] = auxiliary_cols.values[i].tolist()
-            data.append(textrow)
+
     elif args.inputtype == 'json':
         with open(args.input, 'r') as f:
             data = json.loads(f.read())
@@ -137,9 +138,15 @@ if __name__ == '__main__':
     else:
         raise ValueError('Must supply either json or xls')
 
+    # Clean the sourcelanguage col: If it's not a valid string, remove it
+    if args.sourcelanguage_col:
+        for ans in answers:
+            if not isinstance(ans['source_language'], str):
+                ans.pop('source_language')
+
     # add the answers using the api
     if args.dry_run:
-        print('Adding the following answers: ', data)
+        print('Adding the following answers: ', answers)
     else:
         # login
         api = CoditAPI('en')
