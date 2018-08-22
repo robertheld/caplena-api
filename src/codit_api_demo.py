@@ -285,7 +285,7 @@ class CoditAPI(object):
             return r.json()
 
     def createProject(
-        self, name, language, translate=False, auxiliary_column_names=[], questions=[], rows=[]
+        self, name, language, translate=False, auxiliary_column_names=[], questions=[], rows=[], async=False
     ):
         """
         API method to create a new project
@@ -294,8 +294,7 @@ class CoditAPI(object):
         * For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
         required beforehand
         * When creating a new project you can also create questions and rows belonging to it.
-        * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to
-          an existing project.
+        * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an existing project.
         * Rows can also be added to a project at a later time
 
         Parameters
@@ -340,14 +339,15 @@ class CoditAPI(object):
             "rows": rows
         }
 
-        r = self._makeRequest('post', '/projects/', data)
+        get_params = '?async=true' if async else ''
+        r = self._makeRequest('post', '/projects/{}'.format(get_params), data)
 
         if (r.status_code != 201):
             return self._handleBadResponse(r)
         else:
             return r.json()
 
-    def addRowsToProject(self, project_id, rows):
+    def addRowsToProject(self, project_id, rows, async=False):
         """
         API method to add rows to a previously created project.
 
@@ -368,7 +368,8 @@ class CoditAPI(object):
             `False` otherwise
 
         """
-        r = self._makeRequest('post', '/projects/{}/rows'.format(project_id), rows)
+        get_params = '?async=true' if async else ''
+        r = self._makeRequest('post', '/projects/{}/rows{}'.format(project_id, get_params), rows)
 
         if (r.status_code != 201):
             return self._handleBadResponse(r)

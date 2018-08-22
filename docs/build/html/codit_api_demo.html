@@ -115,8 +115,11 @@ and purposes that are intended by the original author (Caplena GmbH).</p>
 <dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span> <span class="o">=</span> <span class="n">CoditAPI</span><span class="p">(</span><span class="s1">&#39;de&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s1">&#39;my_username&#39;</span><span class="p">,</span> <span class="s1">&#39;my_password&#39;</span><span class="p">)</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">listSurveys</span><span class="p">()</span>
-<span class="go">[{&quot;name&quot;: &quot;survey 1&quot;, &quot;codebook&quot;: [{...}]}, {&quot;name&quot;: &quot;Survey 2&quot;, ...}, ...]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">listProjects</span><span class="p">()</span>
+<span class="go">[{&quot;name&quot;: &quot;project 1&quot;,</span>
+<span class="go"> &quot;questions&quot;: [{&quot;name&quot;: &quot;question A&quot;}, ...]},</span>
+<span class="go"> &quot;rows&quot;: [{&quot;answers&quot;: [{...}, ...], &quot;auxiliary_columns&quot;: [...]}]</span>
+<span class="go">]</span>
 </pre></div>
 </div>
 </dd>
@@ -154,79 +157,98 @@ Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.listSurveys">
-<code class="descname">listSurveys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listSurveys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listSurveys" title="Permalink to this definition">¶</a></dt>
-<dd><p>API method to list all surveys that belong to this user.</p>
-<p>List all surveys of the user.</p>
-<p><em>Note:</em> The returned surveys only contain global meta information of the surveys and not the response texts.
+<dt id="codit_api_demo.CoditAPI.listProjects">
+<code class="descname">listProjects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listProjects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listProjects" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to list all projects that belong to this user.</p>
+<p>List all projects of the user.</p>
+<p><em>Note:</em> The returned projects contain global meta information of the projects <em>and</em> their questions, but not the response texts.
 <em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>surveys</strong> – A list of all surveys belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> – A list of all projects belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of survey objects</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of project objects</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.listInheritableSurveys">
-<code class="descname">listInheritableSurveys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listInheritableSurveys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listInheritableSurveys" title="Permalink to this definition">¶</a></dt>
-<dd><p>API method to list all surveys of which inheritance is possible.</p>
-<p>List contains all surveys belonging to user, as well as codit.co provided models.</p>
-<p><em>Note:</em> The returned surveys only contain basic meta information and not the response texts. To get more detailed information about a certain survey call the <cite>listSurveys</cite> method.
+<dt id="codit_api_demo.CoditAPI.listInheritableProjects">
+<code class="descname">listInheritableProjects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listInheritableProjects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listInheritableProjects" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to list all projects of which inheritance is possible.</p>
+<p>List contains all projects belonging to user, as well as codit.co provided models.</p>
+<p><em>Note:</em> The returned projects only contain basic meta information on the project and their questions, but not the response texts. To get more detailed information about a certain project call the <cite>listprojects</cite> method.
 <em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>surveys</strong> – A list of all surveys that can be used for inheritance. This is the concatenation of all surveys owned by the user and global codit.co models.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> – A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global codit.co models.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of survey objects</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of project objects</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.createSurvey">
-<code class="descname">createSurvey</code><span class="sig-paren">(</span><em>name</em>, <em>codebook</em>, <em>language</em>, <em>auxiliary_column_names=[]</em>, <em>description=''</em>, <em>inherits_from=None</em>, <em>translate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.createSurvey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.createSurvey" title="Permalink to this definition">¶</a></dt>
-<dd><p>API method to create a new survey.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<dt id="codit_api_demo.CoditAPI.listQuestions">
+<code class="descname">listQuestions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listQuestions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listQuestions" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to list all questions that belong to this user.</p>
+<p>List all questions of the user.</p>
+<p><em>Note:</em> The returned questions only contain global meta information of the questions and not the response texts.
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>questions</strong> – A list of all questions belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of question objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.createProject">
+<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>async=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.createProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to create a new project</p>
+<p><em>Note:</em>
+* For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand
+* When creating a new project you can also create questions and rows belonging to it.
+* Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an existing project.
+* Rows can also be added to a project at a later time</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em><em>, </em><em>required</em>) – Name of the new survey</li>
-<li><strong>codebook</strong> (<em>list</em><em>, </em><em>required</em>) – List of codes (dictionaries), each containing the keys <cite>id</cite>, <cite>label</cite> and <cite>category</cite>
-Can also be an empty list.</li>
-<li><strong>language</strong> (<em>str</em><em>, </em><em>required</em>) – Language of the survey, valid choices are {en|de}
+<li><strong>name</strong> (<em>str</em><em>, </em><em>required</em>) – Name of the new project</li>
+<li><strong>language</strong> (<em>str</em><em>, </em><em>required</em>) – Language of the project, valid choices are {en|de}
 Has nothing to do with the language the API is set to (the attribute <cite>language</cite>.)</li>
-<li><strong>auxiliary_column_names</strong> (<em>list</em><em>, </em><em>optional</em>) – List of strings, naming additional columns that will be sent with each answer.
+<li><strong>labels</strong> (<em>list</em><em>, </em><em>optional</em>) – List of strings with labels to attach to this project</li>
+<li><strong>auxiliary_column_names</strong> (<em>list</em><em>, </em><em>optional</em>) – List of strings, naming additional columns that will be sent with each row.
 Can also be an empty list.
 The number of elements in this list must match the number of elements
-in the <cite>auxiliary_columns</cite> field when adding answers later on.</li>
-<li><strong>description</strong> (<em>str</em><em>, </em><em>optional</em>) – String describing this survey</li>
-<li><strong>inherits_from</strong> (<em>int</em><em>, </em><em>optional</em>) – ID of another survey of this user, that the model should be based on.
-The codebook of that survey should be <em>identical</em> or <em>almost</em> identical
-in order for the AI to deliver good results.</li>
-<li><strong>translate</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flat indicating whether to translate this survey (where other language than <cite>language</cite> detected)
+in the <cite>auxiliary_columns</cite> field when adding rows.</li>
+<li><strong>translate</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag indicating whether to translate this project (where other language than <cite>language</cite> detected)
 using the Google API.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>survey</strong> – A dictionary containing all attributes of the newly created survey if the call was successful
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>project</strong> – A dictionary containing all attributes of the newly created project if the call was successful
 <cite>False</cite> otherwise</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">survey object</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">project object</p>
 </td>
 </tr>
 </tbody>
@@ -234,9 +256,9 @@ using the Google API.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.addAnswersToSurvey">
-<code class="descname">addAnswersToSurvey</code><span class="sig-paren">(</span><em>survey_id</em>, <em>answers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.addAnswersToSurvey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.addAnswersToSurvey" title="Permalink to this definition">¶</a></dt>
-<dd><p>API method to add answers to a previously created survey.</p>
+<dt id="codit_api_demo.CoditAPI.addRowsToProject">
+<code class="descname">addRowsToProject</code><span class="sig-paren">(</span><em>project_id</em>, <em>rows</em>, <em>async=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.addRowsToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.addRowsToProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to add rows to a previously created project.</p>
 <p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -244,18 +266,37 @@ required beforehand</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>survey_id</strong> (<em>int</em>) – ID of the survey to add the answers to</li>
-<li><strong>answers</strong> (list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)) – List of objects of type Answer</li>
+<li><strong>project_id</strong> (<em>int</em>) – ID of the project to add the rows to</li>
+<li><strong>rows</strong> (list(<a class="reference internal" href="#codit_api_demo.Row" title="codit_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)) – List of objects of type Row</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> – A list of dictionaries containing attributes of the newly created answers if the call was successful
-<cite>False</cite> otherwise
-<em>Note:</em> When bulk creating multiple answers, no id is return for these elements</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rows</strong> – A list of dictionaries containing attributes of the newly created rows if the call was successful
+<cite>False</cite> otherwise</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of answer objects</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of row objects</p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.listRows">
+<code class="descname">listRows</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listRows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listRows" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to list all rows of a specific project.</p>
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_id</strong> (<em>int</em>) – ID of the project of which to return the rows</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> – A list of all rows belonging to the question if the call was successful, <cite>False</cite> otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#codit_api_demo.Row" title="codit_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -263,19 +304,26 @@ required beforehand</p>
 
 <dl class="method">
 <dt id="codit_api_demo.CoditAPI.listAnswers">
-<code class="descname">listAnswers</code><span class="sig-paren">(</span><em>survey_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listAnswers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listAnswers" title="Permalink to this definition">¶</a></dt>
-<dd><p>API method to list all answers of a specific survey.</p>
+<code class="descname">listAnswers</code><span class="sig-paren">(</span><em>question_id</em>, <em>no_group=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listAnswers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listAnswers" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to list all answers of a specific question.</p>
 <p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to return the answers</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>question_id</strong> (<em>int</em>) – ID of the question of which to return the answers</li>
+<li><strong>no_group</strong> (<em>bool</em>) – If true, no grouping will be applied to answers list,
+overriding the <cite>group_identical</cite> property of the question</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> – A list of all answers belonging to the survey if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> – A list of all answers belonging to the question if the call was successful, <cite>False</cite> otherwise</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -283,8 +331,8 @@ required beforehand</p>
 
 <dl class="method">
 <dt id="codit_api_demo.CoditAPI.requestPredictions">
-<code class="descname">requestPredictions</code><span class="sig-paren">(</span><em>survey_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.requestPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.requestPredictions" title="Permalink to this definition">¶</a></dt>
-<dd><p>API method to request the AI-assistant to train itself based on coded answers of specified survey. Only works
+<code class="descname">requestPredictions</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.requestPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.requestPredictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to request the AI-assistant to train itself based on coded answers of specified question. Only works
 if at least 6 answers have been coded.</p>
 <p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
@@ -292,7 +340,7 @@ required beforehand</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to request AI to make predictions</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) – ID of the question of which to request AI to make predictions</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> – True if request successful, False otherwise</td>
 </tr>
@@ -304,7 +352,7 @@ required beforehand</p>
 
 <dl class="method">
 <dt id="codit_api_demo.CoditAPI.getPredictions">
-<code class="descname">getPredictions</code><span class="sig-paren">(</span><em>survey_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.getPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.getPredictions" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getPredictions</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.getPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.getPredictions" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to get AI-coded codes and respective answers. Requires previous call to
 <a class="reference internal" href="#codit_api_demo.CoditAPI.requestPredictions" title="codit_api_demo.CoditAPI.requestPredictions"><code class="xref py py-func docutils literal"><span class="pre">requestPredictions()</span></code></a>.</p>
 <p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
@@ -313,7 +361,7 @@ required beforehand</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>survey_id</strong> (<em>int</em>) – ID of the survey of which to return the code predictions made by AI</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) – ID of the question of which to return the code predictions made by AI</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>result</strong> – None if no predictions are available (response code 204)
 Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cite> and <cite>codes</cite>) which are the predictions, n_trainings (counter), training_completed (iso timestamp), model (meta information on model performance)</td>
@@ -324,6 +372,93 @@ Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cit
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.deleteQuestion">
+<code class="descname">deleteQuestion</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.deleteQuestion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.deleteQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to delete question and its answers.</p>
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) – ID of the question to delete</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> – True if request successful, False otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="codit_api_demo.Question">
+<em class="property">class </em><code class="descclassname">codit_api_demo.</code><code class="descname">Question</code><a class="reference internal" href="_modules/codit_api_demo.html#Question"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.Question" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<p>Answer object, purely for reference</p>
+<dl class="attribute">
+<dt id="codit_api_demo.Question.name">
+<code class="descname">name</code><a class="headerlink" href="#codit_api_demo.Question.name" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str, required</em> – Name of the question.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="codit_api_demo.Question.description">
+<code class="descname">description</code><a class="headerlink" href="#codit_api_demo.Question.description" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str, optional</em> – String describing this question</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="codit_api_demo.Question.group_identical">
+<code class="descname">group_identical</code><a class="headerlink" href="#codit_api_demo.Question.group_identical" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool, optional</em> – Flag indicating whether to group identical answers in coding view and when listing answers.
+Default=true</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="codit_api_demo.Question.group_identical_exclude">
+<code class="descname">group_identical_exclude</code><a class="headerlink" href="#codit_api_demo.Question.group_identical_exclude" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str, optional</em> – All answer texts matching this regular expression won’t be grouped. Default=’‘</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="codit_api_demo.Question.smart_sort">
+<code class="descname">smart_sort</code><a class="headerlink" href="#codit_api_demo.Question.smart_sort" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool, optional</em> – If the smart sorting feature should be enabled. Default=true</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="codit_api_demo.Question.codebook">
+<code class="descname">codebook</code><a class="headerlink" href="#codit_api_demo.Question.codebook" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list, required</em> – List of codes (dictionaries), each containing the keys <cite>id</cite>, <cite>label</cite> and <cite>category</cite>
+Can also be an empty list.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="codit_api_demo.Question.inherits_from">
+<code class="descname">inherits_from</code><a class="headerlink" href="#codit_api_demo.Question.inherits_from" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int, optional</em> – ID of another question of this user, that the model should be based on.
+The codebook of that question should be <em>identical</em> or <em>almost</em> identical
+in order for the AI to deliver good results.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="codit_api_demo.Row">
+<em class="property">class </em><code class="descclassname">codit_api_demo.</code><code class="descname">Row</code><a class="reference internal" href="_modules/codit_api_demo.html#Row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.Row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<dl class="docutils">
+<dt>auxiliary_columns: list(str), required</dt>
+<dd>Needs to have the same number of elemenst as the <cite>auxiliary_column_names</cite> field of the project
+it belongs to</dd>
+<dt>answers: list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>), required</dt>
+<dd>A list of answers, whereby exactly one answer needs to be provided for every question of the project
+it belongs to</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
@@ -338,9 +473,9 @@ Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cit
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Answer.auxiliary_columns">
-<code class="descname">auxiliary_columns</code><a class="headerlink" href="#codit_api_demo.Answer.auxiliary_columns" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list(str), optional</em> – Only required if survey has <cite>len(auxiliary_column_names)&gt;0</cite></p>
+<dt id="codit_api_demo.Answer.question">
+<code class="descname">question</code><a class="headerlink" href="#codit_api_demo.Answer.question" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str, required</em> – The name of the question this answer belongs to</p>
 </dd></dl>
 
 <dl class="attribute">
