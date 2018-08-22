@@ -34,8 +34,11 @@ class CoditAPI(object):
         >>> api = CoditAPI('de')
         >>> api.login('my_username', 'my_password')
         True
-        >>> api.listSurveys()
-        [{"name": "survey 1", "codebook": [{...}]}, {"name": "Survey 2", ...}, ...]
+        >>> api.listProjects()
+        [{"name": "project 1",
+         "questions": [{"name": "question A"}, ...]},
+         "rows": [{"answers": [{...}, ...], "auxiliary_columns": [...]}]
+        ]
 
     """
     _valid_languages = ['en', 'de']
@@ -203,13 +206,13 @@ class CoditAPI(object):
             self.authenticated = True
             return True
 
-    def listSurveys(self):
+    def listProjects(self):
         """
-        API method to list all surveys that belong to this user.
+        API method to list all projects that belong to this user.
 
-        List all surveys of the user.
+        List all projects of the user.
 
-        *Note:* The returned surveys only contain global meta information of the surveys and not the response texts.
+        *Note:* The returned projects contain global meta information of the projects *and* their questions, but not the response texts.
         *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
         required beforehand
 
@@ -218,24 +221,24 @@ class CoditAPI(object):
 
         Returns
         -------
-        surveys : list of survey objects
-            A list of all surveys belonging to the user if the call was successful, `False` otherwise
+        projects : list of project objects
+            A list of all projects belonging to the user if the call was successful, `False` otherwise
 
         """
-        r = self._makeRequest('get', '/surveys/')
+        r = self._makeRequest('get', '/projects/')
 
         if (r.status_code != 200):
             return self._handleBadResponse(r)
         else:
             return r.json()
 
-    def listInheritableSurveys(self):
+    def listInheritableProjects(self):
         """
-        API method to list all surveys of which inheritance is possible.
+        API method to list all projects of which inheritance is possible.
 
-        List contains all surveys belonging to user, as well as codit.co provided models.
+        List contains all projects belonging to user, as well as codit.co provided models.
 
-        *Note:* The returned surveys only contain basic meta information and not the response texts. To get more detailed information about a certain survey call the `listSurveys` method.
+        *Note:* The returned projects only contain basic meta information on the project and their questions, but not the response texts. To get more detailed information about a certain project call the `listprojects` method.
         *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
         required beforehand
 
@@ -244,68 +247,79 @@ class CoditAPI(object):
 
         Returns
         -------
-        surveys : list of survey objects
-            A list of all surveys that can be used for inheritance. This is the concatenation of all surveys owned by the user and global codit.co models.
+        projects : list of project objects
+            A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global codit.co models.
 
         """
-        r = self._makeRequest('get', '/surveys-inheritable/')
+        r = self._makeRequest('get', '/projects-inheritable/')
 
         if (r.status_code != 200):
             return self._handleBadResponse(r)
         else:
             return r.json()
 
-    def createSurvey(
-        self,
-        name,
-        codebook,
-        language,
-        auxiliary_column_names=[],
-        description='',
-        inherits_from=None,
-        translate=False,
-        group_identical=True,
-        group_identical_exclude=''
+    def listQuestions(self):
+        """
+        API method to list all questions that belong to this user.
+
+        List all questions of the user.
+
+        *Note:* The returned questions only contain global meta information of the questions and not the response texts.
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        questions : list of question objects
+            A list of all questions belonging to the user if the call was successful, `False` otherwise
+
+        """
+        r = self._makeRequest('get', '/questions/')
+
+        if (r.status_code != 200):
+            return self._handleBadResponse(r)
+        else:
+            return r.json()
+
+    def createProject(
+        self, name, language, translate=False, auxiliary_column_names=[], questions=[], rows=[]
     ):
         """
-        API method to create a new survey.
+        API method to create a new project
 
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:*
+        * For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
         required beforehand
+        * When creating a new project you can also create questions and rows belonging to it.
+        * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to
+          an existing project.
+        * Rows can also be added to a project at a later time
 
         Parameters
         ----------
         name : str, required
-            Name of the new survey
-        codebook : list, required
-            List of codes (dictionaries), each containing the keys `id`, `label` and `category`
-            Can also be an empty list.
+            Name of the new project
         language : str, required
-            Language of the survey, valid choices are {en|de}
+            Language of the project, valid choices are {en|de}
             Has nothing to do with the language the API is set to (the attribute `language`.)
+        labels: list, optional
+            List of strings with labels to attach to this project
         auxiliary_column_names : list, optional
-            List of strings, naming additional columns that will be sent with each answer.
+            List of strings, naming additional columns that will be sent with each row.
             Can also be an empty list.
             The number of elements in this list must match the number of elements
-            in the `auxiliary_columns` field when adding answers later on.
-        description : str, optional
-            String describing this survey
-        inherits_from : int, optional
-            ID of another survey of this user, that the model should be based on.
-            The codebook of that survey should be *identical* or *almost* identical
-            in order for the AI to deliver good results.
+            in the `auxiliary_columns` field when adding rows.
         translate : bool, optional
-            Flag indicating whether to translate this survey (where other language than `language` detected)
+            Flag indicating whether to translate this project (where other language than `language` detected)
             using the Google API.
-        group_identical : bool, optional
-            Flag indicating whether to group identical answers in coding view and when listing answers.
-        group_identical_exclude : str, optional
-            All answer texts matching this regular expression won't be grouped
 
         Returns
         -------
-        survey : survey object
-            A dictionary containing all attributes of the newly created survey if the call was successful
+        project : project object
+            A dictionary containing all attributes of the newly created project if the call was successful
             `False` otherwise
 
         """
@@ -319,85 +333,105 @@ class CoditAPI(object):
 
         data = {
             "name": name,
-            "codebook": codebook,
-            "surveytype": 'FO',
             "language": language,
             "auxiliary_column_names": auxiliary_column_names,
-            "description": description,
-            "inherits_from": inherits_from,
             "translated": 1 if translate else 0,
-            "group_identical": group_identical,
-            "group_identical_exclude": group_identical_exclude
+            "questions": questions,
+            "rows": rows
         }
 
-        r = self._makeRequest('post', '/surveys/', data)
+        r = self._makeRequest('post', '/projects/', data)
 
         if (r.status_code != 201):
             return self._handleBadResponse(r)
         else:
             return r.json()
 
-    def addAnswersToSurvey(self, survey_id, answers):
+    def addRowsToProject(self, project_id, rows):
         """
-        API method to add answers to a previously created survey.
+        API method to add rows to a previously created project.
 
         *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
         required beforehand
 
         Parameters
         ----------
-        survey_id : int
-            ID of the survey to add the answers to
-        answers : list(:class:`.Answer`)
-            List of objects of type Answer
+        project_id : int
+            ID of the project to add the rows to
+        rows : list(:class:`.Row`)
+            List of objects of type Row
 
         Returns
         -------
-        answers : list of answer objects
-            A list of dictionaries containing attributes of the newly created answers if the call was successful
+        rows : list of row objects
+            A list of dictionaries containing attributes of the newly created rows if the call was successful
             `False` otherwise
-            *Note:* When bulk creating multiple answers, no id is return for these elements
 
         """
-        r = self._makeRequest('post', '/surveys/{}/answers'.format(survey_id), answers)
+        r = self._makeRequest('post', '/projects/{}/rows'.format(project_id), rows)
 
         if (r.status_code != 201):
             return self._handleBadResponse(r)
         else:
             return r.json()
 
-    def listAnswers(self, survey_id, no_group=False):
+    def listRows(self, project_id):
         """
-        API method to list all answers of a specific survey.
+        API method to list all rows of a specific project.
 
         *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
         required beforehand
 
         Parameters
         ----------
-        survey_id : int
-            ID of the survey of which to return the answers
-        no_group : bool
-            If true, no grouping will be applied to answers list,
-            overriding the `group_identical` property of the survey
+        project_id : int
+            ID of the project of which to return the rows
 
         Returns
         -------
-        answers : list(:class:`.Answer`)
-            A list of all answers belonging to the survey if the call was successful, `False` otherwise
+        answers : list(:class:`.Row`)
+            A list of all rows belonging to the question if the call was successful, `False` otherwise
 
         """
-        get_params = '?no_group' if no_group else ''
-        r = self._makeRequest('get', '/surveys/{}/answers{}'.format(survey_id, get_params))
+        r = self._makeRequest('get', '/projects/{}/rows'.format(project_id))
 
         if (r.status_code != 200):
             return self._handleBadResponse(r)
         else:
             return r.json()
 
-    def requestPredictions(self, survey_id):
+    def listAnswers(self, question_id, no_group=False):
         """
-        API method to request the AI-assistant to train itself based on coded answers of specified survey. Only works
+        API method to list all answers of a specific question.
+
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
+
+        Parameters
+        ----------
+        question_id : int
+            ID of the question of which to return the answers
+        no_group : bool
+            If true, no grouping will be applied to answers list,
+            overriding the `group_identical` property of the question
+
+        Returns
+        -------
+        answers : list(:class:`.Answer`)
+            A list of all answers belonging to the question if the call was successful, `False` otherwise
+
+        """
+        get_params = '?no_group' if no_group else ''
+        r = self._makeRequest('get', '/questions/{}/answers{}'.format(question_id, get_params))
+
+        if (r.status_code != 200):
+            return self._handleBadResponse(r)
+        else:
+            return r.json()
+
+    def requestPredictions(self, question_id):
+        """
+        API method to request the AI-assistant to train itself based on coded answers of specified question. Only works
         if at least 6 answers have been coded.
 
         *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
@@ -405,8 +439,8 @@ class CoditAPI(object):
 
         Parameters
         ----------
-        survey_id : int
-            ID of the survey of which to request AI to make predictions
+        question_id : int
+            ID of the question of which to request AI to make predictions
 
         Returns
         -------
@@ -414,14 +448,14 @@ class CoditAPI(object):
             True if request successful, False otherwise
 
         """
-        r = self._makeRequest('post', '/surveys/{}/request-training'.format(survey_id))
+        r = self._makeRequest('post', '/questions/{}/request-training'.format(question_id))
 
         if (r.status_code != 200):
             return self._handleBadResponse(r)
         else:
             return r.json()
 
-    def getPredictions(self, survey_id):
+    def getPredictions(self, question_id):
         """
         API method to get AI-coded codes and respective answers. Requires previous call to
         :func:`~codit_api_demo.CoditAPI.requestPredictions`.
@@ -431,8 +465,8 @@ class CoditAPI(object):
 
         Parameters
         ----------
-        survey_id : int
-            ID of the survey of which to return the code predictions made by AI
+        question_id : int
+            ID of the question of which to return the code predictions made by AI
 
         Returns
         -------
@@ -441,7 +475,7 @@ class CoditAPI(object):
             Otherwise contains keys `answers` (with itself has keys `id` and `codes`) which are the predictions, n_trainings (counter), training_completed (iso timestamp), model (meta information on model performance)
 
         """
-        r = self._makeRequest('get', '/surveys/{}/codes-predicted'.format(survey_id))
+        r = self._makeRequest('get', '/questions/{}/codes-predicted'.format(question_id))
 
         if (r.status_code == 204):
             # No content is available, i.e. no predictions are ready for this answer
@@ -451,17 +485,17 @@ class CoditAPI(object):
         else:
             return self._handleBadResponse(r)
 
-    def deleteSurvey(self, survey_id):
+    def deleteQuestion(self, question_id):
         """
-        API method to delete survey and its answers.
+        API method to delete question and its answers.
 
         *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
         required beforehand
 
         Parameters
         ----------
-        survey_id : int
-            ID of the survey to delete
+        question_id : int
+            ID of the question to delete
 
         Returns
         -------
@@ -469,12 +503,51 @@ class CoditAPI(object):
             True if request successful, False otherwise
 
         """
-        r = self._makeRequest('delete', '/surveys/{}'.format(survey_id))
+        r = self._makeRequest('delete', '/questions/{}'.format(question_id))
 
         if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return True
+
+
+class Question(dict):
+    """
+    Answer object, purely for reference
+
+    Attributes
+    ----------
+    name : str, required
+        Name of the question.
+    description : str, optional
+        String describing this question
+    group_identical : bool, optional
+        Flag indicating whether to group identical answers in coding view and when listing answers.
+        Default=true
+    group_identical_exclude : str, optional
+        All answer texts matching this regular expression won't be grouped. Default=''
+    smart_sort: bool, optional
+        If the smart sorting feature should be enabled. Default=true
+    codebook : list, required
+        List of codes (dictionaries), each containing the keys `id`, `label` and `category`
+        Can also be an empty list.
+    inherits_from : int, optional
+        ID of another question of this user, that the model should be based on.
+        The codebook of that question should be *identical* or *almost* identical
+        in order for the AI to deliver good results.
+
+    """
+
+
+class Row(dict):
+    """
+    auxiliary_columns: list(str), required
+        Needs to have the same number of elemenst as the `auxiliary_column_names` field of the project
+        it belongs to
+    answers: list(:class:`.Answer`), required
+        A list of answers, whereby exactly one answer needs to be provided for every question of the project
+        it belongs to
+    """
 
 
 class Answer(dict):
@@ -485,8 +558,8 @@ class Answer(dict):
     ----------
     text : str, required
         Text of the answer.
-    auxiliary_columns: list(str), optional
-        Only required if survey has `len(auxiliary_column_names)>0`
+    question: str, required
+        The name of the question this answer belongs to
     reviewed : bool, optional
         Answers having the "reviewed" are assumed to have all codes correct
         and will be used to train the AI.
@@ -525,74 +598,124 @@ if __name__ == '__main__':
         print("Login Successful!")
 
     ###########################################################
-    # LIST SURVEYS: Get all existing surveys of this user
+    # LIST PROJECTS: Get all existing projects of this user
     ###########################################################
-    existing_surveys = api.listSurveys()
+    existing_projects = api.listProjects()
 
-    # Count how many surveys we have
-    print("There are {} existing surveys".format(len(existing_surveys)))
+    # Count how many projects we have
+    print("There are {} existing projects".format(len(existing_projects)))
 
     ###########################################################
-    # CREATE SURVEY: Create new survey and get its ID
+    # CREATE PROJECT: Create new project with two questions and two rows (=> 4 answers)
     ###########################################################
-    codebook = [
+    n_questions = 2
+    new_questions = [
         {
-            'id': 1,
-            'label': 'Code 1',
-            'category': 'CATEGORY 1'
-        }, {
-            'id': 20,
-            'label': 'Code 2',
-            'category': 'CATEGORY 2'
-        }
+            'name':
+            'My new question {}'.format(question_number),
+            'description':
+            'Some description of question {}'.format(question_number),
+            'codebook': [
+                {
+                    'id': 1,
+                    'label': 'Code 1 of question {}'.format(question_number),
+                    'category': 'CATEGORY 1'
+                }, {
+                    'id': 20,
+                    'label': 'Code 2 of question {}'.format(question_number),
+                    'category': 'CATEGORY 2'
+                }
+            ]
+        } for question_number in range(n_questions)
     ]
 
-    new_survey = api.createSurvey(
-        "My new survey",
-        codebook,
-        "de",
-        auxiliary_column_names=['ID', 'some other column'],
-        description="Some description of survey",
-        translate=True
-    )
-    if new_survey is not False:
-        print("Created new survey with id {}".format(new_survey['id']))
-
-    ###########################################################
-    # CREATE ANSWERS: Add answers to existing survey
-    ###########################################################
-    answers = [
+    new_rows = [
+        # Row 1
         {
-            "text": "Answer-text 1",
-            "auxiliary_columns": ["ID 1", "Some other column value 1"]
-            # The values of the additional columns: Needs to be in same order as auxiliary_column_names of survey
+            # The values of the additional columns: Needs to be in same order as auxiliary_column_names of project
+            'auxiliary_columns': ['ID 1', 'Some other column value 1'],
+            'answers': [
+                {
+                    'text': 'Answer-text row 1 of question {}'.format(question_number),
+                    # We need to define to which question the answer belongs to
+                    'question': 'My new question {}'.format(question_number)
+                } for question_number in range(n_questions)
+            ]
         },
+        # Row 2
         {
-            "text": "Answer-text 2",
-            "auxiliary_columns": ["ID 2", "Some other column value 2"]
+            'auxiliary_columns': ['ID 2', 'Some other column value 2'],
+            'answers': [
+                {
+                    'text': 'Answer-text row 2 of question {}'.format(question_number),
+                    'question': 'My new question {}'.format(question_number)
+                } for question_number in range(n_questions)
+            ]
         }
     ]
 
-    new_answers = api.addAnswersToSurvey(new_survey['id'], answers)
-    if new_answers is not False:
-        print("Added {} new answers to survey {}".format(len(new_answers), new_survey['id']))
+    new_project = api.createProject(
+        "My new project",
+        language="de",
+        auxiliary_column_names=['ID', 'some other column'],
+        translate=True,
+        questions=new_questions,
+        rows=new_rows
+    )
+
+    if new_project is not False:
+        print("Created new project with id {}".format(new_project['id']))
+
+    question_id_1 = new_project['questions'][0]['id']
+    question_id_2 = new_project['questions'][1]['id']
 
     ###########################################################
-    # LIST ANSWERS: Get all answers of a specific survey
+    # ADD ROWS: Add one more row to existing project
+
+    # Note: When adding rows to an _existing_ project, the questions need to referenced by their ID
+    # not their name
+    further_rows = [
+        {
+            'auxiliary_columns': ['ID 3', 'Some other column value 3'],
+            'answers': [
+                {
+                    'text': 'Answer-text row 3 of question 1',
+                    'question': question_id_1
+                }, {
+                    'text': 'Answer-text row 3 of question 2',
+                    'question': question_id_2
+                }
+            ]
+        }
+    ]
+
+    further_rows_result = api.addRowsToProject(new_project['id'], further_rows)
+    if further_rows_result is not False:
+        print("Added {} new row to project {}".format(len(further_rows), new_project['id']))
+
     ###########################################################
-    answers = api.listAnswers(new_survey['id'])
+    # LIST ROWS: Get all rows of a specific project
+    ###########################################################
+    rows = api.listRows(new_project['id'])
+
+    print("This is the first row: {}".format(rows[0]))
+
+    ###########################################################
+    # LIST ANSWERS: Get all answers of a specific question
+    ###########################################################
+    answers = api.listAnswers(question_id_2)
 
     print(
-        "The first answer ('{}') has been assigned the codes: {}".format(
-            answers[0]['text'], answers[0]['codes']
+        "The first answer ('{}') of question {} has been assigned the codes: {}".format(
+            answers[0]['text'], question_id_2, answers[0]['codes']
         )
     )
 
     ###########################################################
-    # REQUEST PREDICTIONS: Instruct backend to make code predictions for survey
+    # REQUEST PREDICTIONS: Instruct backend to make code predictions for question
     ###########################################################
 
-    if api.requestPredictions(new_survey['id']):
+    if api.requestPredictions(question_id_1):
         print("Training request made, results will soon be available")
     else:
         print("An error occurred when requesting training")
@@ -606,10 +729,10 @@ if __name__ == '__main__':
     # of around 250s is recommended
     # time.sleep(250)
 
-    predictions = api.getPredictions(new_survey['id'])
+    predictions = api.getPredictions(question_id_1)
 
     if predictions is None:
-        print("No predictions are ready for this survey")
+        print("No predictions are ready for this question")
     elif 'answers' in predictions and len(predictions['answers']) > 0:
         print(
             "For answer {} the codes {} were predicted".format(
