@@ -232,6 +232,34 @@ class CoditAPI(object):
         else:
             return r.json()
 
+    def projectDetails(self, project_id):
+        """
+        API method to get the details of a specific project.
+
+        Get the details of a specific project.
+
+        *Note:* The returned projects contain global meta information of the project *and* their questions, but not the response texts.
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
+
+        Parameters
+        ----------
+        project_id : int, required
+            ID of the existing project
+
+        Returns
+        -------
+        project : a project object
+            The project object with the id requested if it exists, `False` otherwise
+
+        """
+        r = self._makeRequest('get', '/projects/{}'.format(project_id))
+
+        if (r.status_code != 200):
+            return self._handleBadResponse(r)
+        else:
+            return r.json()
+
     def listInheritableProjects(self):
         """
         API method to list all projects of which inheritance is possible.
