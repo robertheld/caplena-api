@@ -2,34 +2,37 @@
 
 <!doctype html>
 
+
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>codit_api_demo &#8212; Codit API Demo</title>
+    
     <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bizstyle.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="Codit API Demo" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -100,8 +103,11 @@
 <span class="sd">        &gt;&gt;&gt; api = CoditAPI(&#39;de&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; api.login(&#39;my_username&#39;, &#39;my_password&#39;)</span>
 <span class="sd">        True</span>
-<span class="sd">        &gt;&gt;&gt; api.listSurveys()</span>
-<span class="sd">        [{&quot;name&quot;: &quot;survey 1&quot;, &quot;codebook&quot;: [{...}]}, {&quot;name&quot;: &quot;Survey 2&quot;, ...}, ...]</span>
+<span class="sd">        &gt;&gt;&gt; api.listProjects()</span>
+<span class="sd">        [{&quot;name&quot;: &quot;project 1&quot;,</span>
+<span class="sd">         &quot;questions&quot;: [{&quot;name&quot;: &quot;question A&quot;}, ...]},</span>
+<span class="sd">         &quot;rows&quot;: [{&quot;answers&quot;: [{...}, ...], &quot;auxiliary_columns&quot;: [...]}]</span>
+<span class="sd">        ]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_valid_languages</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="s1">&#39;de&#39;</span><span class="p">]</span>
@@ -123,7 +129,7 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CoditAPI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CoditAPI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">csrftoken</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">authenticated</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span> <span class="o">=</span> <span class="s2">&quot;https://api.codit.co/api&quot;</span>
@@ -269,13 +275,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">authenticated</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="CoditAPI.listSurveys"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listSurveys">[docs]</a>    <span class="k">def</span> <span class="nf">listSurveys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CoditAPI.listProjects"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listProjects">[docs]</a>    <span class="k">def</span> <span class="nf">listProjects</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        API method to list all surveys that belong to this user.</span>
+<span class="sd">        API method to list all projects that belong to this user.</span>
 
-<span class="sd">        List all surveys of the user.</span>
+<span class="sd">        List all projects of the user.</span>
 
-<span class="sd">        *Note:* The returned surveys only contain global meta information of the surveys and not the response texts.</span>
+<span class="sd">        *Note:* The returned projects contain global meta information of the projects *and* their questions, but not the response texts.</span>
 <span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
 <span class="sd">        required beforehand</span>
 
@@ -284,24 +290,52 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        surveys : list of survey objects</span>
-<span class="sd">            A list of all surveys belonging to the user if the call was successful, `False` otherwise</span>
+<span class="sd">        projects : list of project objects</span>
+<span class="sd">            A list of all projects belonging to the user if the call was successful, `False` otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys/&#39;</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CoditAPI.listInheritableSurveys"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listInheritableSurveys">[docs]</a>    <span class="k">def</span> <span class="nf">listInheritableSurveys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CoditAPI.projectDetails"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.projectDetails">[docs]</a>    <span class="k">def</span> <span class="nf">projectDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        API method to list all surveys of which inheritance is possible.</span>
+<span class="sd">        API method to get the details of a specific project.</span>
 
-<span class="sd">        List contains all surveys belonging to user, as well as codit.co provided models.</span>
+<span class="sd">        Get the details of a specific project.</span>
 
-<span class="sd">        *Note:* The returned surveys only contain basic meta information and not the response texts. To get more detailed information about a certain survey call the `listSurveys` method.</span>
+<span class="sd">        *Note:* The returned projects contain global meta information of the project *and* their questions, but not the response texts.</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        project_id : int, required</span>
+<span class="sd">            ID of the existing project</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        project : a project object</span>
+<span class="sd">            The project object with the id requested if it exists, `False` otherwise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CoditAPI.listInheritableProjects"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listInheritableProjects">[docs]</a>    <span class="k">def</span> <span class="nf">listInheritableProjects</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        API method to list all projects of which inheritance is possible.</span>
+
+<span class="sd">        List contains all projects belonging to user, as well as codit.co provided models.</span>
+
+<span class="sd">        *Note:* The returned projects only contain basic meta information on the project and their questions, but not the response texts. To get more detailed information about a certain project call the `listprojects` method.</span>
 <span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
 <span class="sd">        required beforehand</span>
 
@@ -310,71 +344,78 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        surveys : list of survey objects</span>
-<span class="sd">            A list of all surveys that can be used for inheritance. This is the concatenation of all surveys owned by the user and global codit.co models.</span>
+<span class="sd">        projects : list of project objects</span>
+<span class="sd">            A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global codit.co models.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys-inheritable/&#39;</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects-inheritable/&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CoditAPI.createSurvey"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.createSurvey">[docs]</a>    <span class="k">def</span> <span class="nf">createSurvey</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">,</span>
-        <span class="n">codebook</span><span class="p">,</span>
-        <span class="n">language</span><span class="p">,</span>
-        <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[],</span>
-        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="n">inherits_from</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">translate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">group_identical</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">group_identical_exclude</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="n">labels</span><span class="o">=</span><span class="p">[]</span>
+<div class="viewcode-block" id="CoditAPI.listQuestions"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listQuestions">[docs]</a>    <span class="k">def</span> <span class="nf">listQuestions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        API method to list all questions that belong to this user.</span>
+
+<span class="sd">        List all questions of the user.</span>
+
+<span class="sd">        *Note:* The returned questions only contain global meta information of the questions and not the response texts.</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        questions : list of question objects</span>
+<span class="sd">            A list of all questions belonging to the user if the call was successful, `False` otherwise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CoditAPI.createProject"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.createProject">[docs]</a>    <span class="k">def</span> <span class="nf">createProject</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">language</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[],</span> <span class="n">questions</span><span class="o">=</span><span class="p">[],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[],</span> <span class="k">async</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        API method to create a new survey.</span>
+<span class="sd">        API method to create a new project</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        *Note:*</span>
+<span class="sd">        * For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
 <span class="sd">        required beforehand</span>
+<span class="sd">        * When creating a new project you can also create questions and rows belonging to it.</span>
+<span class="sd">        * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an existing project.</span>
+<span class="sd">        * Rows can also be added to a project at a later time</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        name : str, required</span>
-<span class="sd">            Name of the new survey</span>
-<span class="sd">        codebook : list, required</span>
-<span class="sd">            List of codes (dictionaries), each containing the keys `id`, `label` and `category`</span>
-<span class="sd">            Can also be an empty list.</span>
+<span class="sd">            Name of the new project</span>
 <span class="sd">        language : str, required</span>
-<span class="sd">            Language of the survey, valid choices are {en|de}</span>
+<span class="sd">            Language of the project, valid choices are {en|de}</span>
 <span class="sd">            Has nothing to do with the language the API is set to (the attribute `language`.)</span>
+<span class="sd">        labels: list, optional</span>
+<span class="sd">            List of strings with labels to attach to this project</span>
 <span class="sd">        auxiliary_column_names : list, optional</span>
-<span class="sd">            List of strings, naming additional columns that will be sent with each answer.</span>
+<span class="sd">            List of strings, naming additional columns that will be sent with each row.</span>
 <span class="sd">            Can also be an empty list.</span>
 <span class="sd">            The number of elements in this list must match the number of elements</span>
-<span class="sd">            in the `auxiliary_columns` field when adding answers later on.</span>
-<span class="sd">        description : str, optional</span>
-<span class="sd">            String describing this survey</span>
-<span class="sd">        inherits_from : int, optional</span>
-<span class="sd">            ID of another survey of this user, that the model should be based on.</span>
-<span class="sd">            The codebook of that survey should be *identical* or *almost* identical</span>
-<span class="sd">            in order for the AI to deliver good results.</span>
+<span class="sd">            in the `auxiliary_columns` field when adding rows.</span>
 <span class="sd">        translate : bool, optional</span>
-<span class="sd">            Flag indicating whether to translate this survey (where other language than `language` detected)</span>
+<span class="sd">            Flag indicating whether to translate this project (where other language than `language` detected)</span>
 <span class="sd">            using the Google API.</span>
-<span class="sd">        group_identical : bool, optional</span>
-<span class="sd">            Flag indicating whether to group identical answers in coding view and when listing answers.</span>
-<span class="sd">        group_identical_exclude : str, optional</span>
-<span class="sd">            All answer texts matching this regular expression won&#39;t be grouped</span>
-<span class="sd">        labels : list, optional</span>
-<span class="sd">            A list of strings with labels to be attached to the survey.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        survey : survey object</span>
-<span class="sd">            A dictionary containing all attributes of the newly created survey if the call was successful</span>
+<span class="sd">        project : project object</span>
+<span class="sd">            A dictionary containing all attributes of the newly created project if the call was successful</span>
 <span class="sd">            `False` otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -388,86 +429,107 @@
 
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-            <span class="s2">&quot;codebook&quot;</span><span class="p">:</span> <span class="n">codebook</span><span class="p">,</span>
-            <span class="s2">&quot;surveytype&quot;</span><span class="p">:</span> <span class="s1">&#39;FO&#39;</span><span class="p">,</span>
             <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="n">language</span><span class="p">,</span>
             <span class="s2">&quot;auxiliary_column_names&quot;</span><span class="p">:</span> <span class="n">auxiliary_column_names</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
-            <span class="s2">&quot;inherits_from&quot;</span><span class="p">:</span> <span class="n">inherits_from</span><span class="p">,</span>
             <span class="s2">&quot;translated&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">translate</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;group_identical&quot;</span><span class="p">:</span> <span class="n">group_identical</span><span class="p">,</span>
-            <span class="s2">&quot;group_identical_exclude&quot;</span><span class="p">:</span> <span class="n">group_identical_exclude</span><span class="p">,</span>
-            <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span>
+            <span class="s2">&quot;questions&quot;</span><span class="p">:</span> <span class="n">questions</span><span class="p">,</span>
+            <span class="s2">&quot;rows&quot;</span><span class="p">:</span> <span class="n">rows</span>
         <span class="p">}</span>
 
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys/&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?async=true&#39;</span> <span class="k">if</span> <span class="k">async</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">get_params</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CoditAPI.addAnswersToSurvey"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.addAnswersToSurvey">[docs]</a>    <span class="k">def</span> <span class="nf">addAnswersToSurvey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">survey_id</span><span class="p">,</span> <span class="n">answers</span><span class="p">):</span>
+<div class="viewcode-block" id="CoditAPI.addRowsToProject"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.addRowsToProject">[docs]</a>    <span class="k">def</span> <span class="nf">addRowsToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="k">async</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        API method to add answers to a previously created survey.</span>
+<span class="sd">        API method to add rows to a previously created project.</span>
 
 <span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
 <span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        survey_id : int</span>
-<span class="sd">            ID of the survey to add the answers to</span>
-<span class="sd">        answers : list(:class:`.Answer`)</span>
-<span class="sd">            List of objects of type Answer</span>
+<span class="sd">        project_id : int</span>
+<span class="sd">            ID of the project to add the rows to</span>
+<span class="sd">        rows : list(:class:`.Row`)</span>
+<span class="sd">            List of objects of type Row</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        answers : list of answer objects</span>
-<span class="sd">            A list of dictionaries containing attributes of the newly created answers if the call was successful</span>
+<span class="sd">        rows : list of row objects</span>
+<span class="sd">            A list of dictionaries containing attributes of the newly created rows if the call was successful</span>
 <span class="sd">            `False` otherwise</span>
-<span class="sd">            *Note:* When bulk creating multiple answers, no id is return for these elements</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys/</span><span class="si">{}</span><span class="s1">/answers&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">survey_id</span><span class="p">),</span> <span class="n">answers</span><span class="p">)</span>
+        <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?async=true&#39;</span> <span class="k">if</span> <span class="k">async</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">/rows</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="p">,</span> <span class="n">get_params</span><span class="p">),</span> <span class="n">rows</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CoditAPI.listAnswers"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listAnswers">[docs]</a>    <span class="k">def</span> <span class="nf">listAnswers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">survey_id</span><span class="p">,</span> <span class="n">no_group</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CoditAPI.listRows"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listRows">[docs]</a>    <span class="k">def</span> <span class="nf">listRows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        API method to list all answers of a specific survey.</span>
+<span class="sd">        API method to list all rows of a specific project.</span>
 
 <span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
 <span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        survey_id : int</span>
-<span class="sd">            ID of the survey of which to return the answers</span>
-<span class="sd">        no_group : bool</span>
-<span class="sd">            If true, no grouping will be applied to answers list,</span>
-<span class="sd">            overriding the `group_identical` property of the survey</span>
+<span class="sd">        project_id : int</span>
+<span class="sd">            ID of the project of which to return the rows</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        answers : list(:class:`.Answer`)</span>
-<span class="sd">            A list of all answers belonging to the survey if the call was successful, `False` otherwise</span>
+<span class="sd">        answers : list(:class:`.Row`)</span>
+<span class="sd">            A list of all rows belonging to the question if the call was successful, `False` otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?no_group&#39;</span> <span class="k">if</span> <span class="n">no_group</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys/</span><span class="si">{}</span><span class="s1">/answers</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">survey_id</span><span class="p">,</span> <span class="n">get_params</span><span class="p">))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">/rows&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CoditAPI.requestPredictions"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.requestPredictions">[docs]</a>    <span class="k">def</span> <span class="nf">requestPredictions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">survey_id</span><span class="p">):</span>
+<div class="viewcode-block" id="CoditAPI.listAnswers"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.listAnswers">[docs]</a>    <span class="k">def</span> <span class="nf">listAnswers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question_id</span><span class="p">,</span> <span class="n">no_group</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        API method to request the AI-assistant to train itself based on coded answers of specified survey. Only works</span>
+<span class="sd">        API method to list all answers of a specific question.</span>
+
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        question_id : int</span>
+<span class="sd">            ID of the question of which to return the answers</span>
+<span class="sd">        no_group : bool</span>
+<span class="sd">            If true, no grouping will be applied to answers list,</span>
+<span class="sd">            overriding the `group_identical` property of the question</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        answers : list(:class:`.Answer`)</span>
+<span class="sd">            A list of all answers belonging to the question if the call was successful, `False` otherwise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?no_group&#39;</span> <span class="k">if</span> <span class="n">no_group</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">/answers</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_id</span><span class="p">,</span> <span class="n">get_params</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CoditAPI.requestPredictions"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.requestPredictions">[docs]</a>    <span class="k">def</span> <span class="nf">requestPredictions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        API method to request the AI-assistant to train itself based on coded answers of specified question. Only works</span>
 <span class="sd">        if at least 6 answers have been coded.</span>
 
 <span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
@@ -475,8 +537,8 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        survey_id : int</span>
-<span class="sd">            ID of the survey of which to request AI to make predictions</span>
+<span class="sd">        question_id : int</span>
+<span class="sd">            ID of the question of which to request AI to make predictions</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -484,14 +546,14 @@
 <span class="sd">            True if request successful, False otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys/</span><span class="si">{}</span><span class="s1">/request-training&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">survey_id</span><span class="p">))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">/request-training&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_id</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CoditAPI.getPredictions"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.getPredictions">[docs]</a>    <span class="k">def</span> <span class="nf">getPredictions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">survey_id</span><span class="p">):</span>
+<div class="viewcode-block" id="CoditAPI.getPredictions"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.getPredictions">[docs]</a>    <span class="k">def</span> <span class="nf">getPredictions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to get AI-coded codes and respective answers. Requires previous call to</span>
 <span class="sd">        :func:`~codit_api_demo.CoditAPI.requestPredictions`.</span>
@@ -501,8 +563,8 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        survey_id : int</span>
-<span class="sd">            ID of the survey of which to return the code predictions made by AI</span>
+<span class="sd">        question_id : int</span>
+<span class="sd">            ID of the question of which to return the code predictions made by AI</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -511,7 +573,7 @@
 <span class="sd">            Otherwise contains keys `answers` (with itself has keys `id` and `codes`) which are the predictions, n_trainings (counter), training_completed (iso timestamp), model (meta information on model performance)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/surveys/</span><span class="si">{}</span><span class="s1">/codes-predicted&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">survey_id</span><span class="p">))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">/codes-predicted&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_id</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">204</span><span class="p">):</span>
             <span class="c1"># No content is available, i.e. no predictions are ready for this answer</span>
@@ -519,7 +581,71 @@
         <span class="k">elif</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CoditAPI.deleteQuestion"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.deleteQuestion">[docs]</a>    <span class="k">def</span> <span class="nf">deleteQuestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        API method to delete question and its answers.</span>
+
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        question_id : int</span>
+<span class="sd">            ID of the question to delete</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        success : boolean</span>
+<span class="sd">            True if request successful, False otherwise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_id</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="Question"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.Question">[docs]</a><span class="k">class</span> <span class="nc">Question</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Question object, purely for reference</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str, required</span>
+<span class="sd">        Name of the question.</span>
+<span class="sd">    description : str, optional</span>
+<span class="sd">        String describing this question</span>
+<span class="sd">    group_identical : bool, optional</span>
+<span class="sd">        Flag indicating whether to group identical answers in coding view and when listing answers.</span>
+<span class="sd">        Default=true</span>
+<span class="sd">    group_identical_exclude : str, optional</span>
+<span class="sd">        All answer texts matching this regular expression won&#39;t be grouped. Default=&#39;&#39;</span>
+<span class="sd">    smart_sort: bool, optional</span>
+<span class="sd">        If the smart sorting feature should be enabled. Default=true</span>
+<span class="sd">    codebook : list, required</span>
+<span class="sd">        List of codes (dictionaries), each containing the keys `id`, `label` and `category`</span>
+<span class="sd">        Can also be an empty list.</span>
+<span class="sd">    inherits_from : int, optional</span>
+<span class="sd">        ID of another question of this user, that the model should be based on.</span>
+<span class="sd">        The codebook of that question should be *identical* or *almost* identical</span>
+<span class="sd">        in order for the AI to deliver good results.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Row"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.Row">[docs]</a><span class="k">class</span> <span class="nc">Row</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    auxiliary_columns: list(str), required</span>
+<span class="sd">        Needs to have the same number of elemenst as the `auxiliary_column_names` field of the project</span>
+<span class="sd">        it belongs to</span>
+<span class="sd">    answers: list(:class:`.Answer`), required</span>
+<span class="sd">        A list of answers, whereby exactly one answer needs to be provided for every question of the project</span>
+<span class="sd">        it belongs to</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="Answer"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.Answer">[docs]</a><span class="k">class</span> <span class="nc">Answer</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
@@ -530,8 +656,8 @@
 <span class="sd">    ----------</span>
 <span class="sd">    text : str, required</span>
 <span class="sd">        Text of the answer.</span>
-<span class="sd">    auxiliary_columns: list(str), optional</span>
-<span class="sd">        Only required if survey has `len(auxiliary_column_names)&gt;0`</span>
+<span class="sd">    question: str, required</span>
+<span class="sd">        The name of the question this answer belongs to</span>
 <span class="sd">    reviewed : bool, optional</span>
 <span class="sd">        Answers having the &quot;reviewed&quot; are assumed to have all codes correct</span>
 <span class="sd">        and will be used to train the AI.</span>
@@ -545,7 +671,7 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; The main function invoked when calling this script directly&quot;&quot;&quot;</span>
 
     <span class="c1">###########################################################</span>
@@ -570,75 +696,124 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Login Successful!&quot;</span><span class="p">)</span>
 
     <span class="c1">###########################################################</span>
-    <span class="c1"># LIST SURVEYS: Get all existing surveys of this user</span>
+    <span class="c1"># LIST PROJECTS: Get all existing projects of this user</span>
     <span class="c1">###########################################################</span>
-    <span class="n">existing_surveys</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">listSurveys</span><span class="p">()</span>
+    <span class="n">existing_projects</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">listProjects</span><span class="p">()</span>
 
-    <span class="c1"># Count how many surveys we have</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There are </span><span class="si">{}</span><span class="s2"> existing surveys&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">existing_surveys</span><span class="p">)))</span>
+    <span class="c1"># Count how many projects we have</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There are </span><span class="si">{}</span><span class="s2"> existing projects&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">existing_projects</span><span class="p">)))</span>
 
     <span class="c1">###########################################################</span>
-    <span class="c1"># CREATE SURVEY: Create new survey and get its ID</span>
+    <span class="c1"># CREATE PROJECT: Create new project with two questions and two rows (=&gt; 4 answers)</span>
     <span class="c1">###########################################################</span>
-    <span class="n">codebook</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">n_questions</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">new_questions</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Code 1&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;CATEGORY 1&#39;</span>
-        <span class="p">},</span> <span class="p">{</span>
-            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
-            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Code 2&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;CATEGORY 2&#39;</span>
-        <span class="p">}</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span>
+            <span class="s1">&#39;My new question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">),</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">:</span>
+            <span class="s1">&#39;Some description of question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">),</span>
+            <span class="s1">&#39;codebook&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Code 1 of question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">),</span>
+                    <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;CATEGORY 1&#39;</span>
+                <span class="p">},</span> <span class="p">{</span>
+                    <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+                    <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Code 2 of question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">),</span>
+                    <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;CATEGORY 2&#39;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span> <span class="k">for</span> <span class="n">question_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_questions</span><span class="p">)</span>
     <span class="p">]</span>
 
-    <span class="n">new_survey</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">createSurvey</span><span class="p">(</span>
-        <span class="s2">&quot;My new survey&quot;</span><span class="p">,</span>
-        <span class="n">codebook</span><span class="p">,</span>
-        <span class="s2">&quot;de&quot;</span><span class="p">,</span>
-        <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="s1">&#39;some other column&#39;</span><span class="p">],</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Some description of survey&quot;</span><span class="p">,</span>
-        <span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;label 1&#39;</span><span class="p">,</span> <span class="s1">&#39;label 2&#39;</span><span class="p">]</span>
-    <span class="p">)</span>
-    <span class="k">if</span> <span class="n">new_survey</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Created new survey with id </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_survey</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]))</span>
-
-    <span class="c1">###########################################################</span>
-    <span class="c1"># CREATE ANSWERS: Add answers to existing survey</span>
-    <span class="c1">###########################################################</span>
-    <span class="n">answers</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">new_rows</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># Row 1</span>
         <span class="p">{</span>
-            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Answer-text 1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;auxiliary_columns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ID 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Some other column value 1&quot;</span><span class="p">]</span>
-            <span class="c1"># The values of the additional columns: Needs to be in same order as auxiliary_column_names of survey</span>
+            <span class="c1"># The values of the additional columns: Needs to be in same order as auxiliary_column_names of project</span>
+            <span class="s1">&#39;auxiliary_columns&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ID 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Some other column value 1&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;answers&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;Answer-text row 1 of question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">),</span>
+                    <span class="c1"># We need to define to which question the answer belongs to</span>
+                    <span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="s1">&#39;My new question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">)</span>
+                <span class="p">}</span> <span class="k">for</span> <span class="n">question_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_questions</span><span class="p">)</span>
+            <span class="p">]</span>
         <span class="p">},</span>
+        <span class="c1"># Row 2</span>
         <span class="p">{</span>
-            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Answer-text 2&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;auxiliary_columns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ID 2&quot;</span><span class="p">,</span> <span class="s2">&quot;Some other column value 2&quot;</span><span class="p">]</span>
+            <span class="s1">&#39;auxiliary_columns&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ID 2&#39;</span><span class="p">,</span> <span class="s1">&#39;Some other column value 2&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;answers&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;Answer-text row 2 of question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">),</span>
+                    <span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="s1">&#39;My new question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">)</span>
+                <span class="p">}</span> <span class="k">for</span> <span class="n">question_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_questions</span><span class="p">)</span>
+            <span class="p">]</span>
         <span class="p">}</span>
     <span class="p">]</span>
 
-    <span class="n">new_answers</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">addAnswersToSurvey</span><span class="p">(</span><span class="n">new_survey</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">answers</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">new_answers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Added </span><span class="si">{}</span><span class="s2"> new answers to survey </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">new_answers</span><span class="p">),</span> <span class="n">new_survey</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]))</span>
+    <span class="n">new_project</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">createProject</span><span class="p">(</span>
+        <span class="s2">&quot;My new project&quot;</span><span class="p">,</span>
+        <span class="n">language</span><span class="o">=</span><span class="s2">&quot;de&quot;</span><span class="p">,</span>
+        <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="s1">&#39;some other column&#39;</span><span class="p">],</span>
+        <span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">questions</span><span class="o">=</span><span class="n">new_questions</span><span class="p">,</span>
+        <span class="n">rows</span><span class="o">=</span><span class="n">new_rows</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">new_project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Created new project with id </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_project</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]))</span>
+
+    <span class="n">question_id_1</span> <span class="o">=</span> <span class="n">new_project</span><span class="p">[</span><span class="s1">&#39;questions&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+    <span class="n">question_id_2</span> <span class="o">=</span> <span class="n">new_project</span><span class="p">[</span><span class="s1">&#39;questions&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
 
     <span class="c1">###########################################################</span>
-    <span class="c1"># LIST ANSWERS: Get all answers of a specific survey</span>
+    <span class="c1"># ADD ROWS: Add one more row to existing project</span>
+
+    <span class="c1"># Note: When adding rows to an _existing_ project, the questions need to referenced by their ID</span>
+    <span class="c1"># not their name</span>
+    <span class="n">further_rows</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s1">&#39;auxiliary_columns&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ID 3&#39;</span><span class="p">,</span> <span class="s1">&#39;Some other column value 3&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;answers&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;Answer-text row 3 of question 1&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="n">question_id_1</span>
+                <span class="p">},</span> <span class="p">{</span>
+                    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;Answer-text row 3 of question 2&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="n">question_id_2</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+
+    <span class="n">further_rows_result</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">addRowsToProject</span><span class="p">(</span><span class="n">new_project</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">further_rows</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">further_rows_result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Added </span><span class="si">{}</span><span class="s2"> new row to project </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">further_rows</span><span class="p">),</span> <span class="n">new_project</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]))</span>
+
     <span class="c1">###########################################################</span>
-    <span class="n">answers</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">listAnswers</span><span class="p">(</span><span class="n">new_survey</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+    <span class="c1"># LIST ROWS: Get all rows of a specific project</span>
+    <span class="c1">###########################################################</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">listRows</span><span class="p">(</span><span class="n">new_project</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This is the first row: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="c1">###########################################################</span>
+    <span class="c1"># LIST ANSWERS: Get all answers of a specific question</span>
+    <span class="c1">###########################################################</span>
+    <span class="n">answers</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">listAnswers</span><span class="p">(</span><span class="n">question_id_2</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span>
-        <span class="s2">&quot;The first answer (&#39;</span><span class="si">{}</span><span class="s2">&#39;) has been assigned the codes: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">answers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">],</span> <span class="n">answers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;codes&#39;</span><span class="p">]</span>
+        <span class="s2">&quot;The first answer (&#39;</span><span class="si">{}</span><span class="s2">&#39;) of question </span><span class="si">{}</span><span class="s2"> has been assigned the codes: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">answers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;text&#39;</span><span class="p">],</span> <span class="n">question_id_2</span><span class="p">,</span> <span class="n">answers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;codes&#39;</span><span class="p">]</span>
         <span class="p">)</span>
     <span class="p">)</span>
 
     <span class="c1">###########################################################</span>
-    <span class="c1"># REQUEST PREDICTIONS: Instruct backend to make code predictions for survey</span>
+    <span class="c1"># REQUEST PREDICTIONS: Instruct backend to make code predictions for question</span>
     <span class="c1">###########################################################</span>
 
-    <span class="k">if</span> <span class="n">api</span><span class="o">.</span><span class="n">requestPredictions</span><span class="p">(</span><span class="n">new_survey</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">api</span><span class="o">.</span><span class="n">requestPredictions</span><span class="p">(</span><span class="n">question_id_1</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training request made, results will soon be available&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;An error occurred when requesting training&quot;</span><span class="p">)</span>
@@ -652,10 +827,10 @@
     <span class="c1"># of around 250s is recommended</span>
     <span class="c1"># time.sleep(250)</span>
 
-    <span class="n">predictions</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">getPredictions</span><span class="p">(</span><span class="n">new_survey</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">getPredictions</span><span class="p">(</span><span class="n">question_id_1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">predictions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No predictions are ready for this survey&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No predictions are ready for this question&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="s1">&#39;answers&#39;</span> <span class="ow">in</span> <span class="n">predictions</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">predictions</span><span class="p">[</span><span class="s1">&#39;answers&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
             <span class="s2">&quot;For answer </span><span class="si">{}</span><span class="s2"> the codes </span><span class="si">{}</span><span class="s2"> were predicted&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -684,7 +859,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>
