@@ -542,7 +542,7 @@ class CoditAPI(object):
 
 class Question(dict):
     """
-    Answer object, purely for reference
+    Question object, purely for reference
 
     Attributes
     ----------

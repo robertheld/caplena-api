@@ -3,11 +3,11 @@
 <!doctype html>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>codit_api_demo module &mdash; Codit API Demo</title>
+    <title>codit_api_demo module &#8212; Codit API Demo</title>
     
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to src’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Codit API Demo</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Codit API Demo</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -63,14 +63,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -86,21 +83,25 @@
 <p>Demo script illustrating how to do basic operations on the Codit API</p>
 <p class="rubric">Example</p>
 <p>Steps to run:</p>
-<ol class="arabic simple">
+<ol class="arabic">
 <li><dl class="first docutils">
 <dt>Make sure you have a compatible (version &gt;= 2.7) python environment</dt>
-<dd>$ python &#8211;version</dd>
+<dd><p class="first last">$ python &#8211;version</p>
+</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
 <dt>Make sure you have installed the requests library (if not, install using <cite>pip install requests</cite>)</dt>
-<dd>$ pip install requests</dd>
+<dd><p class="first last">$ pip install requests</p>
+</dd>
 </dl>
 </li>
-<li>Adapt the <cite>CODIT_EMAIL</cite> and <cite>CODIT_PASSWORD</cite> variables at the bottom of this script</li>
+<li><p class="first">Adapt the <cite>CODIT_EMAIL</cite> and <cite>CODIT_PASSWORD</cite> variables at the bottom of this script</p>
+</li>
 <li><dl class="first docutils">
 <dt>Call the script</dt>
-<dd>$ python codit_api_demo.py</dd>
+<dd><p class="first last">$ python codit_api_demo.py</p>
+</dd>
 </dl>
 </li>
 </ol>
@@ -117,8 +118,8 @@ and purposes that are intended by the original author (Caplena GmbH).</p>
 <p class="rubric">Example</p>
 <dl class="docutils">
 <dt>To call an API instantiate a CoditAPI object and then call its methods</dt>
-<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span> <span class="o">=</span> <span class="n">CoditAPI</span><span class="p">(</span><span class="s">&#39;de&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s">&#39;my_username&#39;</span><span class="p">,</span> <span class="s">&#39;my_password&#39;</span><span class="p">)</span>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span> <span class="o">=</span> <span class="n">CoditAPI</span><span class="p">(</span><span class="s1">&#39;de&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s1">&#39;my_username&#39;</span><span class="p">,</span> <span class="s1">&#39;my_password&#39;</span><span class="p">)</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">listProjects</span><span class="p">()</span>
 <span class="go">[{&quot;name&quot;: &quot;project 1&quot;,</span>
@@ -151,8 +152,7 @@ Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> &#8211;
-True if login was successful, <cite>False</cite> otherwise</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> &#8211; True if login was successful, <cite>False</cite> otherwise</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
@@ -174,8 +174,7 @@ required beforehand</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> &#8211;
-A list of all projects belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> &#8211; A list of all projects belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of project objects</td>
 </tr>
@@ -197,8 +196,7 @@ required beforehand</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_id</strong> (<em>int, required</em>) &#8211; ID of the existing project</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>project</strong> &#8211;
-The project object with the id requested if it exists, <cite>False</cite> otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>project</strong> &#8211; The project object with the id requested if it exists, <cite>False</cite> otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">a project object</td>
 </tr>
@@ -218,8 +216,7 @@ required beforehand</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> &#8211;
-A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global codit.co models.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> &#8211; A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global codit.co models.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of project objects</td>
 </tr>
@@ -239,8 +236,7 @@ required beforehand</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>questions</strong> &#8211;
-A list of all questions belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>questions</strong> &#8211; A list of all questions belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of question objects</td>
 </tr>
@@ -276,8 +272,7 @@ using the Google API.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>project</strong> &#8211;
-A dictionary containing all attributes of the newly created project if the call was successful
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>project</strong> &#8211; A dictionary containing all attributes of the newly created project if the call was successful
 <cite>False</cite> otherwise</p>
 </td>
 </tr>
@@ -304,8 +299,7 @@ required beforehand</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rows</strong> &#8211;
-A list of dictionaries containing attributes of the newly created rows if the call was successful
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rows</strong> &#8211; A list of dictionaries containing attributes of the newly created rows if the call was successful
 <cite>False</cite> otherwise</p>
 </td>
 </tr>
@@ -328,8 +322,7 @@ required beforehand</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_id</strong> (<em>int</em>) &#8211; ID of the project of which to return the rows</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> &#8211;
-A list of all rows belonging to the question if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> &#8211; A list of all rows belonging to the question if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#codit_api_demo.Row" title="codit_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)</td>
 </tr>
@@ -354,8 +347,7 @@ overriding the <cite>group_identical</cite> property of the question</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> &#8211;
-A list of all answers belonging to the question if the call was successful, <cite>False</cite> otherwise</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> &#8211; A list of all answers belonging to the question if the call was successful, <cite>False</cite> otherwise</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)</p>
@@ -378,8 +370,7 @@ required beforehand</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) &#8211; ID of the question of which to request AI to make predictions</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211;
-True if request successful, False otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211; True if request successful, False otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
 </tr>
@@ -400,8 +391,7 @@ required beforehand</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) &#8211; ID of the question of which to return the code predictions made by AI</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>result</strong> &#8211;
-None if no predictions are available (response code 204)
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>result</strong> &#8211; None if no predictions are available (response code 204)
 Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cite> and <cite>codes</cite>) which are the predictions, n_trainings (counter), training_completed (iso timestamp), model (meta information on model performance)</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
@@ -422,8 +412,7 @@ required beforehand</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) &#8211; ID of the question to delete</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211;
-True if request successful, False otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211; True if request successful, False otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
 </tr>
@@ -437,56 +426,49 @@ True if request successful, False otherwise</td>
 <dt id="codit_api_demo.Question">
 <em class="property">class </em><code class="descclassname">codit_api_demo.</code><code class="descname">Question</code><a class="reference internal" href="_modules/codit_api_demo.html#Question"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.Question" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
-<p>Answer object, purely for reference</p>
+<p>Question object, purely for reference</p>
 <dl class="attribute">
 <dt id="codit_api_demo.Question.name">
 <code class="descname">name</code><a class="headerlink" href="#codit_api_demo.Question.name" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, required</em></p>
-<p>Name of the question.</p>
+<dd><p><em>str, required</em> &#8211; Name of the question.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Question.description">
 <code class="descname">description</code><a class="headerlink" href="#codit_api_demo.Question.description" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, optional</em></p>
-<p>String describing this question</p>
+<dd><p><em>str, optional</em> &#8211; String describing this question</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Question.group_identical">
 <code class="descname">group_identical</code><a class="headerlink" href="#codit_api_demo.Question.group_identical" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool, optional</em></p>
-<p>Flag indicating whether to group identical answers in coding view and when listing answers.
+<dd><p><em>bool, optional</em> &#8211; Flag indicating whether to group identical answers in coding view and when listing answers.
 Default=true</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Question.group_identical_exclude">
 <code class="descname">group_identical_exclude</code><a class="headerlink" href="#codit_api_demo.Question.group_identical_exclude" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, optional</em></p>
-<p>All answer texts matching this regular expression won&#8217;t be grouped. Default=&#8217;&#8216;</p>
+<dd><p><em>str, optional</em> &#8211; All answer texts matching this regular expression won&#8217;t be grouped. Default=&#8217;&#8216;</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Question.smart_sort">
 <code class="descname">smart_sort</code><a class="headerlink" href="#codit_api_demo.Question.smart_sort" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool, optional</em></p>
-<p>If the smart sorting feature should be enabled. Default=true</p>
+<dd><p><em>bool, optional</em> &#8211; If the smart sorting feature should be enabled. Default=true</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Question.codebook">
 <code class="descname">codebook</code><a class="headerlink" href="#codit_api_demo.Question.codebook" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list, required</em></p>
-<p>List of codes (dictionaries), each containing the keys <cite>id</cite>, <cite>label</cite> and <cite>category</cite>
+<dd><p><em>list, required</em> &#8211; List of codes (dictionaries), each containing the keys <cite>id</cite>, <cite>label</cite> and <cite>category</cite>
 Can also be an empty list.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Question.inherits_from">
 <code class="descname">inherits_from</code><a class="headerlink" href="#codit_api_demo.Question.inherits_from" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>int, optional</em></p>
-<p>ID of another question of this user, that the model should be based on.
+<dd><p><em>int, optional</em> &#8211; ID of another question of this user, that the model should be based on.
 The codebook of that question should be <em>identical</em> or <em>almost</em> identical
 in order for the AI to deliver good results.</p>
 </dd></dl>
@@ -515,38 +497,33 @@ it belongs to</dd>
 <dl class="attribute">
 <dt id="codit_api_demo.Answer.text">
 <code class="descname">text</code><a class="headerlink" href="#codit_api_demo.Answer.text" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, required</em></p>
-<p>Text of the answer.</p>
+<dd><p><em>str, required</em> &#8211; Text of the answer.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Answer.question">
 <code class="descname">question</code><a class="headerlink" href="#codit_api_demo.Answer.question" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, required</em></p>
-<p>The name of the question this answer belongs to</p>
+<dd><p><em>str, required</em> &#8211; The name of the question this answer belongs to</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Answer.reviewed">
 <code class="descname">reviewed</code><a class="headerlink" href="#codit_api_demo.Answer.reviewed" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool, optional</em></p>
-<p>Answers having the &#8220;reviewed&#8221; are assumed to have all codes correct
+<dd><p><em>bool, optional</em> &#8211; Answers having the &#8220;reviewed&#8221; are assumed to have all codes correct
 and will be used to train the AI.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Answer.codes">
 <code class="descname">codes</code><a class="headerlink" href="#codit_api_demo.Answer.codes" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list, optional</em></p>
-<p>List of integers (code IDs). Assigning codes to an answer.
+<dd><p><em>list, optional</em> &#8211; List of integers (code IDs). Assigning codes to an answer.
 Will be used to train the AI.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="codit_api_demo.Answer.source_language">
 <code class="descname">source_language</code><a class="headerlink" href="#codit_api_demo.Answer.source_language" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, optional</em></p>
-<p>ISO Code (2 characters, e.g. &#8216;de&#8217; or &#8216;en&#8217;) specifying in which language the text is written.
+<dd><p><em>str, optional</em> &#8211; ISO Code (2 characters, e.g. &#8216;de&#8217; or &#8216;en&#8217;) specifying in which language the text is written.
 Relevant for translation, taking precedance over automatic language detection</p>
 </dd></dl>
 
@@ -572,12 +549,12 @@ Relevant for translation, taking precedance over automatic language detection</p
         <li class="right" >
           <a href="index.html" title="Welcome to src’s documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Codit API Demo</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Codit API Demo</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2018, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        &#169; Copyright 2018, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>
