@@ -15,11 +15,11 @@ if baseuri:
 api.login(codit_email, codit_pw)
 
 
-def test_list_surveys():
-    _ = api.listSurveys()
+def test_list_projects():
+    _ = api.listProjects()
 
-def test_list_inheritable_surveys():
-    _ = api.listInheritableSurveys()
+def test_list_inheritable_projects():
+    _ = api.listInheritableProjects()
 
 def test_workflow():
     codebook = [
@@ -33,40 +33,54 @@ def test_workflow():
             'category': 'CATEGORY 2'
         }
     ]
-    num_surveys_before = len(api.listSurveys())
-    new_survey = api.createSurvey(
-        "My new survey",
-        codebook,
-        "de",
-        auxiliary_column_names=['ID', 'some other column'],
-        description="Some description of survey",
-        translate=True
-    )
-    num_surveys_after = len(api.listSurveys())
-    assert num_surveys_after == num_surveys_before + 1
-    answers = [
+    questions = [{'name': 'Question 1', 'codebook': codebook}]
+    rows_init = [
         {
-            "text": "Answer-text 1",
+            "answers": [{"text":"Answer-text 1", "question": "Question 1"}],
             "auxiliary_columns": ["ID 1", "Some other column value 1"]
             # The values of the additional columns: Needs to be in same order as auxiliary_column_names of survey
         },
         {
-            "text": "Answer-text 2",
-            "auxiliary_columns": ["ID 2", "Some other column value 2"]
+            "answers": [{"text":"Answer-text 2", "question": "Question 1"}],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
         }
     ]
-    new_answers = api.addAnswersToSurvey(new_survey['id'], answers)
+    num_projects_before = len(api.listProjects())
+    new_project = api.createProject(
+        "My new project",
+        "de",
+        auxiliary_column_names=['ID', 'some other column'],
+        translate=True,
+        questions=questions,
+        rows=rows_init
+    )
+    num_projects_after = len(api.listProjects())
+    assert num_projects_after == num_projects_before + 1
+    assert len(new_project['questions']) == 1
+    question_id = new_project['questions'][0]['id']
+    additional_rows = [
+        {
+            "answers": [{"text":"Answer-text 1", "question": question_id}],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
+            # The values of the additional columns: Needs to be in same order as auxiliary_column_names of survey
+        },
+        {
+            "answers": [{"text":"Answer-text 2", "question": question_id}],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
+        }
+    ]
+    new_answers = api.addRowsToProject(new_project['id'], additional_rows)
 
-    answers = api.listAnswers(new_survey['id'])
+    answers = api.listAnswers(question_id)
 
     assert len(new_answers) == len(answers)
 
-    _ = api.requestPredictions(new_survey['id'])
+    _ = api.requestPredictions(question_id)
 
     time.sleep(250)
 
-    predictions = api.getPredictions(new_survey['id'])
+    predictions = api.getPredictions(question_id)
 
-    _ = api.deleteSurvey(new_survey['id'])
+    _ = api.deleteProject(new_project['id'])
 
-    assert num_surveys_before == len(api.listSurveys())
+    assert num_projects_before == len(api.listProjects())

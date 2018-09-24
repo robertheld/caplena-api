@@ -312,6 +312,32 @@ class CoditAPI(object):
         else:
             return r.json()
 
+    def getQuestion(self, question_id):
+        """
+        API method to get question info.
+
+        Get question by ID.
+
+        *Note:* The returned questions only contain meta information of the question and not the response texts.
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        question: a question object
+            A question object if the call was successful, `False` otherwise
+
+        """
+        r = self._makeRequest('get', '/questions/{}'.format(question_id))
+
+        if (r.status_code != 200):
+            return self._handleBadResponse(r)
+        else:
+            return r.json()
+
     def createProject(
         self, name, language, translate=False, auxiliary_column_names=[], questions=[], rows=[], async=False
     ):
@@ -322,7 +348,8 @@ class CoditAPI(object):
         * For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
         required beforehand
         * When creating a new project you can also create questions and rows belonging to it.
-        * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an existing project.
+        * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an
+        existing project.
         * Rows can also be added to a project at a later time
 
         Parameters
@@ -332,17 +359,20 @@ class CoditAPI(object):
         language : str, required
             Language of the project, valid choices are {en|de}
             Has nothing to do with the language the API is set to (the attribute `language`.)
-        labels: list, optional
-            List of strings with labels to attach to this project
+        translate : bool, optional
+            Flag indicating whether to translate this project (where other language than `language` detected)
+            using the Google API.
         auxiliary_column_names : list, optional
             List of strings, naming additional columns that will be sent with each row.
             Can also be an empty list.
             The number of elements in this list must match the number of elements
             in the `auxiliary_columns` field when adding rows.
-        translate : bool, optional
-            Flag indicating whether to translate this project (where other language than `language` detected)
-            using the Google API.
-
+        questions: list(:class:`.Question`)
+            List of questions to create
+        rows : list(:class:`.Row`)
+            List of objects of type Row
+        async: bool
+            If true, send async request, required if uploading more than 2000 rows at once
         Returns
         -------
         project : project object
@@ -533,6 +563,31 @@ class CoditAPI(object):
 
         """
         r = self._makeRequest('delete', '/questions/{}'.format(question_id))
+
+        if (not r.ok):
+            return self._handleBadResponse(r)
+        else:
+            return True
+
+    def deleteProject(self, project_id):
+        """
+        API method to delete projects, its questions and corresponding answers.
+
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
+
+        Parameters
+        ----------
+        project_id: int
+            ID of the project to delete
+
+        Returns
+        -------
+        success : boolean
+            True if request successful, False otherwise
+
+        """
+        r = self._makeRequest('delete', '/projects/{}'.format(project_id))
 
         if (not r.ok):
             return self._handleBadResponse(r)
