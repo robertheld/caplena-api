@@ -1,5 +1,7 @@
 import os, time
 
+import pytest
+
 from src.codit_api_demo import CoditAPI
 
 
@@ -21,7 +23,8 @@ def test_list_projects():
 def test_list_inheritable_projects():
     _ = api.listInheritableProjects()
 
-def test_workflow():
+@pytest.mark.parametrize('async', [False, True])
+def test_workflow(async):
     codebook = [
         {
             'id': 1,
@@ -52,8 +55,10 @@ def test_workflow():
         auxiliary_column_names=['ID', 'some other column'],
         translate=True,
         questions=questions,
-        rows=rows_init
+        rows=rows_init,
+        async=async
     )
+    time.sleep(30)
     num_projects_after = len(api.listProjects())
     assert num_projects_after == num_projects_before + 1
     assert len(new_project['questions']) == 1
@@ -69,11 +74,15 @@ def test_workflow():
             "auxiliary_columns": ["ID 1", "Some other column value 1"]
         }
     ]
-    new_answers = api.addRowsToProject(new_project['id'], additional_rows)
+    new_answers = api.addRowsToProject(new_project['id'], additional_rows, async=async)
 
+    time.sleep(30)
     answers = api.listAnswers(question_id)
 
-    assert len(new_answers) == len(answers)
+    if not async:
+        assert len(new_answers) == len(answers)
+    else:
+        assert 4 == len(answers)
 
     _ = api.requestPredictions(question_id)
 
