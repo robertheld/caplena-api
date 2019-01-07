@@ -58,7 +58,7 @@ def test_workflow(async):
         rows=rows_init,
         async=async
     )
-    time.sleep(30)
+    time.sleep(10)
     num_projects_after = len(api.listProjects())
     assert num_projects_after == num_projects_before + 1
     assert len(new_project['questions']) == 1
@@ -76,13 +76,10 @@ def test_workflow(async):
     ]
     new_answers = api.addRowsToProject(new_project['id'], additional_rows, async=async)
 
-    time.sleep(30)
-    answers = api.listAnswers(question_id)
+    time.sleep(10)
+    answers = api.listAnswers(question_id, no_group=True)
 
-    if not async:
-        assert len(new_answers) == len(answers)
-    else:
-        assert 4 == len(answers)
+    assert 4 == len(answers)
 
     _ = api.requestPredictions(question_id)
 
