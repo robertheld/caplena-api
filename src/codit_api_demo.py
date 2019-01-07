@@ -338,6 +338,32 @@ class CoditAPI(object):
         else:
             return r.json()
 
+    def getProject(self, project_id):
+        """
+        API method to get project info.
+
+        Get project by ID.
+
+        *Note:* The returned questions only contain meta information of the question and not the response texts.
+        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        required beforehand
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        project: a project object
+            A project object if the call was successful, `False` otherwise
+
+        """
+        r = self._makeRequest('get', '/projects/{}'.format(project_id))
+
+        if (r.status_code != 200):
+            return self._handleBadResponse(r)
+        else:
+            return r.json()
+
     def createProject(
         self, name, language, translate=False, auxiliary_column_names=[], questions=[], rows=[], async=False
     ):
