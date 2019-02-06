@@ -345,7 +345,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        projects : list of project objects</span>
+<span class="sd">        projects: list of project objects</span>
 <span class="sd">            A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global codit.co models.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -371,7 +371,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        questions : list of question objects</span>
+<span class="sd">        questions: list of question objects</span>
 <span class="sd">            A list of all questions belonging to the user if the call was successful, `False` otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -397,7 +397,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        question: a question object</span>
+<span class="sd">        question : a question object</span>
 <span class="sd">            A question object if the call was successful, `False` otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -423,7 +423,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        project: a project object</span>
+<span class="sd">        project : a project object</span>
 <span class="sd">            A project object if the call was successful, `False` otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -464,13 +464,13 @@
 <span class="sd">            Can also be an empty list.</span>
 <span class="sd">            The number of elements in this list must match the number of elements</span>
 <span class="sd">            in the `auxiliary_columns` field when adding rows.</span>
-<span class="sd">        questions: list(:class:`.Question`)</span>
+<span class="sd">        questions : list(:class:`.Question`)</span>
 <span class="sd">            List of questions to create</span>
 <span class="sd">        rows : list(:class:`.Row`)</span>
 <span class="sd">            List of objects of type Row</span>
-<span class="sd">        async: bool</span>
+<span class="sd">        async : bool</span>
 <span class="sd">            If true, send async request, required if uploading more than 2000 rows at once</span>
-<span class="sd">        request_training: bool</span>
+<span class="sd">        request_training : bool</span>
 <span class="sd">            If true, automatically request training after uploading answers</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -520,9 +520,9 @@
 <span class="sd">            ID of the project to add the rows to</span>
 <span class="sd">        rows : list(:class:`.Row`)</span>
 <span class="sd">            List of objects of type Row</span>
-<span class="sd">        async: bool</span>
+<span class="sd">        async : bool</span>
 <span class="sd">            If true, send async request, required if uploading more than 2000 rows at once</span>
-<span class="sd">        request_training: bool</span>
+<span class="sd">        request_training : bool</span>
 <span class="sd">            If true, automatically request training after uploading answers</span>
 
 <span class="sd">        Returns</span>
@@ -691,7 +691,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        project_id: int</span>
+<span class="sd">        project_id : int</span>
 <span class="sd">            ID of the project to delete</span>
 
 <span class="sd">        Returns</span>
@@ -738,10 +738,10 @@
 
 <div class="viewcode-block" id="Row"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.Row">[docs]</a><span class="k">class</span> <span class="nc">Row</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    auxiliary_columns: list(str), required</span>
+<span class="sd">    auxiliary_columns : list(str), required</span>
 <span class="sd">        Needs to have the same number of elemenst as the `auxiliary_column_names` field of the project</span>
 <span class="sd">        it belongs to</span>
-<span class="sd">    answers: list(:class:`.Answer`), required</span>
+<span class="sd">    answers : list(:class:`.Answer`), required</span>
 <span class="sd">        A list of answers, whereby exactly one answer needs to be provided for every question of the project</span>
 <span class="sd">        it belongs to</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
@@ -755,7 +755,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    text : str, required</span>
 <span class="sd">        Text of the answer.</span>
-<span class="sd">    question: str, required</span>
+<span class="sd">    question : str, required</span>
 <span class="sd">        The name of the question this answer belongs to</span>
 <span class="sd">    reviewed : bool, optional</span>
 <span class="sd">        Answers having the &quot;reviewed&quot; are assumed to have all codes correct</span>
@@ -763,7 +763,7 @@
 <span class="sd">    codes : list, optional</span>
 <span class="sd">        List of integers (code IDs). Assigning codes to an answer.</span>
 <span class="sd">        Will be used to train the AI.</span>
-<span class="sd">    source_language: str, optional</span>
+<span class="sd">    source_language : str, optional</span>
 <span class="sd">        ISO Code (2 characters, e.g. &#39;de&#39; or &#39;en&#39;) specifying in which language the text is written.</span>
 <span class="sd">        Relevant for translation, taking precedance over automatic language detection</span>
 

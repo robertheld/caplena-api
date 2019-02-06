@@ -276,7 +276,7 @@ class CoditAPI(object):
 
         Returns
         -------
-        projects : list of project objects
+        projects: list of project objects
             A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global codit.co models.
 
         """
@@ -302,7 +302,7 @@ class CoditAPI(object):
 
         Returns
         -------
-        questions : list of question objects
+        questions: list of question objects
             A list of all questions belonging to the user if the call was successful, `False` otherwise
 
         """
@@ -328,7 +328,7 @@ class CoditAPI(object):
 
         Returns
         -------
-        question: a question object
+        question : a question object
             A question object if the call was successful, `False` otherwise
 
         """
@@ -354,7 +354,7 @@ class CoditAPI(object):
 
         Returns
         -------
-        project: a project object
+        project : a project object
             A project object if the call was successful, `False` otherwise
 
         """
@@ -395,13 +395,13 @@ class CoditAPI(object):
             Can also be an empty list.
             The number of elements in this list must match the number of elements
             in the `auxiliary_columns` field when adding rows.
-        questions: list(:class:`.Question`)
+        questions : list(:class:`.Question`)
             List of questions to create
         rows : list(:class:`.Row`)
             List of objects of type Row
-        async: bool
+        async : bool
             If true, send async request, required if uploading more than 2000 rows at once
-        request_training: bool
+        request_training : bool
             If true, automatically request training after uploading answers
         Returns
         -------
@@ -451,9 +451,9 @@ class CoditAPI(object):
             ID of the project to add the rows to
         rows : list(:class:`.Row`)
             List of objects of type Row
-        async: bool
+        async : bool
             If true, send async request, required if uploading more than 2000 rows at once
-        request_training: bool
+        request_training : bool
             If true, automatically request training after uploading answers
 
         Returns
@@ -622,7 +622,7 @@ class CoditAPI(object):
 
         Parameters
         ----------
-        project_id: int
+        project_id : int
             ID of the project to delete
 
         Returns
@@ -669,10 +669,10 @@ class Question(dict):
 
 class Row(dict):
     """
-    auxiliary_columns: list(str), required
+    auxiliary_columns : list(str), required
         Needs to have the same number of elemenst as the `auxiliary_column_names` field of the project
         it belongs to
-    answers: list(:class:`.Answer`), required
+    answers : list(:class:`.Answer`), required
         A list of answers, whereby exactly one answer needs to be provided for every question of the project
         it belongs to
     """
@@ -686,7 +686,7 @@ class Answer(dict):
     ----------
     text : str, required
         Text of the answer.
-    question: str, required
+    question : str, required
         The name of the question this answer belongs to
     reviewed : bool, optional
         Answers having the "reviewed" are assumed to have all codes correct
@@ -694,7 +694,7 @@ class Answer(dict):
     codes : list, optional
         List of integers (code IDs). Assigning codes to an answer.
         Will be used to train the AI.
-    source_language: str, optional
+    source_language : str, optional
         ISO Code (2 characters, e.g. 'de' or 'en') specifying in which language the text is written.
         Relevant for translation, taking precedance over automatic language detection
 
