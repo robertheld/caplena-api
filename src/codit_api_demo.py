@@ -788,7 +788,8 @@ if __name__ == '__main__':
         auxiliary_column_names=['ID', 'some other column'],
         translate=True,
         questions=new_questions,
-        rows=new_rows
+        rows=new_rows,
+        request_training=False
     )
 
     if new_project is not False:
@@ -817,7 +818,7 @@ if __name__ == '__main__':
         }
     ]
 
-    further_rows_result = api.addRowsToProject(new_project['id'], further_rows)
+    further_rows_result = api.addRowsToProject(new_project['id'], further_rows, request_training=False)
     if further_rows_result is not False:
         print("Added {} new row to project {}".format(len(further_rows), new_project['id']))
 
