@@ -401,7 +401,7 @@ class CoditAPI(object):
             List of objects of type Row
         async: bool
             If true, send async request, required if uploading more than 2000 rows at once
-        request_training: bool, optional
+        request_training: bool
             If true, automatically request training after uploading answers
         Returns
         -------
@@ -451,6 +451,10 @@ class CoditAPI(object):
             ID of the project to add the rows to
         rows : list(:class:`.Row`)
             List of objects of type Row
+        async: bool
+            If true, send async request, required if uploading more than 2000 rows at once
+        request_training: bool
+            If true, automatically request training after uploading answers
 
         Returns
         -------
