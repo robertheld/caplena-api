@@ -13,7 +13,6 @@ parser = argparse.ArgumentParser(
     'variables CODIT_EMAIL and CODIT_PW or entering them when required.\n'
 )
 
-parser.add_argument('question_id', type=int, help='ID of question to append answers to')
 parser.add_argument('input', type=str, help='File to parse')
 parser.add_argument(
     '--dry-run', action='store_true', help='If set, do not upload data but show what would be uploaded'
@@ -22,6 +21,12 @@ parser.add_argument(
 parser.add_argument('--not-reviewed', dest='reviewed', action='store_false')
 
 parser.add_argument('--batch_size', type=int, help='Number of answers to upload in one batch', default=2000)
+
+parser.add_argument('--project_name', type=str, help='Name of the project to be created', default='My project')
+
+parser.add_argument('--language', type=str, help='Language of the project to be created', default='en')
+
+parser.add_argument('--translate', type=bool, help='Wether to translate answers', default=False)
 
 subparsers = parser.add_subparsers(dest='inputtype')
 
@@ -36,7 +41,6 @@ excelgroup.add_argument(
 )
 excelgroup.add_argument(
     '--codes-substring',
-    required=True,
     type=str,
     help='Substring of code-columns (sparse format). Example: Excel contains columns "Code_1", "Code_2" '
     ', ...Parse these codes by setting --codes-substring="Code"'
@@ -50,25 +54,30 @@ excelgroup.add_argument(
     help='Source language column (optional), language-tags need to be ISO tags'
 )
 excelgroup.add_argument(
+    '--reviewed-col',
+    type=str,
+    help='Column with information if answer was reviewed or not (True -> reviewed)'
+)
+excelgroup.add_argument(
     '--codes-binary',
     action='store_true',
     help='If set, codes are expected to be in binary format. '
     'The code ids are assumed to be continuous and start from zero'
 )
-
+excelgroup.add_argument('--subsample-size', type=int, help='Subsample n answers randomly', default=None)
+excelgroup.add_argument('--aux-cols', type=lambda s: s.split(','), help='Only upload specified \
+    columns as auxiliary columns, if None \
+    will upload all columns except text and code columns')
 args = parser.parse_args()
 
 # parse credentials from environment variables
 email = os.environ.get('CODIT_EMAIL', None)
 pw = os.environ.get('CODIT_PW', None)
 
-question_id = args.question_id
-
 if __name__ == '__main__':
     if args.inputtype == 'xlsx':
         # read data
         df_in = pd.read_excel(args.input, sheet_name=args.sheet_number)
-        print('Adding {} answers'.format(len(df_in)))
 
         # renaming columns, parsing codes and separating the auxiliary-columns
         answer_cols = []
@@ -89,6 +98,9 @@ if __name__ == '__main__':
 
             print("Discovered {} code columns".format(len(codes_cols)))
 
+            # replace common non-integer values in code columns to clean codes
+            df_in.loc[:,codes_cols] = df_in.loc[:,codes_cols].replace({'-': None})
+
             if args.codes_binary:
                 # The codes are in binary format, i.e. [0 0 1 0]
                 from sklearn.preprocessing import MultiLabelBinarizer
@@ -107,22 +119,35 @@ if __name__ == '__main__':
 
                 df_in['codes'] = df_in['codes'].apply(codes_from_binary)
             else:
-                # The codes are in "list" format, i.e. for every row [code_id1, code_id2] (different lengths for rows possible)
+                # The codes are in "list" format, i.e. for every row [code_id1, code_id2]
+                # (different lengths for rows possible)
                 df_in['codes'] = df_in[codes_cols].values.tolist()
                 if args.code_to_ignore:
                     df_in['codes'] = df_in['codes'].apply(lambda x:
                                                           [int(it) for it in x \
-                                                           if (not pd.isnull(it)) and (not int(it) == args.code_to_ignore)])
+                                                           if (not pd.isnull(it) and str(int).strip()) and (not int(it) == args.code_to_ignore)])
                 else:
                     df_in['codes'] = df_in['codes'
-                                           ].apply(lambda x: [int(it) for it in x if not pd.isnull(it)])
-            df_in['reviewed'] = args.reviewed
+                                           ].apply(lambda x: [int(it) for it in x if (not pd.isnull(it) and str(it).strip())])
             answer_cols.append('codes')
-            answer_cols.append('reviewed')
             df_in = df_in.drop(codes_cols, axis=1)
+        if args.reviewed_col:
+            df_in = df_in.rename(columns={args.reviewed_col: 'reviewed'})
+        else:
+            df_in['reviewed'] = args.reviewed
+        answer_cols.append('reviewed')
+        if args.subsample_size:
+            df_in = df_in.sample(args.subsample_size)
+        print('Adding {} answers'.format(len(df_in)))
 
-        # all the other columns are auxiliary columns
-        auxiliary_col_names = [col_name for col_name in df_in.columns if col_name not in answer_cols]
+        if args.aux_cols:
+            auxiliary_col_names = args.aux_cols
+            cols_to_drop = [col_name for col_name in df_in.columns if col_name not in answer_cols+auxiliary_col_names]
+            df_in = df_in.drop(cols_to_drop, axis=1)
+        else:
+            # all the other columns are auxiliary columns
+            auxiliary_col_names = [col_name for col_name in df_in.columns if col_name not in answer_cols]
+
         # also fill NaN's in auxiliary columns
         auxiliary_cols = df_in[auxiliary_col_names].fillna(value='')
 
@@ -139,7 +164,7 @@ if __name__ == '__main__':
         rows = []
         for i, answer in df_answers.iterrows():
             aux_column = answer.pop('auxiliary_columns')
-            answer['question'] = question_id
+            #answer['question'] = question_id
             rows.append({'auxiliary_columns': aux_column, 'answers': [answer.to_dict()]})
 
     elif args.inputtype == 'json':
@@ -153,10 +178,30 @@ if __name__ == '__main__':
                 answer['codes'] = json.loads(answer['codes'])
                 answer['reviewed'] = True
                 aux_column = answer.pop('auxiliary_columns')
-                answer['question'] = question_id
+                #answer['question'] = question_id
                 rows.append({'auxiliary_columns': aux_column, 'answers': [answer.to_dict()]})
         if parsing_json:
             print('transformed codes from str to array')
+        auxiliary_col_names = ['' for i in range(len(data[0]['auxiliary_columns']))]
+    elif args.inputtype == 'json_lines':
+        data = []
+        with open(args.input, 'r') as f:
+            for line in f:
+                item = json.loads(line.read())
+                datum = {'code': item['overall'], 'text': item[args.text_col]}
+                data.append()
+        rows = []
+        parsing_json = False
+        for answer in data:
+            if isinstance(answer['codes'], str):
+                parsing_json = True
+                answer['codes'] = json.loads(answer['codes'])
+                answer['reviewed'] = True
+                aux_column = answer.pop('auxiliary_columns')
+                rows.append({'auxiliary_columns': aux_column, 'answers': [answer.to_dict()]})
+        if parsing_json:
+            print('transformed codes from str to array')
+        auxiliary_col_names = ['' for i in range(len(data[0]['auxiliary_columns']))]
     else:
         raise ValueError('Must supply either json or xls')
 
@@ -181,9 +226,29 @@ if __name__ == '__main__':
 
         login = api.login(email, pw)
 
+        new_questions = [
+            {
+                'name':
+                    args.text_col,
+                'codebook': []
+            }
+        ]
+        new_project = api.createProject(
+            args.project_name,
+            language=args.language,
+            auxiliary_column_names=auxiliary_col_names,
+            translate=args.translate,
+            questions=new_questions
+        )
+        if new_project is not False:
+            print("Created new project with id {}".format(new_project['id']))
+
+        project = new_project
+        project_id = project['id']
+        question_id = project['questions'][0]['id']
+        for row in rows:
+            row['answers'][0]['question'] = question_id
         # get question info:
-        question = api.getQuestion(question_id)
-        project_id = question['project']
         print('Adding {} answers to question {} in project {}'.format(len(rows), question_id, project_id))
         # batch answers in order not to hit the limit
         if len(rows) < args.batch_size:
