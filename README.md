@@ -14,7 +14,7 @@ Adapt the credentials in [src/codit\_api\_demo.py](src/codit_api_demo.py). Execu
 
 # Documentation
 
-Make sure to check out the [documentation](https://maurice-g.github.io/codit-api)
+Make sure to check out the [documentation](http://apidocs.codit.co/build/html/index.html)
 
 # License
 
