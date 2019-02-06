@@ -401,6 +401,8 @@ class CoditAPI(object):
             List of objects of type Row
         async: bool
             If true, send async request, required if uploading more than 2000 rows at once
+        request_training: bool, optional
+            If true, automatically request training after uploading answers
         Returns
         -------
         project : project object
