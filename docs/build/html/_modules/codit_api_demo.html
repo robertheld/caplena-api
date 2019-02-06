@@ -92,6 +92,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
 
 
 <div class="viewcode-block" id="CoditAPI"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI">[docs]</a><span class="k">class</span> <span class="nc">CoditAPI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -381,8 +382,61 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
+<div class="viewcode-block" id="CoditAPI.getQuestion"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.getQuestion">[docs]</a>    <span class="k">def</span> <span class="nf">getQuestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        API method to get question info.</span>
+
+<span class="sd">        Get question by ID.</span>
+
+<span class="sd">        *Note:* The returned questions only contain meta information of the question and not the response texts.</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        question: a question object</span>
+<span class="sd">            A question object if the call was successful, `False` otherwise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_id</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CoditAPI.getProject"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.getProject">[docs]</a>    <span class="k">def</span> <span class="nf">getProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        API method to get project info.</span>
+
+<span class="sd">        Get project by ID.</span>
+
+<span class="sd">        *Note:* The returned questions only contain meta information of the question and not the response texts.</span>
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        project: a project object</span>
+<span class="sd">            A project object if the call was successful, `False` otherwise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="CoditAPI.createProject"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.createProject">[docs]</a>    <span class="k">def</span> <span class="nf">createProject</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">language</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[],</span> <span class="n">questions</span><span class="o">=</span><span class="p">[],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[],</span> <span class="k">async</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">language</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[],</span> <span class="n">questions</span><span class="o">=</span><span class="p">[],</span> <span class="n">rows</span><span class="o">=</span><span class="p">[],</span> <span class="k">async</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">request_training</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to create a new project</span>
@@ -391,7 +445,8 @@
 <span class="sd">        * For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
 <span class="sd">        required beforehand</span>
 <span class="sd">        * When creating a new project you can also create questions and rows belonging to it.</span>
-<span class="sd">        * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an existing project.</span>
+<span class="sd">        * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an</span>
+<span class="sd">        existing project.</span>
 <span class="sd">        * Rows can also be added to a project at a later time</span>
 
 <span class="sd">        Parameters</span>
@@ -401,17 +456,20 @@
 <span class="sd">        language : str, required</span>
 <span class="sd">            Language of the project, valid choices are {en|de}</span>
 <span class="sd">            Has nothing to do with the language the API is set to (the attribute `language`.)</span>
-<span class="sd">        labels: list, optional</span>
-<span class="sd">            List of strings with labels to attach to this project</span>
+<span class="sd">        translate : bool, optional</span>
+<span class="sd">            Flag indicating whether to translate this project (where other language than `language` detected)</span>
+<span class="sd">            using the Google API.</span>
 <span class="sd">        auxiliary_column_names : list, optional</span>
 <span class="sd">            List of strings, naming additional columns that will be sent with each row.</span>
 <span class="sd">            Can also be an empty list.</span>
 <span class="sd">            The number of elements in this list must match the number of elements</span>
 <span class="sd">            in the `auxiliary_columns` field when adding rows.</span>
-<span class="sd">        translate : bool, optional</span>
-<span class="sd">            Flag indicating whether to translate this project (where other language than `language` detected)</span>
-<span class="sd">            using the Google API.</span>
-
+<span class="sd">        questions: list(:class:`.Question`)</span>
+<span class="sd">            List of questions to create</span>
+<span class="sd">        rows : list(:class:`.Row`)</span>
+<span class="sd">            List of objects of type Row</span>
+<span class="sd">        async: bool</span>
+<span class="sd">            If true, send async request, required if uploading more than 2000 rows at once</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        project : project object</span>
@@ -436,7 +494,10 @@
             <span class="s2">&quot;rows&quot;</span><span class="p">:</span> <span class="n">rows</span>
         <span class="p">}</span>
 
-        <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?async=true&#39;</span> <span class="k">if</span> <span class="k">async</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">get_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;request_training&#39;</span><span class="p">:</span> <span class="n">request_training</span><span class="p">}</span>
+        <span class="k">if</span> <span class="k">async</span><span class="p">:</span>
+            <span class="n">get_params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;async&#39;</span><span class="p">:</span> <span class="k">async</span><span class="p">})</span>
+        <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">get_params</span><span class="p">)</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">get_params</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">):</span>
@@ -444,7 +505,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CoditAPI.addRowsToProject"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.addRowsToProject">[docs]</a>    <span class="k">def</span> <span class="nf">addRowsToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="k">async</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CoditAPI.addRowsToProject"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.addRowsToProject">[docs]</a>    <span class="k">def</span> <span class="nf">addRowsToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="k">async</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">request_training</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to add rows to a previously created project.</span>
 
@@ -465,7 +526,10 @@
 <span class="sd">            `False` otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?async=true&#39;</span> <span class="k">if</span> <span class="k">async</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">get_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;request_training&#39;</span><span class="p">:</span> <span class="n">request_training</span><span class="p">}</span>
+        <span class="k">if</span> <span class="k">async</span><span class="p">:</span>
+            <span class="n">get_params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;async&#39;</span><span class="p">:</span> <span class="k">async</span><span class="p">})</span>
+        <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">get_params</span><span class="p">)</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">/rows</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="p">,</span> <span class="n">get_params</span><span class="p">),</span> <span class="n">rows</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">):</span>
@@ -527,7 +591,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CoditAPI.requestPredictions"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.requestPredictions">[docs]</a>    <span class="k">def</span> <span class="nf">requestPredictions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
+<div class="viewcode-block" id="CoditAPI.requestPredictions"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.requestPredictions">[docs]</a>    <span class="k">def</span> <span class="nf">requestPredictions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to request the AI-assistant to train itself based on coded answers of specified question. Only works</span>
 <span class="sd">        if at least 6 answers have been coded.</span>
@@ -546,7 +610,11 @@
 <span class="sd">            True if request successful, False otherwise</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">/request-training&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_id</span><span class="p">))</span>
+        <span class="n">request_url</span> <span class="o">=</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">/request-training&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">request_url</span> <span class="o">+=</span> <span class="n">parameters</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="n">request_url</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
@@ -602,6 +670,31 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_id</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CoditAPI.deleteProject"><a class="viewcode-back" href="../codit_api_demo.html#codit_api_demo.CoditAPI.deleteProject">[docs]</a>    <span class="k">def</span> <span class="nf">deleteProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        API method to delete projects, its questions and corresponding answers.</span>
+
+<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is</span>
+<span class="sd">        required beforehand</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        project_id: int</span>
+<span class="sd">            ID of the project to delete</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        success : boolean</span>
+<span class="sd">            True if request successful, False otherwise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>

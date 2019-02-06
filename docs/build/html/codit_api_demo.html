@@ -245,14 +245,55 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="codit_api_demo.CoditAPI.getQuestion">
+<code class="descname">getQuestion</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.getQuestion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.getQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to get question info.</p>
+<p>Get question by ID.</p>
+<p><em>Note:</em> The returned questions only contain meta information of the question and not the response texts.
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>question</strong> &#8211; A question object if the call was successful, <cite>False</cite> otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">a question object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.getProject">
+<code class="descname">getProject</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.getProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.getProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to get project info.</p>
+<p>Get project by ID.</p>
+<p><em>Note:</em> The returned questions only contain meta information of the question and not the response texts.
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>project</strong> &#8211; A project object if the call was successful, <cite>False</cite> otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">a project object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="codit_api_demo.CoditAPI.createProject">
-<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>async=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.createProject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.createProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to create a new project</p>
 <p><em>Note:</em>
 * For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand
 * When creating a new project you can also create questions and rows belonging to it.
-* Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an existing project.
+* Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an
+existing project.
 * Rows can also be added to a project at a later time</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -262,13 +303,15 @@ required beforehand
 <li><strong>name</strong> (<em>str, required</em>) &#8211; Name of the new project</li>
 <li><strong>language</strong> (<em>str, required</em>) &#8211; Language of the project, valid choices are {en|de}
 Has nothing to do with the language the API is set to (the attribute <cite>language</cite>.)</li>
-<li><strong>labels</strong> (<em>list, optional</em>) &#8211; List of strings with labels to attach to this project</li>
+<li><strong>translate</strong> (<em>bool, optional</em>) &#8211; Flag indicating whether to translate this project (where other language than <cite>language</cite> detected)
+using the Google API.</li>
 <li><strong>auxiliary_column_names</strong> (<em>list, optional</em>) &#8211; List of strings, naming additional columns that will be sent with each row.
 Can also be an empty list.
 The number of elements in this list must match the number of elements
 in the <cite>auxiliary_columns</cite> field when adding rows.</li>
-<li><strong>translate</strong> (<em>bool, optional</em>) &#8211; Flag indicating whether to translate this project (where other language than <cite>language</cite> detected)
-using the Google API.</li>
+<li><strong>questions</strong> (list(<a class="reference internal" href="#codit_api_demo.Question" title="codit_api_demo.Question"><code class="xref py py-class docutils literal"><span class="pre">Question</span></code></a>)) &#8211; List of questions to create</li>
+<li><strong>rows</strong> (list(<a class="reference internal" href="#codit_api_demo.Row" title="codit_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)) &#8211; List of objects of type Row</li>
+<li><strong>async</strong> (<em>bool</em>) &#8211; If true, send async request, required if uploading more than 2000 rows at once</li>
 </ul>
 </td>
 </tr>
@@ -285,7 +328,7 @@ using the Google API.</li>
 
 <dl class="method">
 <dt id="codit_api_demo.CoditAPI.addRowsToProject">
-<code class="descname">addRowsToProject</code><span class="sig-paren">(</span><em>project_id</em>, <em>rows</em>, <em>async=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.addRowsToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.addRowsToProject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addRowsToProject</code><span class="sig-paren">(</span><em>project_id</em>, <em>rows</em>, <em>async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.addRowsToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.addRowsToProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to add rows to a previously created project.</p>
 <p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
@@ -359,7 +402,7 @@ overriding the <cite>group_identical</cite> property of the question</li>
 
 <dl class="method">
 <dt id="codit_api_demo.CoditAPI.requestPredictions">
-<code class="descname">requestPredictions</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.requestPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.requestPredictions" title="Permalink to this definition">¶</a></dt>
+<code class="descname">requestPredictions</code><span class="sig-paren">(</span><em>question_id</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.requestPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.requestPredictions" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to request the AI-assistant to train itself based on coded answers of specified question. Only works
 if at least 6 answers have been coded.</p>
 <p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
@@ -411,6 +454,26 @@ required beforehand</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) &#8211; ID of the question to delete</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211; True if request successful, False otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="codit_api_demo.CoditAPI.deleteProject">
+<code class="descname">deleteProject</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.deleteProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.deleteProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>API method to delete projects, its questions and corresponding answers.</p>
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+required beforehand</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_id</strong> (<em>int</em>) &#8211; ID of the project to delete</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211; True if request successful, False otherwise</td>
 </tr>

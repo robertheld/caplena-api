@@ -37,17 +37,46 @@ def test_workflow(async):
         }
     ]
     questions = [{'name': 'Question 1', 'codebook': codebook}]
+    # make sure to have at least 15 answers reviewed to enble predictions
     rows_init = [
         {
-            "answers": [{"text":"Answer-text 1", "question": "Question 1"}],
+            "answers": [{"text":"Answer-text 1", "question": "Question 1", "codes": [1, 20], "reviewed": True}],
             "auxiliary_columns": ["ID 1", "Some other column value 1"]
             # The values of the additional columns: Needs to be in same order as auxiliary_column_names of survey
         },
         {
-            "answers": [{"text":"Answer-text 2", "question": "Question 1"}],
+            "answers": [{"text":"Answer-text 2", "question": "Question 1", "codes": [1], "reviewed": True}],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
+        },
+        {
+            "answers": [{"text":"Answer-text 3", "question": "Question 1", "codes": [20], "reviewed": True}],
+                   "auxiliary_columns": ["ID 1", "Some other column value 1"]
+        },
+        {
+            "answers": [{"text":"Answer-text 4", "question": "Question 1", "codes": [20], "reviewed": True}],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
+        },
+        {
+            "answers": [{"text":"Answer-text 5", "question": "Question 1", "codes": [1,20], "reviewed": True}],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
+        },
+        {
+            "answers": [{"text":"Answer-text 6", "question": "Question 1", "codes": [1], "reviewed": True}],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
+        },
+        {
+            "answers": [{"text":"Answer-text 7", "question": "Question 1", "codes": [1,20], "reviewed": True}],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
+        },
+        {
+            "answers": [{"text":"Answer-text 8", "question": "Question 1", "codes": [1], "reviewed": True}],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
+        },
+        {
+            "answers": [{"text":"Answer-text 9", "question": "Question 1", "codes": [1], "reviewed": False}],
             "auxiliary_columns": ["ID 1", "Some other column value 1"]
         }
-    ]
+    ] * 3
     num_projects_before = len(api.listProjects())
     new_project = api.createProject(
         "My new project",
@@ -56,37 +85,44 @@ def test_workflow(async):
         translate=True,
         questions=questions,
         rows=rows_init,
-        async=async
+        async=async,
+        request_training=False
     )
-    time.sleep(10)
-    num_projects_after = len(api.listProjects())
-    assert num_projects_after == num_projects_before + 1
-    assert len(new_project['questions']) == 1
-    question_id = new_project['questions'][0]['id']
-    additional_rows = [
-        {
-            "answers": [{"text":"Answer-text 1", "question": question_id}],
-            "auxiliary_columns": ["ID 1", "Some other column value 1"]
-            # The values of the additional columns: Needs to be in same order as auxiliary_column_names of survey
-        },
-        {
-            "answers": [{"text":"Answer-text 2", "question": question_id}],
-            "auxiliary_columns": ["ID 1", "Some other column value 1"]
-        }
-    ]
-    new_answers = api.addRowsToProject(new_project['id'], additional_rows, async=async)
+    try:
+        if async:
+            time.sleep(20)
+        num_projects_after = len(api.listProjects())
+        assert num_projects_after == num_projects_before + 1
+        assert len(new_project['questions']) == 1
+        question_id = new_project['questions'][0]['id']
 
-    time.sleep(10)
-    answers = api.listAnswers(question_id, no_group=True)
+        _ = api.requestPredictions(question_id, request_svm_now=True)
+        # wait a couple of seconds for the predictions to arrive
+        time.sleep(15)
 
-    assert 4 == len(answers)
+        predictions = api.getPredictions(question_id)
+        assert predictions is not None
+        assert len(predictions['answers']) == 1
 
-    _ = api.requestPredictions(question_id)
+        additional_rows = [
+            {
+                "answers": [{"text":"Answer-text 1 new data", "question": question_id, "reviewed": False}],
+                "auxiliary_columns": ["ID 1", "Some other column value 1"]
+                # The values of the additional columns: Needs to be in same order as auxiliary_column_names of survey
+            },
+            {
+                "answers": [{"text":"Answer-text 2 new data", "question": question_id, "reviewed": False}],
+                "auxiliary_columns": ["ID 1", "Some other column value 1"]
+            }
+        ]
+        new_answers = api.addRowsToProject(new_project['id'], additional_rows, async=async, request_training=False)
+        if async:
+            time.sleep(20)
+        answers = api.listAnswers(question_id, no_group=True)
+        assert len(rows_init)+len(additional_rows) == len(answers)
 
-    time.sleep(250)
 
-    predictions = api.getPredictions(question_id)
+    finally:
+        _ = api.deleteProject(new_project['id'])
+        assert num_projects_before == len(api.listProjects())
 
-    _ = api.deleteProject(new_project['id'])
-
-    assert num_projects_before == len(api.listProjects())

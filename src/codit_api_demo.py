@@ -23,6 +23,7 @@ Copyright 2018 Caplena GmbH, Zurich.
 """
 
 import requests
+import urllib
 
 
 class CoditAPI(object):
@@ -365,7 +366,8 @@ class CoditAPI(object):
             return r.json()
 
     def createProject(
-        self, name, language, translate=False, auxiliary_column_names=[], questions=[], rows=[], async=False
+        self, name, language, translate=False, auxiliary_column_names=[], questions=[], rows=[], async=False,
+            request_training=True
     ):
         """
         API method to create a new project
@@ -423,7 +425,10 @@ class CoditAPI(object):
             "rows": rows
         }
 
-        get_params = '?async=true' if async else ''
+        get_params = {'request_training': request_training}
+        if async:
+            get_params.update({'async': async})
+        get_params = '?' + urllib.parse.urlencode(get_params)
         r = self._makeRequest('post', '/projects/{}'.format(get_params), data)
 
         if (r.status_code != 201):
@@ -431,7 +436,7 @@ class CoditAPI(object):
         else:
             return r.json()
 
-    def addRowsToProject(self, project_id, rows, async=False):
+    def addRowsToProject(self, project_id, rows, async=False, request_training=True):
         """
         API method to add rows to a previously created project.
 
@@ -452,7 +457,10 @@ class CoditAPI(object):
             `False` otherwise
 
         """
-        get_params = '?async=true' if async else ''
+        get_params = {'request_training': request_training}
+        if async:
+            get_params.update({'async': async})
+        get_params = '?' + urllib.parse.urlencode(get_params)
         r = self._makeRequest('post', '/projects/{}/rows{}'.format(project_id, get_params), rows)
 
         if (r.status_code != 201):
@@ -514,7 +522,7 @@ class CoditAPI(object):
         else:
             return r.json()
 
-    def requestPredictions(self, question_id):
+    def requestPredictions(self, question_id, **kwargs):
         """
         API method to request the AI-assistant to train itself based on coded answers of specified question. Only works
         if at least 6 answers have been coded.
@@ -533,7 +541,11 @@ class CoditAPI(object):
             True if request successful, False otherwise
 
         """
-        r = self._makeRequest('post', '/questions/{}/request-training'.format(question_id))
+        request_url = '/questions/{}/request-training'.format(question_id)
+        if kwargs:
+            parameters = '?' + urllib.parse.urlencode(kwargs)
+            request_url += parameters
+        r = self._makeRequest('post', request_url)
 
         if (r.status_code != 200):
             return self._handleBadResponse(r)

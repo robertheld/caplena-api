@@ -8,7 +8,7 @@ import json
 from src.codit_api_demo import CoditAPI
 
 parser = argparse.ArgumentParser(
-    description='Script to add Answers with their respective codes to question from Excel '
+    description='Script to create a new project with one question and their answers with codes from Excel '
     'or JSON. Requires setting credentials to codit.co via the environment '
     'variables CODIT_EMAIL and CODIT_PW or entering them when required.\n'
 )
