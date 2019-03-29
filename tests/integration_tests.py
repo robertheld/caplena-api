@@ -23,8 +23,8 @@ def test_list_inheritable_projects():
     _ = api.listInheritableProjects()
 
 
-@pytest.mark.parametrize('async', [False, True])
-def test_workflow(async):
+@pytest.mark.parametrize('run,async', [(1, False), (2, True)])
+def test_workflow(run, async):
     codebook = [
         {
             'id': 1,
@@ -126,12 +126,6 @@ def test_workflow(async):
         }
     ] * 3
     num_projects_before = len(api.listProjects())
-    # only request training for one workflow as it's exactly the same and creates load
-    # this has nothing to do with the upload being async or not, just a way to make sure it's only done once
-    if not async:
-        request_training = True
-    else:
-        request_training = False
     new_project = api.createProject(
         "My new project",
         "de",
@@ -140,7 +134,7 @@ def test_workflow(async):
         questions=questions,
         rows=rows_init,
         async=async,
-        request_training=request_training
+        request_training=False
     )
     try:
         if async:
@@ -149,21 +143,24 @@ def test_workflow(async):
         assert num_projects_after == num_projects_before + 1
         assert len(new_project['questions']) == 1
         question_id = new_project['questions'][0]['id']
+        # only request training for one workflow as it's exactly the same and creates load
+        if run == 1:
 
-        _ = api.requestPredictions(question_id, request_svm_now=True)
+            _ = api.requestPredictions(question_id, request_svm_now=True)
 
-        # wait for the predictions to arrive
-        MAX_PRED_TIME = 35
-        delay = 0
-        predictions = None
-        while predictions is None and delay <= MAX_PRED_TIME:
-            predictions = api.getPredictions(question_id)
-            timestep = 5
-            time.sleep(timestep)
-            delay = delay + timestep
+            # wait for the predictions to arrive
+            MAX_PRED_TIME = 35
+            delay = 0
+            predictions = None
+            while predictions is None and delay <= MAX_PRED_TIME:
+                predictions = api.getPredictions(question_id)
+                timestep = 5
+                time.sleep(timestep)
+                delay = delay + timestep
 
-        assert predictions is not None
-        assert len(predictions['answers']) == 1
+            n_not_reviewed = len([row for row in rows_init if not row['answers']['reviewed']])
+            assert predictions is not None
+            assert len(predictions['answers']) == n_not_reviewed
 
         additional_rows = [
             {
