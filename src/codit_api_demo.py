@@ -42,7 +42,7 @@ class CoditAPI(object):
         ]
 
     """
-    _valid_languages = ['en', 'de']
+    _valid_languages = ['en', 'de', 'es', 'pt', 'fr']
 
     def __init__(self, language):
         """
@@ -366,8 +366,15 @@ class CoditAPI(object):
             return r.json()
 
     def createProject(
-        self, name, language, translate=False, auxiliary_column_names=[], questions=[], rows=[], async=False,
-            request_training=True
+        self,
+        name,
+        language,
+        translate=False,
+        auxiliary_column_names=[],
+        questions=[],
+        rows=[],
+        async=False,
+        request_training=True
     ):
         """
         API method to create a new project
