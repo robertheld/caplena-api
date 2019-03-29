@@ -26,7 +26,7 @@ parser.add_argument('--project_name', type=str, help='Name of the project to be 
 
 parser.add_argument('--language', type=str, help='Language of the project to be created', default='en')
 
-parser.add_argument('--translate', type=bool, help='Wether to translate answers', default=False)
+parser.add_argument('--translate', action='store_true', help='Wether to translate answers')
 
 subparsers = parser.add_subparsers(dest='inputtype')
 
@@ -44,6 +44,13 @@ excelgroup.add_argument(
     type=str,
     help='Substring of code-columns (sparse format). Example: Excel contains columns "Code_1", "Code_2" '
     ', ...Parse these codes by setting --codes-substring="Code"'
+)
+excelgroup.add_argument(
+    '--codes-col-range',
+    type=str,
+    help='Range of columns where codes are located, format is start_idx:end_idx, for example if the second column '
+    'up to the 10th column contain codes pass: 1:10',
+    default=None
 )
 excelgroup.add_argument(
     '--code-to-ignore', type=int, help='Code ID of code to ignore (will not be uploaded)', default=None
@@ -70,11 +77,14 @@ excelgroup.add_argument('--aux-cols', type=lambda s: s.split(','), help='Only up
     will upload all columns except text and code columns')
 args = parser.parse_args()
 
+if args.codes_substring and args.codes_col_range:
+    raise ValueError('Choose either col range or substring matching')
 # parse credentials from environment variables
 email = os.environ.get('CODIT_EMAIL', None)
 pw = os.environ.get('CODIT_PW', None)
 
 if __name__ == '__main__':
+    codebook = []
     if args.inputtype == 'xlsx':
         # read data
         df_in = pd.read_excel(args.input, sheet_name=args.sheet_number)
@@ -93,15 +103,20 @@ if __name__ == '__main__':
             df_in = df_in.rename(columns={args.sourcelanguage_col: 'source_language'})
             answer_cols.append('source_language')
 
-        if args.codes_substring:
-            codes_cols = [col for col in df_in.columns if args.codes_substring in col]
-
+        if args.codes_substring or args.codes_col_range:
+            if args.codes_substring:
+                codes_cols = [col for col in df_in.columns if args.codes_substring in col]
+            else:
+                colrange = args.codes_col_range.split(':')
+                codes_cols = df_in.columns[int(colrange[0]):int(colrange[1])]
             print("Discovered {} code columns".format(len(codes_cols)))
 
             # replace common non-integer values in code columns to clean codes
-            df_in.loc[:,codes_cols] = df_in.loc[:,codes_cols].replace({'-': None})
+            #df_in.loc[:,codes_cols] = df_in.loc[:,codes_cols].replace({'-': None})
 
             if args.codes_binary:
+                for i, code in enumerate(codes_cols):
+                    codebook.append({'label': code, 'category': 'CODES', 'id': i})
                 # The codes are in binary format, i.e. [0 0 1 0]
                 from sklearn.preprocessing import MultiLabelBinarizer
                 import numpy as np
@@ -215,6 +230,7 @@ if __name__ == '__main__':
     # add the answers using the api
     if args.dry_run:
         print('Adding the following rows: ', rows)
+        print('codebook ',codebook)
     else:
         # login
         api = CoditAPI('en')
@@ -230,7 +246,7 @@ if __name__ == '__main__':
             {
                 'name':
                     args.text_col,
-                'codebook': []
+                'codebook': codebook
             }
         ]
         new_project = api.createProject(
