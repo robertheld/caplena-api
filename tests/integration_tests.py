@@ -158,7 +158,7 @@ def test_workflow(run, async):
                 time.sleep(timestep)
                 delay = delay + timestep
 
-            n_not_reviewed = len([row for row in rows_init if not row['answers']['reviewed']])
+            n_not_reviewed = len([row for row in rows_init if not row['answers'][0]['reviewed']])
             assert predictions is not None
             assert len(predictions['answers']) == n_not_reviewed
 
