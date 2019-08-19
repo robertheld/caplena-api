@@ -2,17 +2,17 @@ import os, time
 
 import pytest
 
-from src.codit_api_demo import CoditAPI
+from src.caplena_api_demo import CaplenaAPI
 
-api = CoditAPI('en')
+api = CaplenaAPI('en')
 
 baseuri = os.environ.get('BASEURI')
-codit_email = os.environ.get('CODIT_EMAIL')
-codit_pw = os.environ.get('CODIT_PW')
+caplena_email = os.environ.get('CAPLENA_EMAIL')
+caplena_pw = os.environ.get('CAPLENA_PW')
 
 if baseuri:
     api.baseURI = baseuri
-api.login(codit_email, codit_pw)
+api.login(caplena_email, caplena_pw)
 
 
 def test_list_projects():

@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>codit_api_demo module &#8212; Codit API Demo</title>
+    <title>caplena_api_demo module &#8212; Codit API Demo</title>
     
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -56,7 +56,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/codit_api_demo.txt"
+      <li><a href="_sources/caplena_api_demo.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -78,9 +78,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-codit_api_demo">
-<span id="codit-api-demo-module"></span><h1>codit_api_demo module<a class="headerlink" href="#module-codit_api_demo" title="Permalink to this headline">¶</a></h1>
-<p>Demo script illustrating how to do basic operations on the Codit API</p>
+  <div class="section" id="caplena-api-demo-module">
+<h1>caplena_api_demo module<a class="headerlink" href="#caplena-api-demo-module" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-caplena_api_demo"></span><p>Demo script illustrating how to do basic operations on the Caplena API</p>
 <p class="rubric">Example</p>
 <p>Steps to run:</p>
 <ol class="arabic">
@@ -100,7 +100,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>Call the script</dt>
-<dd><p class="first last">$ python codit_api_demo.py</p>
+<dd><p class="first last">$ python caplena_api_demo.py</p>
 </dd>
 </dl>
 </li>
@@ -111,14 +111,14 @@ Every receiving party agrees to use it solely for own purposes
 and purposes that are intended by the original author (Caplena GmbH).</p>
 <p>Copyright 2018 Caplena GmbH, Zurich.</p>
 <dl class="class">
-<dt id="codit_api_demo.CoditAPI">
-<em class="property">class </em><code class="descclassname">codit_api_demo.</code><code class="descname">CoditAPI</code><span class="sig-paren">(</span><em>language</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI">
+<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">CaplenaAPI</code><span class="sig-paren">(</span><em>language</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Class enabling interaction with (parts of) the Codit.co API</p>
+<p>Class enabling interaction with (parts of) the Caplena.co API</p>
 <p class="rubric">Example</p>
 <dl class="docutils">
-<dt>To call an API instantiate a CoditAPI object and then call its methods</dt>
-<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span> <span class="o">=</span> <span class="n">CoditAPI</span><span class="p">(</span><span class="s1">&#39;de&#39;</span><span class="p">)</span>
+<dt>To call an API instantiate a CaplenaAPI object and then call its methods</dt>
+<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span> <span class="o">=</span> <span class="n">CaplenaAPI</span><span class="p">(</span><span class="s1">&#39;de&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s1">&#39;my_username&#39;</span><span class="p">,</span> <span class="s1">&#39;my_password&#39;</span><span class="p">)</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">listProjects</span><span class="p">()</span>
@@ -131,8 +131,8 @@ and purposes that are intended by the original author (Caplena GmbH).</p>
 </dd>
 </dl>
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.login">
-<code class="descname">login</code><span class="sig-paren">(</span><em>email</em>, <em>password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.login" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.login">
+<code class="descname">login</code><span class="sig-paren">(</span><em>email</em>, <em>password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.login" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to authenticate user.</p>
 <p>Validates email &amp; password credentials with server.
 If the login is successful, all subsequent API calls will be made as this user.
@@ -163,12 +163,12 @@ Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.listProjects">
-<code class="descname">listProjects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listProjects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listProjects" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.listProjects">
+<code class="descname">listProjects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.listProjects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.listProjects" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to list all projects that belong to this user.</p>
 <p>List all projects of the user.</p>
 <p><em>Note:</em> The returned projects contain global meta information of the projects <em>and</em> their questions, but not the response texts.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -183,12 +183,12 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.projectDetails">
-<code class="descname">projectDetails</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.projectDetails"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.projectDetails" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.projectDetails">
+<code class="descname">projectDetails</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.projectDetails"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.projectDetails" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to get the details of a specific project.</p>
 <p>Get the details of a specific project.</p>
 <p><em>Note:</em> The returned projects contain global meta information of the project <em>and</em> their questions, but not the response texts.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -205,18 +205,18 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.listInheritableProjects">
-<code class="descname">listInheritableProjects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listInheritableProjects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listInheritableProjects" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.listInheritableProjects">
+<code class="descname">listInheritableProjects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.listInheritableProjects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.listInheritableProjects" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to list all projects of which inheritance is possible.</p>
-<p>List contains all projects belonging to user, as well as codit.co provided models.</p>
+<p>List contains all projects belonging to user, as well as Caplena provided models.</p>
 <p><em>Note:</em> The returned projects only contain basic meta information on the project and their questions, but not the response texts. To get more detailed information about a certain project call the <cite>listprojects</cite> method.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> &#8211; A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global codit.co models.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> &#8211; A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global Caplena models.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of project objects</td>
 </tr>
@@ -225,12 +225,12 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.listQuestions">
-<code class="descname">listQuestions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listQuestions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listQuestions" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.listQuestions">
+<code class="descname">listQuestions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.listQuestions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.listQuestions" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to list all questions that belong to this user.</p>
 <p>List all questions of the user.</p>
 <p><em>Note:</em> The returned questions only contain global meta information of the questions and not the response texts.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -245,12 +245,12 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.getQuestion">
-<code class="descname">getQuestion</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.getQuestion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.getQuestion" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.getQuestion">
+<code class="descname">getQuestion</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.getQuestion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.getQuestion" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to get question info.</p>
 <p>Get question by ID.</p>
 <p><em>Note:</em> The returned questions only contain meta information of the question and not the response texts.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -265,12 +265,12 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.getProject">
-<code class="descname">getProject</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.getProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.getProject" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.getProject">
+<code class="descname">getProject</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.getProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.getProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to get project info.</p>
 <p>Get project by ID.</p>
 <p><em>Note:</em> The returned questions only contain meta information of the question and not the response texts.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -285,11 +285,11 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.createProject">
-<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.createProject" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.createProject">
+<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.createProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to create a new project</p>
 <p><em>Note:</em>
-* For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+* For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand
 * When creating a new project you can also create questions and rows belonging to it.
 * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an
@@ -309,8 +309,8 @@ using the Google API.</li>
 Can also be an empty list.
 The number of elements in this list must match the number of elements
 in the <cite>auxiliary_columns</cite> field when adding rows.</li>
-<li><strong>questions</strong> (list(<a class="reference internal" href="#codit_api_demo.Question" title="codit_api_demo.Question"><code class="xref py py-class docutils literal"><span class="pre">Question</span></code></a>)) &#8211; List of questions to create</li>
-<li><strong>rows</strong> (list(<a class="reference internal" href="#codit_api_demo.Row" title="codit_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)) &#8211; List of objects of type Row</li>
+<li><strong>questions</strong> (list(<a class="reference internal" href="#caplena_api_demo.Question" title="caplena_api_demo.Question"><code class="xref py py-class docutils literal"><span class="pre">Question</span></code></a>)) &#8211; List of questions to create</li>
+<li><strong>rows</strong> (list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)) &#8211; List of objects of type Row</li>
 <li><strong>async</strong> (<em>bool</em>) &#8211; If true, send async request, required if uploading more than 2000 rows at once</li>
 <li><strong>request_training</strong> (<em>bool</em>) &#8211; If true, automatically request training after uploading answers</li>
 </ul>
@@ -328,10 +328,10 @@ in the <cite>auxiliary_columns</cite> field when adding rows.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.addRowsToProject">
-<code class="descname">addRowsToProject</code><span class="sig-paren">(</span><em>project_id</em>, <em>rows</em>, <em>async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.addRowsToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.addRowsToProject" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.addRowsToProject">
+<code class="descname">addRowsToProject</code><span class="sig-paren">(</span><em>project_id</em>, <em>rows</em>, <em>async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.addRowsToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.addRowsToProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to add rows to a previously created project.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -339,7 +339,7 @@ required beforehand</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>project_id</strong> (<em>int</em>) &#8211; ID of the project to add the rows to</li>
-<li><strong>rows</strong> (list(<a class="reference internal" href="#codit_api_demo.Row" title="codit_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)) &#8211; List of objects of type Row</li>
+<li><strong>rows</strong> (list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)) &#8211; List of objects of type Row</li>
 <li><strong>async</strong> (<em>bool</em>) &#8211; If true, send async request, required if uploading more than 2000 rows at once</li>
 <li><strong>request_training</strong> (<em>bool</em>) &#8211; If true, automatically request training after uploading answers</li>
 </ul>
@@ -357,10 +357,10 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.listRows">
-<code class="descname">listRows</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listRows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listRows" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.listRows">
+<code class="descname">listRows</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.listRows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.listRows" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to list all rows of a specific project.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -370,17 +370,17 @@ required beforehand</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> &#8211; A list of all rows belonging to the question if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#codit_api_demo.Row" title="codit_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.listAnswers">
-<code class="descname">listAnswers</code><span class="sig-paren">(</span><em>question_id</em>, <em>no_group=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.listAnswers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.listAnswers" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.listAnswers">
+<code class="descname">listAnswers</code><span class="sig-paren">(</span><em>question_id</em>, <em>no_group=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.listAnswers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.listAnswers" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to list all answers of a specific question.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -396,7 +396,7 @@ overriding the <cite>group_identical</cite> property of the question</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> &#8211; A list of all answers belonging to the question if the call was successful, <cite>False</cite> otherwise</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list(<a class="reference internal" href="#caplena_api_demo.Answer" title="caplena_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)</p>
 </td>
 </tr>
 </tbody>
@@ -404,11 +404,11 @@ overriding the <cite>group_identical</cite> property of the question</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.requestPredictions">
-<code class="descname">requestPredictions</code><span class="sig-paren">(</span><em>question_id</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.requestPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.requestPredictions" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.requestPredictions">
+<code class="descname">requestPredictions</code><span class="sig-paren">(</span><em>question_id</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.requestPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.requestPredictions" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to request the AI-assistant to train itself based on coded answers of specified question. Only works
 if at least 6 answers have been coded.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -425,11 +425,11 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.getPredictions">
-<code class="descname">getPredictions</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.getPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.getPredictions" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.getPredictions">
+<code class="descname">getPredictions</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.getPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.getPredictions" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to get AI-coded codes and respective answers. Requires previous call to
-<a class="reference internal" href="#codit_api_demo.CoditAPI.requestPredictions" title="codit_api_demo.CoditAPI.requestPredictions"><code class="xref py py-func docutils literal"><span class="pre">requestPredictions()</span></code></a>.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<a class="reference internal" href="#caplena_api_demo.CaplenaAPI.requestPredictions" title="caplena_api_demo.CaplenaAPI.requestPredictions"><code class="xref py py-func docutils literal"><span class="pre">requestPredictions()</span></code></a>.</p>
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -447,10 +447,10 @@ Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cit
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.deleteQuestion">
-<code class="descname">deleteQuestion</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.deleteQuestion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.deleteQuestion" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.deleteQuestion">
+<code class="descname">deleteQuestion</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.deleteQuestion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.deleteQuestion" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to delete question and its answers.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -467,10 +467,10 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="codit_api_demo.CoditAPI.deleteProject">
-<code class="descname">deleteProject</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codit_api_demo.html#CoditAPI.deleteProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.CoditAPI.deleteProject" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.CaplenaAPI.deleteProject">
+<code class="descname">deleteProject</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.deleteProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.deleteProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to delete projects, its questions and corresponding answers.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#codit_api_demo.CoditAPI.login" title="codit_api_demo.CoditAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -489,51 +489,51 @@ required beforehand</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="codit_api_demo.Question">
-<em class="property">class </em><code class="descclassname">codit_api_demo.</code><code class="descname">Question</code><a class="reference internal" href="_modules/codit_api_demo.html#Question"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.Question" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Question">
+<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Question</code><a class="reference internal" href="_modules/caplena_api_demo.html#Question"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Question" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
 <p>Question object, purely for reference</p>
 <dl class="attribute">
-<dt id="codit_api_demo.Question.name">
-<code class="descname">name</code><a class="headerlink" href="#codit_api_demo.Question.name" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Question.name">
+<code class="descname">name</code><a class="headerlink" href="#caplena_api_demo.Question.name" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>str, required</em> &#8211; Name of the question.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Question.description">
-<code class="descname">description</code><a class="headerlink" href="#codit_api_demo.Question.description" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Question.description">
+<code class="descname">description</code><a class="headerlink" href="#caplena_api_demo.Question.description" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>str, optional</em> &#8211; String describing this question</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Question.group_identical">
-<code class="descname">group_identical</code><a class="headerlink" href="#codit_api_demo.Question.group_identical" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Question.group_identical">
+<code class="descname">group_identical</code><a class="headerlink" href="#caplena_api_demo.Question.group_identical" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>bool, optional</em> &#8211; Flag indicating whether to group identical answers in coding view and when listing answers.
 Default=true</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Question.group_identical_exclude">
-<code class="descname">group_identical_exclude</code><a class="headerlink" href="#codit_api_demo.Question.group_identical_exclude" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Question.group_identical_exclude">
+<code class="descname">group_identical_exclude</code><a class="headerlink" href="#caplena_api_demo.Question.group_identical_exclude" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>str, optional</em> &#8211; All answer texts matching this regular expression won&#8217;t be grouped. Default=&#8217;&#8216;</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Question.smart_sort">
-<code class="descname">smart_sort</code><a class="headerlink" href="#codit_api_demo.Question.smart_sort" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Question.smart_sort">
+<code class="descname">smart_sort</code><a class="headerlink" href="#caplena_api_demo.Question.smart_sort" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>bool, optional</em> &#8211; If the smart sorting feature should be enabled. Default=true</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Question.codebook">
-<code class="descname">codebook</code><a class="headerlink" href="#codit_api_demo.Question.codebook" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Question.codebook">
+<code class="descname">codebook</code><a class="headerlink" href="#caplena_api_demo.Question.codebook" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>list, required</em> &#8211; List of codes (dictionaries), each containing the keys <cite>id</cite>, <cite>label</cite> and <cite>category</cite>
 Can also be an empty list.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Question.inherits_from">
-<code class="descname">inherits_from</code><a class="headerlink" href="#codit_api_demo.Question.inherits_from" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Question.inherits_from">
+<code class="descname">inherits_from</code><a class="headerlink" href="#caplena_api_demo.Question.inherits_from" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>int, optional</em> &#8211; ID of another question of this user, that the model should be based on.
 The codebook of that question should be <em>identical</em> or <em>almost</em> identical
 in order for the AI to deliver good results.</p>
@@ -542,53 +542,53 @@ in order for the AI to deliver good results.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="codit_api_demo.Row">
-<em class="property">class </em><code class="descclassname">codit_api_demo.</code><code class="descname">Row</code><a class="reference internal" href="_modules/codit_api_demo.html#Row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.Row" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Row">
+<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Row</code><a class="reference internal" href="_modules/caplena_api_demo.html#Row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Row" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
 <dl class="docutils">
 <dt>auxiliary_columns</dt>
  <span class="classifier-delimiter">:</span> <span class="classifier">list(str), required</span><dd>Needs to have the same number of elemenst as the <cite>auxiliary_column_names</cite> field of the project
 it belongs to</dd>
 <dt>answers</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">list(<a class="reference internal" href="#codit_api_demo.Answer" title="codit_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>), required</span><dd>A list of answers, whereby exactly one answer needs to be provided for every question of the project
+ <span class="classifier-delimiter">:</span> <span class="classifier">list(<a class="reference internal" href="#caplena_api_demo.Answer" title="caplena_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>), required</span><dd>A list of answers, whereby exactly one answer needs to be provided for every question of the project
 it belongs to</dd>
 </dl>
 </dd></dl>
 
 <dl class="class">
-<dt id="codit_api_demo.Answer">
-<em class="property">class </em><code class="descclassname">codit_api_demo.</code><code class="descname">Answer</code><a class="reference internal" href="_modules/codit_api_demo.html#Answer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#codit_api_demo.Answer" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Answer">
+<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Answer</code><a class="reference internal" href="_modules/caplena_api_demo.html#Answer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Answer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
 <p>Answer object, purely for reference</p>
 <dl class="attribute">
-<dt id="codit_api_demo.Answer.text">
-<code class="descname">text</code><a class="headerlink" href="#codit_api_demo.Answer.text" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Answer.text">
+<code class="descname">text</code><a class="headerlink" href="#caplena_api_demo.Answer.text" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>str, required</em> &#8211; Text of the answer.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Answer.question">
-<code class="descname">question</code><a class="headerlink" href="#codit_api_demo.Answer.question" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Answer.question">
+<code class="descname">question</code><a class="headerlink" href="#caplena_api_demo.Answer.question" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>str, required</em> &#8211; The name of the question this answer belongs to</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Answer.reviewed">
-<code class="descname">reviewed</code><a class="headerlink" href="#codit_api_demo.Answer.reviewed" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Answer.reviewed">
+<code class="descname">reviewed</code><a class="headerlink" href="#caplena_api_demo.Answer.reviewed" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>bool, optional</em> &#8211; Answers having the &#8220;reviewed&#8221; are assumed to have all codes correct
 and will be used to train the AI.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Answer.codes">
-<code class="descname">codes</code><a class="headerlink" href="#codit_api_demo.Answer.codes" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Answer.codes">
+<code class="descname">codes</code><a class="headerlink" href="#caplena_api_demo.Answer.codes" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>list, optional</em> &#8211; List of integers (code IDs). Assigning codes to an answer.
 Will be used to train the AI.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="codit_api_demo.Answer.source_language">
-<code class="descname">source_language</code><a class="headerlink" href="#codit_api_demo.Answer.source_language" title="Permalink to this definition">¶</a></dt>
+<dt id="caplena_api_demo.Answer.source_language">
+<code class="descname">source_language</code><a class="headerlink" href="#caplena_api_demo.Answer.source_language" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>str, optional</em> &#8211; ISO Code (2 characters, e.g. &#8216;de&#8217; or &#8216;en&#8217;) specifying in which language the text is written.
 Relevant for translation, taking precedance over automatic language detection</p>
 </dd></dl>
@@ -619,7 +619,7 @@ Relevant for translation, taking precedance over automatic language detection</p
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Author.
+        &#169; Copyright 2018, Caplena GmbH.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>

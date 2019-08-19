@@ -55,9 +55,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Codit API Demo'
-copyright = '2018, Author'
-author = 'Author'
+project = 'Caplena API Demo'
+copyright = '2018, Caplena GmbH'
+author = 'Caplena GmbH'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -323,7 +323,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'src', 'src Documentation',
+    (master_doc, 'Caplena', 'Caplena Documentation',
      author, 'src', 'One line description of project.',
      'Miscellaneous'),
 ]

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Demo script illustrating how to do basic operations on the Codit API
+"""Demo script illustrating how to do basic operations on the Caplena API
 
 Example
 -------
@@ -11,7 +11,7 @@ Steps to run:
     $ pip install requests
 3. Adapt the `CODIT_EMAIL` and `CODIT_PASSWORD` variables at the bottom of this script
 4. Call the script
-    $ python codit_api_demo.py
+    $ python caplena_api_demo.py
 
 Notes
 -----
@@ -26,13 +26,13 @@ import requests
 import urllib
 
 
-class CoditAPI(object):
-    """Class enabling interaction with (parts of) the Codit.co API
+class CaplenaAPI(object):
+    """Class enabling interaction with (parts of) the Caplena.co API
 
     Example
     -------
-    To call an API instantiate a CoditAPI object and then call its methods
-        >>> api = CoditAPI('de')
+    To call an API instantiate a CaplenaAPI object and then call its methods
+        >>> api = CaplenaAPI('de')
         >>> api.login('my_username', 'my_password')
         True
         >>> api.listProjects()
@@ -61,10 +61,10 @@ class CoditAPI(object):
         -------
 
         """
-        super(CoditAPI, self).__init__()
+        super(CaplenaAPI, self).__init__()
         self.csrftoken = None
         self.authenticated = False
-        self.baseURI = "https://api.codit.co/api"
+        self.baseURI = "https://api.caplena.com/api"
 
         if language not in self._valid_languages:
             raise ValueError(
@@ -214,7 +214,7 @@ class CoditAPI(object):
         List all projects of the user.
 
         *Note:* The returned projects contain global meta information of the projects *and* their questions, but not the response texts.
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -240,7 +240,7 @@ class CoditAPI(object):
         Get the details of a specific project.
 
         *Note:* The returned projects contain global meta information of the project *and* their questions, but not the response texts.
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -265,10 +265,10 @@ class CoditAPI(object):
         """
         API method to list all projects of which inheritance is possible.
 
-        List contains all projects belonging to user, as well as codit.co provided models.
+        List contains all projects belonging to user, as well as Caplena provided models.
 
         *Note:* The returned projects only contain basic meta information on the project and their questions, but not the response texts. To get more detailed information about a certain project call the `listprojects` method.
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -277,7 +277,7 @@ class CoditAPI(object):
         Returns
         -------
         projects: list of project objects
-            A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global codit.co models.
+            A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global Caplena models.
 
         """
         r = self._makeRequest('get', '/projects-inheritable/')
@@ -294,7 +294,7 @@ class CoditAPI(object):
         List all questions of the user.
 
         *Note:* The returned questions only contain global meta information of the questions and not the response texts.
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -320,7 +320,7 @@ class CoditAPI(object):
         Get question by ID.
 
         *Note:* The returned questions only contain meta information of the question and not the response texts.
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -346,7 +346,7 @@ class CoditAPI(object):
         Get project by ID.
 
         *Note:* The returned questions only contain meta information of the question and not the response texts.
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -380,7 +380,7 @@ class CoditAPI(object):
         API method to create a new project
 
         *Note:*
-        * For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        * For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
         * When creating a new project you can also create questions and rows belonging to it.
         * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an
@@ -449,7 +449,7 @@ class CoditAPI(object):
         """
         API method to add rows to a previously created project.
 
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -485,7 +485,7 @@ class CoditAPI(object):
         """
         API method to list all rows of a specific project.
 
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -510,7 +510,7 @@ class CoditAPI(object):
         """
         API method to list all answers of a specific question.
 
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -540,7 +540,7 @@ class CoditAPI(object):
         API method to request the AI-assistant to train itself based on coded answers of specified question. Only works
         if at least 6 answers have been coded.
 
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -568,9 +568,9 @@ class CoditAPI(object):
     def getPredictions(self, question_id):
         """
         API method to get AI-coded codes and respective answers. Requires previous call to
-        :func:`~codit_api_demo.CoditAPI.requestPredictions`.
+        :func:`~caplena_api_demo.CaplenaAPI.requestPredictions`.
 
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -599,7 +599,7 @@ class CoditAPI(object):
         """
         API method to delete question and its answers.
 
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -624,7 +624,7 @@ class CoditAPI(object):
         """
         API method to delete projects, its questions and corresponding answers.
 
-        *Note:* For this method to work, a successfull call to :func:`~codit_api_demo.CoditAPI.login` is
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
@@ -722,8 +722,8 @@ if __name__ == '__main__':
     CODIT_EMAIL = 'name@domain.com'
     CODIT_PASSWORD = '**************'
 
-    # Instantiate new instance of CoditAPI class
-    api = CoditAPI('en')
+    # Instantiate new instance of CaplenaAPI class
+    api = CaplenaAPI('en')
 
     # Call the login method before doing anything else
     # This sets all session parameters required for further calls

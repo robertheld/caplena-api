@@ -1,5 +1,5 @@
-# codit-api
-Client libraries for [codit.co](https://codit.co)
+# caplena-api
+Client libraries for [Caplena](https://caplena.com)
 
 # Getting started
 
@@ -9,12 +9,12 @@ Make sure you have python version >= 2.7 and to install the requests library `pi
 
 ## Installing
 
-Adapt the credentials in [src/codit\_api\_demo.py](src/codit_api_demo.py). Execute script using 
-`python src/codit_api_demo.py`
+Adapt the credentials in [src/caplena\_api\_demo.py](src/caplena_api_demo.py). Execute script using 
+`python src/caplena_api_demo.py`
 
 # Documentation
 
-Make sure to check out the [documentation](http://apidocs.codit.co/build/html/index.html)
+Make sure to check out the [documentation](http://apidocs.caplena.com/build/html/index.html)
 
 # License
 

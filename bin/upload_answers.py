@@ -5,12 +5,12 @@ import argparse
 import getpass
 import json
 
-from src.codit_api_demo import CoditAPI
+from src.caplena_api_demo import CaplenaAPI
 
 parser = argparse.ArgumentParser(
     description='Script to create a new project with one question and their answers with codes from Excel '
-    'or JSON. Requires setting credentials to codit.co via the environment '
-    'variables CODIT_EMAIL and CODIT_PW or entering them when required.\n'
+    'or JSON. Requires setting credentials to Caplena via the environment '
+    'variables CAPLENA_EMAIL and CAPLENA_PW or entering them when required.\n'
 )
 
 parser.add_argument('input', type=str, help='File to parse')
@@ -80,8 +80,8 @@ args = parser.parse_args()
 if args.codes_substring and args.codes_col_range:
     raise ValueError('Choose either col range or substring matching')
 # parse credentials from environment variables
-email = os.environ.get('CODIT_EMAIL', None)
-pw = os.environ.get('CODIT_PW', None)
+email = os.environ.get('CAPLENA_EMAIL', None)
+pw = os.environ.get('CAPLENA_PW', None)
 
 if __name__ == '__main__':
     codebook = []
@@ -233,7 +233,7 @@ if __name__ == '__main__':
         print('codebook ',codebook)
     else:
         # login
-        api = CoditAPI('en')
+        api = CaplenaAPI('en')
 
         if email is None:
             email = input('Enter your email: ')
