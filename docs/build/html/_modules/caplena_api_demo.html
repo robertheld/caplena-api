@@ -231,9 +231,8 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                 <span class="s2">&quot;CSRF-Token / authentication not set. Call login(..) before invoking other API calls&quot;</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="p">,</span> <span class="n">method</span><span class="p">)(</span>
-            <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span><span class="p">,</span> <span class="n">apiURI</span><span class="p">),</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getHeaders</span><span class="p">()</span>
-        <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="p">,</span>
+                       <span class="n">method</span><span class="p">)(</span><span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span><span class="p">,</span> <span class="n">apiURI</span><span class="p">),</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getHeaders</span><span class="p">())</span>
 
 <div class="viewcode-block" id="CaplenaAPI.login"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.login">[docs]</a>    <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -443,7 +442,8 @@
         <span class="n">questions</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">rows</span><span class="o">=</span><span class="p">[],</span>
         <span class="k">async</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">request_training</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">request_training</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">translation_engine</span><span class="o">=</span><span class="s1">&#39;GT&#39;</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to create a new project</span>
@@ -479,6 +479,8 @@
 <span class="sd">            If true, send async request, required if uploading more than 2000 rows at once</span>
 <span class="sd">        request_training : bool</span>
 <span class="sd">            If true, automatically request training after uploading answers</span>
+<span class="sd">        translation_engine : str</span>
+<span class="sd">            Choice of translation engine, either &#39;GT&#39; for Google Translate or &#39;DL&#39; for DeepL</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        project : project object</span>
@@ -499,6 +501,7 @@
             <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="n">language</span><span class="p">,</span>
             <span class="s2">&quot;auxiliary_column_names&quot;</span><span class="p">:</span> <span class="n">auxiliary_column_names</span><span class="p">,</span>
             <span class="s2">&quot;translated&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">translate</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;translation_engine&quot;</span><span class="p">:</span> <span class="n">translation_engine</span><span class="p">,</span>
             <span class="s2">&quot;questions&quot;</span><span class="p">:</span> <span class="n">questions</span><span class="p">,</span>
             <span class="s2">&quot;rows&quot;</span><span class="p">:</span> <span class="n">rows</span>
         <span class="p">}</span>

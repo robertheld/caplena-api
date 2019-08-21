@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="top" title="Codit API Demo" href="index.html" />
-    <link rel="prev" title="Welcome to src’s documentation!" href="index.html" />
+    <link rel="prev" title="Welcome to the documentation of Caplena’s Python client library!" href="index.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
@@ -43,7 +43,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to src’s documentation!"
+          <a href="index.html" title="Welcome to the documentation of Caplena’s Python client library!"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Codit API Demo</a> &#187;</li> 
       </ul>
@@ -52,7 +52,7 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to src&#8217;s documentation!</a></p>
+                        title="previous chapter">Welcome to the documentation of Caplena&#8217;s Python client library!</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -286,7 +286,7 @@ required beforehand</p>
 
 <dl class="method">
 <dt id="caplena_api_demo.CaplenaAPI.createProject">
-<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.createProject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>async=False</em>, <em>request_training=True</em>, <em>translation_engine='GT'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.createProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to create a new project</p>
 <p><em>Note:</em>
 * For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
@@ -313,6 +313,7 @@ in the <cite>auxiliary_columns</cite> field when adding rows.</li>
 <li><strong>rows</strong> (list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)) &#8211; List of objects of type Row</li>
 <li><strong>async</strong> (<em>bool</em>) &#8211; If true, send async request, required if uploading more than 2000 rows at once</li>
 <li><strong>request_training</strong> (<em>bool</em>) &#8211; If true, automatically request training after uploading answers</li>
+<li><strong>translation_engine</strong> (<em>str</em>) &#8211; Choice of translation engine, either &#8216;GT&#8217; for Google Translate or &#8216;DL&#8217; for DeepL</li>
 </ul>
 </td>
 </tr>
@@ -613,7 +614,7 @@ Relevant for translation, taking precedance over automatic language detection</p
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to src’s documentation!"
+          <a href="index.html" title="Welcome to the documentation of Caplena’s Python client library!"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Codit API Demo</a> &#187;</li> 
       </ul>
