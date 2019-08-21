@@ -138,7 +138,7 @@ def test_workflow(run, async):
     )
     try:
         if async:
-            time.sleep(20)
+            time.sleep(40)
         num_projects_after = len(api.listProjects())
         assert num_projects_after == num_projects_before + 1
         assert len(new_project['questions']) == 1
@@ -185,7 +185,7 @@ def test_workflow(run, async):
             new_project['id'], additional_rows, async=async, request_training=False
         )
         if async:
-            time.sleep(20)
+            time.sleep(30)
         answers = api.listAnswers(question_id, no_group=True)
         assert len(rows_init) + len(additional_rows) == len(answers)
 

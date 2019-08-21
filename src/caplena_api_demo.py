@@ -162,9 +162,8 @@ class CaplenaAPI(object):
             raise Exception(
                 "CSRF-Token / authentication not set. Call login(..) before invoking other API calls"
             )
-        return getattr(self.sess, method)(
-            "{}{}".format(self.baseURI, apiURI), json=data, headers=self._getHeaders()
-        )
+        return getattr(self.sess,
+                       method)("{}{}".format(self.baseURI, apiURI), json=data, headers=self._getHeaders())
 
     def login(self, email, password):
         """
@@ -374,7 +373,8 @@ class CaplenaAPI(object):
         questions=[],
         rows=[],
         async=False,
-        request_training=True
+        request_training=True,
+        translation_engine='GT'
     ):
         """
         API method to create a new project
@@ -410,6 +410,8 @@ class CaplenaAPI(object):
             If true, send async request, required if uploading more than 2000 rows at once
         request_training : bool
             If true, automatically request training after uploading answers
+        translation_engine : str
+            Choice of translation engine, either 'GT' for Google Translate or 'DL' for DeepL
         Returns
         -------
         project : project object
@@ -430,6 +432,7 @@ class CaplenaAPI(object):
             "language": language,
             "auxiliary_column_names": auxiliary_column_names,
             "translated": 1 if translate else 0,
+            "translation_engine": translation_engine,
             "questions": questions,
             "rows": rows
         }
