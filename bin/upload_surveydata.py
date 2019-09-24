@@ -189,7 +189,7 @@ if __name__ == "__main__":
             'name': 'language',
             'message':
             'Please enter the language of the new project (ISO code). If data is multilingual, enter the most prominent language',
-            'default': 'pt'
+            'default': 'en'
         },
     ]
     answers = prompt(question)
