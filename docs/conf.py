@@ -36,6 +36,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
+    'sphinx_autodoc_typehints'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -56,7 +57,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Caplena API Demo'
-copyright = '2018, Caplena GmbH'
+copyright = '2019, Caplena GmbH'
 author = 'Caplena GmbH'
 
 # The version info for the project you're documenting, acts as replacement for

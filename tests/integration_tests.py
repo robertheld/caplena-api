@@ -2,7 +2,7 @@ import os, time
 
 import pytest
 
-from src.caplena_api_demo import CaplenaAPI
+from src.caplena_api_demo import CaplenaAPI, Question, Row, Answer, Project
 
 api = CaplenaAPI('en')
 
@@ -23,8 +23,8 @@ def test_list_inheritable_projects():
     _ = api.listInheritableProjects()
 
 
-@pytest.mark.parametrize('run,async', [(1, False), (2, True)])
-def test_workflow(run, async):
+@pytest.mark.parametrize('run,upload_async', [(1, False), (2, True)])
+def test_workflow(run, upload_async):
     codebook = [
         {
             'id': 1,
@@ -126,23 +126,26 @@ def test_workflow(run, async):
         }
     ] * 3
     num_projects_before = len(api.listProjects())
+    questions = [Question.from_json(q) for q in questions]
+    rows_init = [Row.from_json(row_init) for row_init in rows_init]
     new_project = api.createProject(
-        "My new project",
-        "de",
+        name="My new project",
+        language="de",
         auxiliary_column_names=['ID', 'some other column'],
         translate=True,
         questions=questions,
         rows=rows_init,
-        async=async,
+        upload_async=upload_async,
         request_training=False
     )
+    assert isinstance(new_project, Project)
     try:
-        if async:
+        if upload_async:
             time.sleep(40)
         num_projects_after = len(api.listProjects())
         assert num_projects_after == num_projects_before + 1
-        assert len(new_project['questions']) == 1
-        question_id = new_project['questions'][0]['id']
+        assert len(new_project.questions) == 1
+        question_id = new_project.questions[0].id
         # only request training for one workflow as it's exactly the same and creates load
         if run == 1:
 
@@ -158,9 +161,9 @@ def test_workflow(run, async):
                 time.sleep(timestep)
                 delay = delay + timestep
 
-            n_not_reviewed = len([row for row in rows_init if not row['answers'][0]['reviewed']])
+            n_not_reviewed = len([row for row in rows_init if not row.answers[0].reviewed])
             assert predictions is not None
-            assert len(predictions['answers']) == n_not_reviewed
+            assert len(predictions.answers) == n_not_reviewed
 
         additional_rows = [
             {
@@ -182,13 +185,13 @@ def test_workflow(run, async):
             }
         ]
         new_answers = api.addRowsToProject(
-            new_project['id'], additional_rows, async=async, request_training=False
+            new_project.id, [Row.from_json(r) for r in additional_rows], upload_async=upload_async, request_training=False
         )
-        if async:
+        if upload_async:
             time.sleep(30)
         answers = api.listAnswers(question_id, no_group=True)
         assert len(rows_init) + len(additional_rows) == len(answers)
 
     finally:
-        _ = api.deleteProject(new_project['id'])
+        _ = api.deleteProject(new_project.id)
         assert num_projects_before == len(api.listProjects())

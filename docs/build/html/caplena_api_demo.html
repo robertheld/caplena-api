@@ -2,37 +2,28 @@
 
 <!doctype html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>caplena_api_demo module &#8212; Codit API Demo</title>
-    
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="_static/bizstyle.js"></script>
-    <link rel="top" title="Codit API Demo" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Welcome to the documentation of Caplena’s Python client library!" href="index.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
     <![endif]-->
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -52,22 +43,22 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to the documentation of Caplena&#8217;s Python client library!</a></p>
+                        title="previous chapter">Welcome to the documentation of Caplena’s Python client library!</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/caplena_api_demo.txt"
+      <li><a href="_sources/caplena_api_demo.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -85,22 +76,19 @@
 <p>Steps to run:</p>
 <ol class="arabic">
 <li><dl class="first docutils">
-<dt>Make sure you have a compatible (version &gt;= 2.7) python environment</dt>
-<dd><p class="first last">$ python &#8211;version</p>
+<dt>Make sure you have a compatible (version &gt;= 2.7) python environment</dt><dd><p>$ python –version</p>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>Make sure you have installed the requests library (if not, install using <cite>pip install requests</cite>)</dt>
-<dd><p class="first last">$ pip install requests</p>
+<dt>Make sure you have installed the requests library (if not, install using <cite>pip install requests</cite>)</dt><dd><p>$ pip install requests</p>
 </dd>
 </dl>
 </li>
 <li><p class="first">Adapt the <cite>CODIT_EMAIL</cite> and <cite>CODIT_PASSWORD</cite> variables at the bottom of this script</p>
 </li>
 <li><dl class="first docutils">
-<dt>Call the script</dt>
-<dd><p class="first last">$ python caplena_api_demo.py</p>
+<dt>Call the script</dt><dd><p>$ python caplena_api_demo.py</p>
 </dd>
 </dl>
 </li>
@@ -111,14 +99,268 @@ Every receiving party agrees to use it solely for own purposes
 and purposes that are intended by the original author (Caplena GmbH).</p>
 <p>Copyright 2018 Caplena GmbH, Zurich.</p>
 <dl class="class">
+<dt id="caplena_api_demo.Code">
+<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Code</code><span class="sig-paren">(</span><em>id</em>, <em>label</em>, <em>category</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Code"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.utils.CaplenaObj</span></code></p>
+<p>Code object</p>
+<dl class="method">
+<dt id="caplena_api_demo.Code.from_json">
+<em class="property">classmethod </em><code class="descname">from_json</code><span class="sig-paren">(</span><em>json_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Code.from_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Code.from_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="caplena_api_demo.Question">
+<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Question</code><span class="sig-paren">(</span><em>name</em>, <em>description=''</em>, <em>codebook=[]</em>, <em>group_identical=True</em>, <em>group_identical_exclude=''</em>, <em>smart_sort=False</em>, <em>inherits_from=None</em>, <em>id=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Question"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Question" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.utils.CaplenaObj</span></code></p>
+<p>Question object</p>
+<dl class="attribute">
+<dt id="caplena_api_demo.Question.name">
+<code class="descname">name</code><a class="headerlink" href="#caplena_api_demo.Question.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the question.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str, required</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caplena_api_demo.Question.description">
+<code class="descname">description</code><a class="headerlink" href="#caplena_api_demo.Question.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>String describing this question</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str, optional</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caplena_api_demo.Question.group_identical">
+<code class="descname">group_identical</code><a class="headerlink" href="#caplena_api_demo.Question.group_identical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag indicating whether to group identical answers in coding view and when listing answers.
+Default=true</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bool, optional</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caplena_api_demo.Question.group_identical_exclude">
+<code class="descname">group_identical_exclude</code><a class="headerlink" href="#caplena_api_demo.Question.group_identical_exclude" title="Permalink to this definition">¶</a></dt>
+<dd><p>All answer texts matching this regular expression won’t be grouped. Default=’‘</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str, optional</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caplena_api_demo.Question.smart_sort">
+<code class="descname">smart_sort</code><a class="headerlink" href="#caplena_api_demo.Question.smart_sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the smart sorting feature should be enabled. Default=true</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bool, optional</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caplena_api_demo.Question.codebook">
+<code class="descname">codebook</code><a class="headerlink" href="#caplena_api_demo.Question.codebook" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of codes (dictionaries), each containing the keys <cite>id</cite>, <cite>label</cite> and <cite>category</cite>
+Can also be an empty list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list, required</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caplena_api_demo.Question.inherits_from">
+<code class="descname">inherits_from</code><a class="headerlink" href="#caplena_api_demo.Question.inherits_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>ID of another question of this user, that the model should be based on.
+The codebook of that question should be <em>identical</em> or <em>almost</em> identical
+in order for the AI to deliver good results.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int, optional</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="caplena_api_demo.Question.from_json">
+<em class="property">classmethod </em><code class="descname">from_json</code><span class="sig-paren">(</span><em>json_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Question.from_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Question.from_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="caplena_api_demo.Answer">
+<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Answer</code><span class="sig-paren">(</span><em>text</em>, <em>question</em>, <em>source_language=''</em>, <em>reviewed=False</em>, <em>codes=[]</em>, <em>id=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Answer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Answer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.utils.CaplenaObj</span></code></p>
+<p>Answer object</p>
+<dl class="attribute">
+<dt id="caplena_api_demo.Answer.text">
+<code class="descname">text</code><a class="headerlink" href="#caplena_api_demo.Answer.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text of the answer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str, required</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caplena_api_demo.Answer.question">
+<code class="descname">question</code><a class="headerlink" href="#caplena_api_demo.Answer.question" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the question this answer belongs to</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str, required</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caplena_api_demo.Answer.reviewed">
+<code class="descname">reviewed</code><a class="headerlink" href="#caplena_api_demo.Answer.reviewed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Answers having the “reviewed” are assumed to have all codes correct
+and will be used to train the AI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bool, optional</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caplena_api_demo.Answer.codes">
+<code class="descname">codes</code><a class="headerlink" href="#caplena_api_demo.Answer.codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of integers (code IDs). Assigning codes to an answer.
+Will be used to train the AI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list, optional</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="caplena_api_demo.Answer.source_language">
+<code class="descname">source_language</code><a class="headerlink" href="#caplena_api_demo.Answer.source_language" title="Permalink to this definition">¶</a></dt>
+<dd><p>ISO Code (2 characters, e.g. ‘de’ or ‘en’) specifying in which language the text is written.
+Relevant for translation, taking precedance over automatic language detection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str, optional</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="caplena_api_demo.Answer.from_json">
+<em class="property">classmethod </em><code class="descname">from_json</code><span class="sig-paren">(</span><em>json_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Answer.from_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Answer.from_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="caplena_api_demo.Row">
+<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Row</code><span class="sig-paren">(</span><em>auxiliary_columns</em>, <em>answers</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.utils.CaplenaObj</span></code></p>
+<dl class="docutils">
+<dt>auxiliary_columns<span class="classifier">list(str), required</span></dt><dd>Needs to have the same number of elemenst as the <cite>auxiliary_column_names</cite> field of the project
+it belongs to</dd>
+<dt>answers<span class="classifier">list(<a class="reference internal" href="#caplena_api_demo.Answer" title="caplena_api_demo.Answer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Answer</span></code></a>), required</span></dt><dd>A list of answers, whereby exactly one answer needs to be provided for every question of the project
+it belongs to</dd>
+</dl>
+<dl class="method">
+<dt id="caplena_api_demo.Row.from_json">
+<em class="property">classmethod </em><code class="descname">from_json</code><span class="sig-paren">(</span><em>json_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Row.from_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Row.from_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="caplena_api_demo.Project">
+<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Project</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>questions</em>, <em>rows=[]</em>, <em>auxiliary_column_names=[]</em>, <em>translation_engine='google'</em>, <em>translate=False</em>, <em>translated=0</em>, <em>permissions=''</em>, <em>created=''</em>, <em>completed=False</em>, <em>id=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.utils.CaplenaObj</span></code></p>
+<dl class="method">
+<dt id="caplena_api_demo.Project.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Project.to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Project.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="caplena_api_demo.Project.from_json">
+<em class="property">classmethod </em><code class="descname">from_json</code><span class="sig-paren">(</span><em>json_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Project.from_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Project.from_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="caplena_api_demo.Predictions">
+<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Predictions</code><span class="sig-paren">(</span><em>answers</em>, <em>model</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Predictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.utils.CaplenaObj</span></code></p>
+<dl class="method">
+<dt id="caplena_api_demo.Predictions.from_json">
+<em class="property">classmethod </em><code class="descname">from_json</code><span class="sig-paren">(</span><em>json_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#Predictions.from_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Predictions.from_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="caplena_api_demo.CaplenaAPI">
 <em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">CaplenaAPI</code><span class="sig-paren">(</span><em>language</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class enabling interaction with (parts of) the Caplena.co API</p>
 <p class="rubric">Example</p>
 <dl class="docutils">
-<dt>To call an API instantiate a CaplenaAPI object and then call its methods</dt>
-<dd><div class="first last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span> <span class="o">=</span> <span class="n">CaplenaAPI</span><span class="p">(</span><span class="s1">&#39;de&#39;</span><span class="p">)</span>
+<dt>To call an API instantiate a CaplenaAPI object and then call its methods</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">api</span> <span class="o">=</span> <span class="n">CaplenaAPI</span><span class="p">(</span><span class="s1">&#39;de&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="s1">&#39;my_username&#39;</span><span class="p">,</span> <span class="s1">&#39;my_password&#39;</span><span class="p">)</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">api</span><span class="o">.</span><span class="n">listProjects</span><span class="p">()</span>
@@ -130,6 +372,11 @@ and purposes that are intended by the original author (Caplena GmbH).</p>
 </div>
 </dd>
 </dl>
+<dl class="attribute">
+<dt id="caplena_api_demo.CaplenaAPI.valid_languages">
+<code class="descname">valid_languages</code><em class="property"> = ['en', 'de', 'es', 'pt', 'fr']</em><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.valid_languages" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="caplena_api_demo.CaplenaAPI.login">
 <code class="descname">login</code><span class="sig-paren">(</span><em>email</em>, <em>password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.login" title="Permalink to this definition">¶</a></dt>
@@ -144,18 +391,15 @@ We also use this function to retrieve the CSRF-Token from the cookies.
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>email</strong> (<em>str</em>) &#8211; Email of the user to be logged in</li>
-<li><strong>password</strong> (<em>str</em>) &#8211; Password of the user to be logged in</li>
-<li><strong>data</strong> (<em>dict</em>) &#8211; Data to be sent to API as json. Dictionary of key/value pairs (not-serialized!)
-Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
-<cite>str|float|int|long|list|dictionary|bool|None</cite></li>
+<li><strong>email</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Email of the user to be logged in</li>
+<li><strong>password</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Password of the user to be logged in</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>success</strong> &#8211; True if login was successful, <cite>False</cite> otherwise</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if login was successful, <cite>False</cite> otherwise</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">success</p>
 </td>
 </tr>
 </tbody>
@@ -168,37 +412,15 @@ Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
 <dd><p>API method to list all projects that belong to this user.</p>
 <p>List all projects of the user.</p>
 <p><em>Note:</em> The returned projects contain global meta information of the projects <em>and</em> their questions, but not the response texts.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> &#8211; A list of all projects belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> – A list of all projects belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of project objects</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="caplena_api_demo.CaplenaAPI.projectDetails">
-<code class="descname">projectDetails</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.projectDetails"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.projectDetails" title="Permalink to this definition">¶</a></dt>
-<dd><p>API method to get the details of a specific project.</p>
-<p>Get the details of a specific project.</p>
-<p><em>Note:</em> The returned projects contain global meta information of the project <em>and</em> their questions, but not the response texts.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
-required beforehand</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_id</strong> (<em>int, required</em>) &#8211; ID of the existing project</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>project</strong> &#8211; The project object with the id requested if it exists, <cite>False</cite> otherwise</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">a project object</td>
 </tr>
 </tbody>
 </table>
@@ -210,13 +432,13 @@ required beforehand</p>
 <dd><p>API method to list all projects of which inheritance is possible.</p>
 <p>List contains all projects belonging to user, as well as Caplena provided models.</p>
 <p><em>Note:</em> The returned projects only contain basic meta information on the project and their questions, but not the response texts. To get more detailed information about a certain project call the <cite>listprojects</cite> method.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> &#8211; A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global Caplena models.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>projects</strong> – A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global Caplena models.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of project objects</td>
 </tr>
@@ -230,13 +452,13 @@ required beforehand</p>
 <dd><p>API method to list all questions that belong to this user.</p>
 <p>List all questions of the user.</p>
 <p><em>Note:</em> The returned questions only contain global meta information of the questions and not the response texts.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>questions</strong> &#8211; A list of all questions belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>questions</strong> – A list of all questions belonging to the user if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of question objects</td>
 </tr>
@@ -250,13 +472,13 @@ required beforehand</p>
 <dd><p>API method to get question info.</p>
 <p>Get question by ID.</p>
 <p><em>Note:</em> The returned questions only contain meta information of the question and not the response texts.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>question</strong> &#8211; A question object if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>question</strong> – A question object if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">a question object</td>
 </tr>
@@ -270,13 +492,13 @@ required beforehand</p>
 <dd><p>API method to get project info.</p>
 <p>Get project by ID.</p>
 <p><em>Note:</em> The returned questions only contain meta information of the question and not the response texts.
-<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>project</strong> &#8211; A project object if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>project</strong> – A project object if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">a project object</td>
 </tr>
@@ -286,10 +508,10 @@ required beforehand</p>
 
 <dl class="method">
 <dt id="caplena_api_demo.CaplenaAPI.createProject">
-<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>async=False</em>, <em>request_training=True</em>, <em>translation_engine='GT'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.createProject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>translation_engine='GT'</em>, <em>upload_async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.createProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to create a new project</p>
 <p><em>Note:</em>
-* For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+* For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand
 * When creating a new project you can also create questions and rows belonging to it.
 * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an
@@ -300,24 +522,24 @@ existing project.
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str, required</em>) &#8211; Name of the new project</li>
-<li><strong>language</strong> (<em>str, required</em>) &#8211; Language of the project, valid choices are {en|de}
+<li><strong>name</strong> (<em>str</em><em>, </em><em>required</em>) – Name of the new project</li>
+<li><strong>language</strong> (<em>str</em><em>, </em><em>required</em>) – Language of the project, valid choices are {en|de}
 Has nothing to do with the language the API is set to (the attribute <cite>language</cite>.)</li>
-<li><strong>translate</strong> (<em>bool, optional</em>) &#8211; Flag indicating whether to translate this project (where other language than <cite>language</cite> detected)
+<li><strong>translate</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag indicating whether to translate this project (where other language than <cite>language</cite> detected)
 using the Google API.</li>
-<li><strong>auxiliary_column_names</strong> (<em>list, optional</em>) &#8211; List of strings, naming additional columns that will be sent with each row.
+<li><strong>auxiliary_column_names</strong> (<em>list</em><em>, </em><em>optional</em>) – List of strings, naming additional columns that will be sent with each row.
 Can also be an empty list.
 The number of elements in this list must match the number of elements
 in the <cite>auxiliary_columns</cite> field when adding rows.</li>
-<li><strong>questions</strong> (list(<a class="reference internal" href="#caplena_api_demo.Question" title="caplena_api_demo.Question"><code class="xref py py-class docutils literal"><span class="pre">Question</span></code></a>)) &#8211; List of questions to create</li>
-<li><strong>rows</strong> (list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)) &#8211; List of objects of type Row</li>
-<li><strong>async</strong> (<em>bool</em>) &#8211; If true, send async request, required if uploading more than 2000 rows at once</li>
-<li><strong>request_training</strong> (<em>bool</em>) &#8211; If true, automatically request training after uploading answers</li>
-<li><strong>translation_engine</strong> (<em>str</em>) &#8211; Choice of translation engine, either &#8216;GT&#8217; for Google Translate or &#8216;DL&#8217; for DeepL</li>
+<li><strong>questions</strong> (list(<a class="reference internal" href="#caplena_api_demo.Question" title="caplena_api_demo.Question"><code class="xref py py-class docutils literal notranslate"><span class="pre">Question</span></code></a>)) – List of questions to create</li>
+<li><strong>rows</strong> (list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal notranslate"><span class="pre">Row</span></code></a>)) – List of objects of type Row</li>
+<li><strong>async</strong> (<em>bool</em>) – If true, send async request, required if uploading more than 2000 rows at once</li>
+<li><strong>request_training</strong> (<em>bool</em>) – If true, automatically request training after uploading answers</li>
+<li><strong>translation_engine</strong> (<em>str</em>) – Choice of translation engine, either ‘GT’ for Google Translate or ‘DL’ for DeepL</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>project</strong> &#8211; A dictionary containing all attributes of the newly created project if the call was successful
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>project</strong> – A dictionary containing all attributes of the newly created project if the call was successful
 <cite>False</cite> otherwise</p>
 </td>
 </tr>
@@ -330,23 +552,23 @@ in the <cite>auxiliary_columns</cite> field when adding rows.</li>
 
 <dl class="method">
 <dt id="caplena_api_demo.CaplenaAPI.addRowsToProject">
-<code class="descname">addRowsToProject</code><span class="sig-paren">(</span><em>project_id</em>, <em>rows</em>, <em>async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.addRowsToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.addRowsToProject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addRowsToProject</code><span class="sig-paren">(</span><em>project_id</em>, <em>rows</em>, <em>upload_async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.addRowsToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.addRowsToProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to add rows to a previously created project.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>project_id</strong> (<em>int</em>) &#8211; ID of the project to add the rows to</li>
-<li><strong>rows</strong> (list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)) &#8211; List of objects of type Row</li>
-<li><strong>async</strong> (<em>bool</em>) &#8211; If true, send async request, required if uploading more than 2000 rows at once</li>
-<li><strong>request_training</strong> (<em>bool</em>) &#8211; If true, automatically request training after uploading answers</li>
+<li><strong>project_id</strong> (<em>int</em>) – ID of the project to add the rows to</li>
+<li><strong>rows</strong> (list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal notranslate"><span class="pre">Row</span></code></a>)) – List of objects of type Row</li>
+<li><strong>async</strong> (<em>bool</em>) – If true, send async request, required if uploading more than 2000 rows at once</li>
+<li><strong>request_training</strong> (<em>bool</em>) – If true, automatically request training after uploading answers</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rows</strong> &#8211; A list of dictionaries containing attributes of the newly created rows if the call was successful
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rows</strong> – A list of dictionaries containing attributes of the newly created rows if the call was successful
 <cite>False</cite> otherwise</p>
 </td>
 </tr>
@@ -361,17 +583,17 @@ required beforehand</p>
 <dt id="caplena_api_demo.CaplenaAPI.listRows">
 <code class="descname">listRows</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.listRows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.listRows" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to list all rows of a specific project.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_id</strong> (<em>int</em>) &#8211; ID of the project of which to return the rows</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_id</strong> (<em>int</em>) – ID of the project of which to return the rows</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> &#8211; A list of all rows belonging to the question if the call was successful, <cite>False</cite> otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>answers</strong> – A list of all rows belonging to the question if the call was successful, <cite>False</cite> otherwise</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal"><span class="pre">Row</span></code></a>)</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal notranslate"><span class="pre">Row</span></code></a>)</td>
 </tr>
 </tbody>
 </table>
@@ -381,23 +603,23 @@ required beforehand</p>
 <dt id="caplena_api_demo.CaplenaAPI.listAnswers">
 <code class="descname">listAnswers</code><span class="sig-paren">(</span><em>question_id</em>, <em>no_group=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.listAnswers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.listAnswers" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to list all answers of a specific question.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>question_id</strong> (<em>int</em>) &#8211; ID of the question of which to return the answers</li>
-<li><strong>no_group</strong> (<em>bool</em>) &#8211; If true, no grouping will be applied to answers list,
+<li><strong>question_id</strong> (<em>int</em>) – ID of the question of which to return the answers</li>
+<li><strong>no_group</strong> (<em>bool</em>) – If true, no grouping will be applied to answers list,
 overriding the <cite>group_identical</cite> property of the question</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> &#8211; A list of all answers belonging to the question if the call was successful, <cite>False</cite> otherwise</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>answers</strong> – A list of all answers belonging to the question if the call was successful, <cite>False</cite> otherwise</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list(<a class="reference internal" href="#caplena_api_demo.Answer" title="caplena_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>)</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list(<a class="reference internal" href="#caplena_api_demo.Answer" title="caplena_api_demo.Answer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Answer</span></code></a>)</p>
 </td>
 </tr>
 </tbody>
@@ -409,15 +631,15 @@ overriding the <cite>group_identical</cite> property of the question</li>
 <code class="descname">requestPredictions</code><span class="sig-paren">(</span><em>question_id</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.requestPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.requestPredictions" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to request the AI-assistant to train itself based on coded answers of specified question. Only works
 if at least 6 answers have been coded.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) &#8211; ID of the question of which to request AI to make predictions</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) – ID of the question of which to request AI to make predictions</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211; True if request successful, False otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> – True if request successful, False otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
 </tr>
@@ -429,16 +651,16 @@ required beforehand</p>
 <dt id="caplena_api_demo.CaplenaAPI.getPredictions">
 <code class="descname">getPredictions</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.getPredictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.getPredictions" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to get AI-coded codes and respective answers. Requires previous call to
-<a class="reference internal" href="#caplena_api_demo.CaplenaAPI.requestPredictions" title="caplena_api_demo.CaplenaAPI.requestPredictions"><code class="xref py py-func docutils literal"><span class="pre">requestPredictions()</span></code></a>.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<a class="reference internal" href="#caplena_api_demo.CaplenaAPI.requestPredictions" title="caplena_api_demo.CaplenaAPI.requestPredictions"><code class="xref py py-func docutils literal notranslate"><span class="pre">requestPredictions()</span></code></a>.</p>
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) &#8211; ID of the question of which to return the code predictions made by AI</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) – ID of the question of which to return the code predictions made by AI</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>result</strong> &#8211; None if no predictions are available (response code 204)
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>result</strong> – None if no predictions are available (response code 204)
 Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cite> and <cite>codes</cite>) which are the predictions, n_trainings (counter), training_completed (iso timestamp), model (meta information on model performance)</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
@@ -451,15 +673,15 @@ Otherwise contains keys <cite>answers</cite> (with itself has keys <cite>id</cit
 <dt id="caplena_api_demo.CaplenaAPI.deleteQuestion">
 <code class="descname">deleteQuestion</code><span class="sig-paren">(</span><em>question_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.deleteQuestion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.deleteQuestion" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to delete question and its answers.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) &#8211; ID of the question to delete</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>question_id</strong> (<em>int</em>) – ID of the question to delete</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211; True if request successful, False otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> – True if request successful, False otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
 </tr>
@@ -471,127 +693,20 @@ required beforehand</p>
 <dt id="caplena_api_demo.CaplenaAPI.deleteProject">
 <code class="descname">deleteProject</code><span class="sig-paren">(</span><em>project_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.deleteProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.deleteProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to delete projects, its questions and corresponding answers.</p>
-<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal"><span class="pre">login()</span></code></a> is
+<p><em>Note:</em> For this method to work, a successfull call to <a class="reference internal" href="#caplena_api_demo.CaplenaAPI.login" title="caplena_api_demo.CaplenaAPI.login"><code class="xref py py-func docutils literal notranslate"><span class="pre">login()</span></code></a> is
 required beforehand</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_id</strong> (<em>int</em>) &#8211; ID of the project to delete</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_id</strong> (<em>int</em>) – ID of the project to delete</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> &#8211; True if request successful, False otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>success</strong> – True if request successful, False otherwise</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="caplena_api_demo.Question">
-<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Question</code><a class="reference internal" href="_modules/caplena_api_demo.html#Question"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Question" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
-<p>Question object, purely for reference</p>
-<dl class="attribute">
-<dt id="caplena_api_demo.Question.name">
-<code class="descname">name</code><a class="headerlink" href="#caplena_api_demo.Question.name" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, required</em> &#8211; Name of the question.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="caplena_api_demo.Question.description">
-<code class="descname">description</code><a class="headerlink" href="#caplena_api_demo.Question.description" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, optional</em> &#8211; String describing this question</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="caplena_api_demo.Question.group_identical">
-<code class="descname">group_identical</code><a class="headerlink" href="#caplena_api_demo.Question.group_identical" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool, optional</em> &#8211; Flag indicating whether to group identical answers in coding view and when listing answers.
-Default=true</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="caplena_api_demo.Question.group_identical_exclude">
-<code class="descname">group_identical_exclude</code><a class="headerlink" href="#caplena_api_demo.Question.group_identical_exclude" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, optional</em> &#8211; All answer texts matching this regular expression won&#8217;t be grouped. Default=&#8217;&#8216;</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="caplena_api_demo.Question.smart_sort">
-<code class="descname">smart_sort</code><a class="headerlink" href="#caplena_api_demo.Question.smart_sort" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool, optional</em> &#8211; If the smart sorting feature should be enabled. Default=true</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="caplena_api_demo.Question.codebook">
-<code class="descname">codebook</code><a class="headerlink" href="#caplena_api_demo.Question.codebook" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list, required</em> &#8211; List of codes (dictionaries), each containing the keys <cite>id</cite>, <cite>label</cite> and <cite>category</cite>
-Can also be an empty list.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="caplena_api_demo.Question.inherits_from">
-<code class="descname">inherits_from</code><a class="headerlink" href="#caplena_api_demo.Question.inherits_from" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>int, optional</em> &#8211; ID of another question of this user, that the model should be based on.
-The codebook of that question should be <em>identical</em> or <em>almost</em> identical
-in order for the AI to deliver good results.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="caplena_api_demo.Row">
-<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Row</code><a class="reference internal" href="_modules/caplena_api_demo.html#Row"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Row" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
-<dl class="docutils">
-<dt>auxiliary_columns</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">list(str), required</span><dd>Needs to have the same number of elemenst as the <cite>auxiliary_column_names</cite> field of the project
-it belongs to</dd>
-<dt>answers</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">list(<a class="reference internal" href="#caplena_api_demo.Answer" title="caplena_api_demo.Answer"><code class="xref py py-class docutils literal"><span class="pre">Answer</span></code></a>), required</span><dd>A list of answers, whereby exactly one answer needs to be provided for every question of the project
-it belongs to</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="caplena_api_demo.Answer">
-<em class="property">class </em><code class="descclassname">caplena_api_demo.</code><code class="descname">Answer</code><a class="reference internal" href="_modules/caplena_api_demo.html#Answer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.Answer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
-<p>Answer object, purely for reference</p>
-<dl class="attribute">
-<dt id="caplena_api_demo.Answer.text">
-<code class="descname">text</code><a class="headerlink" href="#caplena_api_demo.Answer.text" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, required</em> &#8211; Text of the answer.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="caplena_api_demo.Answer.question">
-<code class="descname">question</code><a class="headerlink" href="#caplena_api_demo.Answer.question" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, required</em> &#8211; The name of the question this answer belongs to</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="caplena_api_demo.Answer.reviewed">
-<code class="descname">reviewed</code><a class="headerlink" href="#caplena_api_demo.Answer.reviewed" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool, optional</em> &#8211; Answers having the &#8220;reviewed&#8221; are assumed to have all codes correct
-and will be used to train the AI.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="caplena_api_demo.Answer.codes">
-<code class="descname">codes</code><a class="headerlink" href="#caplena_api_demo.Answer.codes" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list, optional</em> &#8211; List of integers (code IDs). Assigning codes to an answer.
-Will be used to train the AI.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="caplena_api_demo.Answer.source_language">
-<code class="descname">source_language</code><a class="headerlink" href="#caplena_api_demo.Answer.source_language" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>str, optional</em> &#8211; ISO Code (2 characters, e.g. &#8216;de&#8217; or &#8216;en&#8217;) specifying in which language the text is written.
-Relevant for translation, taking precedance over automatic language detection</p>
 </dd></dl>
 
 </dd></dl>
@@ -621,7 +736,7 @@ Relevant for translation, taking precedance over automatic language detection</p
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Caplena GmbH.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
     </div>
   </body>
 </html>
