@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 import argparse
+import re
 from pprint import pprint
 from PyInquirer import style_from_dict, Token, prompt
 from PyInquirer import Validator, ValidationError
@@ -68,9 +69,9 @@ if __name__ == "__main__":
     if answers['filepath']:
         df_codebook = parse_file(answers['filepath'])
 
-        code_name_col = 'NAME'
-        code_category_col = 'CATEGORY'
-        code_id_col = 'CODE ID'
+        code_name_col = 'Code Name'
+        code_category_col = 'Code Category'
+        code_id_col = 'Code ID'
         for i, row in df_codebook.iterrows():
             code = {'id': row[code_id_col], 'label': row[code_name_col], 'category': row[code_category_col]}
             codebook.append(code)
@@ -81,7 +82,7 @@ if __name__ == "__main__":
         {
             'type': 'input',
             'name': 'filepath',
-            'message': 'Please enter the file path to the Excel file containing the coded answers',
+            'message': 'Please enter the file path to the Excel file containing the answers',
             'validate': FileExistsValidator
         }
     ]
@@ -102,6 +103,13 @@ if __name__ == "__main__":
             'type': 'input',
             'name': 'text_col',
             'message': 'Please enter the name of the column containing the text'
+        }, {
+            'type':
+            'input',
+            'name':
+            'sourcelang_col',
+            'message':
+            'Please enter the name of the column containing the source language (ISO codes). Hit enter if not available.'
         }
     ]
 
@@ -110,33 +118,105 @@ if __name__ == "__main__":
     text_col = answers['text_col']
     if text_col not in df_answers.columns:
         raise ValueError('Column {} does not exist'.format(text_col))
+    sourcelang_col = answers['sourcelang_col']
+    if sourcelang_col:
+        if sourcelang_col not in df_answers.columns:
+            raise ValueError('Column {} does not exist'.format(sourcelang_col))
+        df_answers['source_language'] = df_answers[sourcelang_col]
 
-    if codebook:
+    question = [
+        {
+            'type': 'confirm',
+            'name': 'has_reviewed',
+            'message': 'Do you have already coded rows?',
+            'default': False
+        }
+    ]
+    answers = prompt(question)
+    if answers['has_reviewed']:
+        question = [
+            {
+                'type': 'list',
+                'choices': ['caplena.com_list', 'caplena.com_binary'],
+                'name': 'codes_format',
+                'message': 'In what format are the codes of the reviewed answers?',
+                'default': 'caplena.com_list'
+            }
+        ]
+        answers = prompt(question)
+
         codes_col = 'codes'
-        df_answers[codes_col] = df_answers[codes_cols].fillna(0).values.tolist()
+        if codebook:
+            df_answers[codes_col] = df_answers[codes_cols].fillna(0).values.tolist()
 
-        valid_code_ids = [code['id'] for code in codebook]
+            valid_code_ids = [code['id'] for code in codebook]
 
-        def _check_if_code_exists(code_id):
-            if not code_id in valid_code_ids:
-                raise ValueError('Code with ID {} was found in answers but not in Codebook'.format(code_id))
-            else:
-                return code_id
+            def _check_if_code_exists(code_id):
+                if not code_id in valid_code_ids:
+                    raise ValueError(
+                        'Code with ID {} was found in answers but not in Codebook'.format(code_id)
+                    )
+                else:
+                    return code_id
 
-        df_answers[codes_col] = df_answers[codes_col].apply(
-            lambda x: [
-                _check_if_code_exists(int(it)) for it in x
-                if (not pd.isnull(it) and str(it).strip() and it != 0)
+            df_answers[codes_col] = df_answers[codes_col].apply(
+                lambda x: [
+                    _check_if_code_exists(int(it)) for it in x
+                    if (not pd.isnull(it) and str(it).strip() and it != 0)
+                ]
+            )
+
+        if answers['codes_format'] == 'caplena.com_binary':
+            code_id_clean_regex = re.compile('Code ID ')
+            code_name_clean_regex = re.compile('Code Name |\'')
+            code_category_clean_regex = re.compile('Code category|\'')
+            codes_cols = [col for col in df_answers.columns if len(col.split('|')) == 3]
+            print('Found the following code columns: ', codes_cols)
+            for i, code in enumerate(codes_cols):
+                id, label, cat = code.split('|')
+                id = int(code_id_clean_regex.sub('', id).strip())
+                cat = code_category_clean_regex.sub('', cat).strip()
+                label = code_name_clean_regex.sub('', label).strip()
+                codebook.append({'label': label, 'category': cat.upper(), 'id': id})
+            # The codes are in binary format, i.e. [0 0 1 0]
+            from sklearn.preprocessing import MultiLabelBinarizer
+            import numpy as np
+
+            # Instantiate the binarizer
+            binarizer = MultiLabelBinarizer()
+            # Convert NAs to 0, concatenate columns to one list per row
+            df_answers['codes'] = df_answers[codes_cols].fillna(0).values.tolist()
+            # Prepare the binarizer: Our code IDs are 1:len(code_cols)
+            binarizer.fit(np.asarray([[code['id'] for code in codebook]]))
+
+            def codes_from_binary(row):
+                row = [0 if el == ' ' else el for el in row]
+                binary_mat = np.asarray([[int(el) for el in row]])
+                return [int(res) for res in binarizer.inverse_transform(binary_mat)[0]]
+
+            df_answers['codes'] = df_answers['codes'].apply(codes_from_binary)
+            print('Parsed codebook from column names: ', codebook)
+
+        elif answers['codes_format'] == 'caplena.com_list':
+            codes_cols = [col for col in df_answers.columns if 'Code ID' in col]
+            # The codes are in "list" format, i.e. for every row [code_id1, code_id2]
+            # (different lengths for rows possible)
+            df_answers[codes_col] = df_answers[codes_cols].values.tolist()
+            df_answers[codes_col] = df_answers[codes_col].apply(
+                lambda x: [int(it) for it in x if (not pd.isnull(it) and str(it).strip())]
+            )
+            code_name_and_cat_cols = [
+                col for col in df_answers.columns
+                if 'Code Name' in col or 'Code Kategorie' in col or 'Code Category' in col
             ]
-        )
+            df_answers = df_answers.drop(code_name_and_cat_cols, axis=1)
 
-        # empty rows are not-reviewed, find them
         df_answers['reviewed'] = ~df_answers[codes_cols].isnull().all(1)
-        answer_cols = [text_col, codes_cols, codes_col, 'reviewed']
+        answer_cols = [text_col, codes_cols, codes_col, 'reviewed', 'source_language']
         df_answers = df_answers.drop(codes_cols, axis=1)
     else:
         df_answers['reviewed'] = False
-        answer_cols = [text_col, 'reviewed']
+        answer_cols = [text_col, 'reviewed', 'source_language']
 
     auxiliary_col_names = [col_name for col_name in df_answers.columns if col_name not in answer_cols]
     print("Adding {} auxiliary columns: {}".format(len(auxiliary_col_names), auxiliary_col_names))
