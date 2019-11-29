@@ -1,8 +1,9 @@
 import json
 
+
 class ComplexEncoder(json.JSONEncoder):
     def default(self, obj):
-        if hasattr(obj,'reprJSON'):
+        if hasattr(obj, 'reprJSON'):
             return obj.reprJSON()
         else:
             return json.JSONEncoder.default(self, obj)
@@ -22,7 +23,5 @@ class CaplenaObj(object):
         return json.dumps(self.__dict__, cls=ComplexEncoder)
 
     @classmethod
-    def from_json(cls, json_data: dict):
+    def from_json(cls, json_data):
         pass
-
-

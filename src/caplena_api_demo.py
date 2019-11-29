@@ -21,231 +21,17 @@ and purposes that are intended by the original author (Caplena GmbH).
 
 Copyright 2018 Caplena GmbH, Zurich.
 """
-from typing import List, Dict, Union
 import requests
-import urllib
 import time
+import json
+import six
 
-from src.utils import CaplenaObj
+if six.PY2:
+    from urllib import urlencode
+else:
+    from urllib.parse import urlencode
 
-
-class Code(CaplenaObj):
-    """
-    Code object
-    """
-    def __init__(self, id: int, label: str, category: str, **kwargs):
-        """
-        test doc string
-        :param id:
-        :param label:
-        :param category:
-        :param kwargs:
-        """
-        self.id = id
-        self.label = label
-        self.category = category
-        super().__init__(**kwargs)
-
-    @classmethod
-    def from_json(cls, json_data: dict):
-        return cls(**json_data)
-
-
-class Question(CaplenaObj):
-    """
-    Question object
-
-    Attributes
-    ----------
-    name : str, required
-        Name of the question.
-    description : str, optional
-        String describing this question
-    group_identical : bool, optional
-        Flag indicating whether to group identical answers in coding view and when listing answers.
-        Default=true
-    group_identical_exclude : str, optional
-        All answer texts matching this regular expression won't be grouped. Default=''
-    smart_sort: bool, optional
-        If the smart sorting feature should be enabled. Default=true
-    codebook : list, required
-        List of codes (dictionaries), each containing the keys `id`, `label` and `category`
-        Can also be an empty list.
-    inherits_from : int, optional
-        ID of another question of this user, that the model should be based on.
-        The codebook of that question should be *identical* or *almost* identical
-        in order for the AI to deliver good results.
-
-    """
-    def __init__(
-        self,
-        name: str,
-        description: str = '',
-        codebook: List[Code] = [],
-        group_identical: bool = True,
-        group_identical_exclude: str = '',
-        smart_sort: bool = False,
-        inherits_from: int = None,
-        id: int = None,
-        **kwargs
-    ):
-        self.name = name
-        self.description = description
-        self.group_identical = group_identical
-        self.group_identical_exclude = group_identical_exclude
-        self.smart_sort = smart_sort
-        self.codebook = codebook
-        self.inherits_from = inherits_from
-        self.id = id
-        super().__init__(**kwargs)
-
-    @classmethod
-    def from_json(cls, json_data: dict):
-        return cls(**json_data)
-
-
-class Answer(CaplenaObj):
-    """
-    Answer object
-
-    Attributes
-    ----------
-    text : str, required
-        Text of the answer.
-    question : str, required
-        The name of the question this answer belongs to
-    reviewed : bool, optional
-        Answers having the "reviewed" are assumed to have all codes correct
-        and will be used to train the AI.
-    codes : list, optional
-        List of integers (code IDs). Assigning codes to an answer.
-        Will be used to train the AI.
-    source_language : str, optional
-        ISO Code (2 characters, e.g. 'de' or 'en') specifying in which language the text is written.
-        Relevant for translation, taking precedance over automatic language detection
-
-    """
-    def __init__(
-        self,
-        text: str,
-        question: Union[str, int],
-        source_language: str = '',
-        reviewed: bool = False,
-        codes: List[int] = [],
-        id: int = None,
-        **kwargs
-    ):
-        self.id = id
-        self.text = text
-        self.question = question
-        self.reviewed = reviewed
-        self.codes = codes
-        self.source_language = source_language
-        super().__init__(**kwargs)
-
-    @classmethod
-    def from_json(cls, json_data: dict):
-        return cls(**json_data)
-
-
-class Row(CaplenaObj):
-    """
-    auxiliary_columns : list(str), required
-        Needs to have the same number of elemenst as the `auxiliary_column_names` field of the project
-        it belongs to
-    answers : list(:class:`.Answer`), required
-        A list of answers, whereby exactly one answer needs to be provided for every question of the project
-        it belongs to
-    """
-    def __init__(self, auxiliary_columns: List[str], answers: List[Answer], **kwargs):
-        self.auxiliary_columns = auxiliary_columns
-        self.answers = answers
-        super().__init__(**kwargs)
-
-    @classmethod
-    def from_json(cls, json_data: dict):
-        ans = json_data.pop('answers')
-        answers = list(map(Answer.from_json, ans))
-        row = Row(answers=answers, **json_data)
-        json_data['answers'] = ans
-        return row
-
-
-class Project(CaplenaObj):
-    def __init__(
-        self,
-        name: str,
-        language: str,
-        questions: List[Question],
-        rows: List[Row] = [],
-        auxiliary_column_names: List[str] = [],
-        translation_engine: str = 'google',
-        translate: bool = False,
-        translated: int = 0,
-        permissions: str = '',
-        created: str = '',
-        completed: bool = False,
-        id: int = None,
-        **kwargs
-    ):
-        self.name = name
-        if language not in CaplenaAPI.valid_languages:
-            raise ValueError(
-                "Invalid language '{}', accepted values are {{{}}}".format(
-                    language, ",".join(CaplenaAPI.valid_languages)
-                )
-            )
-        else:
-            self.language = language
-        self.auxiliary_column_names = auxiliary_column_names
-        if translated:
-            self.translate = True if translated else False
-        else:
-            self.translate = translate
-        self.questions = questions
-        self.rows = rows
-        self.translation_engine = translation_engine
-        self.permissions = permissions
-        self.created = created
-        self.completed = completed
-        self.id = id
-        super().__init__(**kwargs)
-
-    def to_dict(self):
-        data = {
-            "name": self.name,
-            "language": self.language,
-            "auxiliary_column_names": self.auxiliary_column_names,
-            "translated": 1 if self.translate else 0,
-            "translation_engine": self.translation_engine,
-            "questions": self.questions,
-            "rows": self.rows
-        }
-        return data
-
-    @classmethod
-    def from_json(cls, json_data: dict):
-        questions = list(map(Question.from_json, json_data.pop('questions')))
-        if 'rows' in json_data.keys():
-            row_data = json_data.pop('rows')
-            rows = list(map(Row.from_json, row_data))
-            proj = Project(rows=rows, questions=questions, **json_data)
-            json_data['rows'] = row_data
-            return proj
-        else:
-            proj = Project(questions=questions, **json_data)
-            return proj
-
-
-class Predictions(CaplenaObj):
-    def __init__(self, answers: List[Answer], model: Dict, **kwargs):
-        self.answers = answers
-        self.model = model
-        super().__init__(**kwargs)
-
-    @classmethod
-    def from_json(cls, json_data: dict):
-        return Predictions(**json_data)
+from src.utils import CaplenaObj, ComplexEncoder
 
 
 class CaplenaAPI(object):
@@ -266,7 +52,7 @@ class CaplenaAPI(object):
     """
     valid_languages = ['en', 'de', 'es', 'pt', 'fr']
 
-    def __init__(self, language: str):
+    def __init__(self, language):
         """
         API Class Initializer.
 
@@ -276,7 +62,7 @@ class CaplenaAPI(object):
 
         Parameters
         ----------
-        language :
+        language : str
             Content-Language for API calls (mainly relevant for error messages), either "de" or "en"
 
         Returns
@@ -299,7 +85,7 @@ class CaplenaAPI(object):
 
         self.sess = requests.Session()
 
-    def _getHeaders(self) -> Dict:
+    def _getHeaders(self):
         """
         Internal function to generate global header for all API calls
 
@@ -316,7 +102,7 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        headers :
+        headers : dict
             Dictionary with keys being the header names and values the header values
 
         """
@@ -346,7 +132,7 @@ class CaplenaAPI(object):
         """
         raise Exception("ERROR (status code {}): {}".format(response.status_code, response.text))
 
-    def _makeRequest(self, method: str, apiURI: str, data: Union[Dict, List] = None, publicmethod: bool=False) -> requests.Response:
+    def _makeRequest(self, method, apiURI, data=None, publicmethod=False):
         """
         Internal function to make the API call.
 
@@ -357,16 +143,16 @@ class CaplenaAPI(object):
 
         Parameters
         ----------
-        method :
+        method : str
             HTTP request method which should be called (i.e. GET / POST / ...)
             Needs to be a method of requests, otherwise function will fail
-        apiURI :
+        apiURI : str
             The URI of the API method to call (only last part, the base URI including domain are class attributes)
-        data :
+        data : dict|list
             Data to be sent to API as json. Dictionary of key/value pairs (not-serialized!)
             Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
-            string|float|int|long|list|dictionary|boolean|none
-        publicmethod :
+            string|float|int|long|list|dictionary|bool|none
+        publicmethod : bool
             Flag indicating if authentication / csrftoken is required for this API method.
             Only set to True for public endpoints, such as `login`
             (optional)
@@ -382,10 +168,13 @@ class CaplenaAPI(object):
             raise Exception(
                 "CSRF-Token / authentication not set. Call login(..) before invoking other API calls"
             )
-        return getattr(self.sess,
-                       method)("{}{}".format(self.baseURI, apiURI), data=json.dumps(data, cls=ComplexEncoder) if data else None, headers=self._getHeaders())
+        return getattr(self.sess, method)(
+            "{}{}".format(self.baseURI, apiURI),
+            data=json.dumps(data, cls=ComplexEncoder) if data else None,
+            headers=self._getHeaders()
+        )
 
-    def login(self, email: str, password: str) -> bool:
+    def login(self, email, password):
         """
         API method to authenticate user.
 
@@ -397,14 +186,14 @@ class CaplenaAPI(object):
 
         Parameters
         ----------
-        email :
+        email : str
             Email of the user to be logged in
-        password :
+        password : str
             Password of the user to be logged in
 
         Returns
         -------
-        success :
+        success : bool
             True if login was successful, `False` otherwise
 
         """
@@ -422,7 +211,7 @@ class CaplenaAPI(object):
             self.authenticated = True
             return True
 
-    def listProjects(self) -> List[Project]:
+    def listProjects(self):
         """
         API method to list all projects that belong to this user.
 
@@ -437,8 +226,8 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        projects : list of project objects
-            A list of all projects belonging to the user if the call was successful, `False` otherwise
+        projects : list(:class:`.Project`)
+            A list of all projects belonging to the user
 
         """
         r = self._makeRequest('get', '/projects/')
@@ -448,8 +237,7 @@ class CaplenaAPI(object):
         else:
             return [Project.from_json(data) for data in r.json()]
 
-
-    def listInheritableProjects(self) -> List[Project]:
+    def listInheritableProjects(self):
         """
         API method to list all projects of which inheritance is possible.
 
@@ -464,7 +252,7 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        projects: list of project objects
+        projects : list(:class:`.Project`)
             A list of all projects that can be used for inheritance. This is the concatenation of all projects owned by the user and global Caplena models.
 
         """
@@ -475,7 +263,7 @@ class CaplenaAPI(object):
         else:
             return [Project.from_json(data) for data in r.json()]
 
-    def listQuestions(self) -> List[Question]:
+    def listQuestions(self):
         """
         API method to list all questions that belong to this user.
 
@@ -490,7 +278,7 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        questions: list of question objects
+        questions: list(:class:`.Question`)
             A list of all questions belonging to the user if the call was successful, `False` otherwise
 
         """
@@ -501,7 +289,7 @@ class CaplenaAPI(object):
         else:
             return [Question.from_json(data) for data in r.json()]
 
-    def getQuestion(self, question_id: int) -> Question:
+    def getQuestion(self, question_id):
         """
         API method to get question info.
 
@@ -516,8 +304,8 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        question : a question object
-            A question object if the call was successful, `False` otherwise
+        question : Question
+            A question object
 
         """
         r = self._makeRequest('get', '/questions/{}'.format(question_id))
@@ -527,7 +315,7 @@ class CaplenaAPI(object):
         else:
             return Question.from_json(r.json())
 
-    def getProject(self, project_id: int) -> Project:
+    def getProject(self, project_id):
         """
         API method to get project info.
 
@@ -542,8 +330,8 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        project : a project object
-            A project object if the call was successful, `False` otherwise
+        project : Project
+            A project object
 
         """
         r = self._makeRequest('get', '/projects/{}'.format(project_id))
@@ -558,13 +346,13 @@ class CaplenaAPI(object):
         name,
         language,
         translate=False,
-        auxiliary_column_names: List = [],
-        questions: List[Question] = [],
-        rows: List[Row] = [],
-        translation_engine: str = 'GT',
-        upload_async: bool = False,
-        request_training: bool = True
-    ) -> Project:
+        auxiliary_column_names=[],
+        questions=[],
+        rows=[],
+        translation_engine='GT',
+        upload_async=False,
+        request_training=True
+    ):
         """
         API method to create a new project
 
@@ -603,9 +391,8 @@ class CaplenaAPI(object):
             Choice of translation engine, either 'GT' for Google Translate or 'DL' for DeepL
         Returns
         -------
-        project : project object
-            A dictionary containing all attributes of the newly created project if the call was successful
-            `False` otherwise
+        project : Project
+            A new Project object
 
         """
         proj = Project(
@@ -620,7 +407,7 @@ class CaplenaAPI(object):
         get_params = {'request_training': request_training}
         if upload_async:
             get_params.update({'async': upload_async})
-        get_params = '?' + urllib.parse.urlencode(get_params)
+        get_params = '?' + urlencode(get_params)
         r = self._makeRequest('post', '/projects/{}'.format(get_params), proj.to_dict())
 
         if (r.status_code != 201):
@@ -628,9 +415,7 @@ class CaplenaAPI(object):
         else:
             return Project.from_json(r.json())
 
-    def addRowsToProject(
-        self, project_id: int, rows: List[Row], upload_async: bool = False, request_training: bool = True
-    ) -> List[Row]:
+    def addRowsToProject(self, project_id, rows, upload_async=False, request_training=True):
         """
         API method to add rows to a previously created project.
 
@@ -650,15 +435,14 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        rows : list of row objects
-            A list of dictionaries containing attributes of the newly created rows if the call was successful
-            `False` otherwise
+        rows: list(:class:`.Row`)
+            A list of the newly created rows
 
         """
         get_params = {'request_training': request_training}
         if upload_async:
             get_params.update({'async': upload_async})
-        get_params = '?' + urllib.parse.urlencode(get_params)
+        get_params = '?' + urlencode(get_params)
         r = self._makeRequest(
             'post', '/projects/{}/rows{}'.format(project_id, get_params), [row.to_dict() for row in rows]
         )
@@ -668,7 +452,7 @@ class CaplenaAPI(object):
         else:
             return [Row.from_json(dat) for dat in r.json()]
 
-    def listRows(self, project_id) -> List[Row]:
+    def listRows(self, project_id):
         """
         API method to list all rows of a specific project.
 
@@ -683,7 +467,7 @@ class CaplenaAPI(object):
         Returns
         -------
         answers : list(:class:`.Row`)
-            A list of all rows belonging to the question if the call was successful, `False` otherwise
+            A list of all rows belonging to the question
 
         """
         r = self._makeRequest('get', '/projects/{}/rows'.format(project_id))
@@ -693,7 +477,7 @@ class CaplenaAPI(object):
         else:
             return [Row.from_json(dat) for dat in r.json()]
 
-    def listAnswers(self, question_id: int, no_group: bool = False) -> List[Answer]:
+    def listAnswers(self, question_id, no_group=False):
         """
         API method to list all answers of a specific question.
 
@@ -711,7 +495,7 @@ class CaplenaAPI(object):
         Returns
         -------
         answers : list(:class:`.Answer`)
-            A list of all answers belonging to the question if the call was successful, `False` otherwise
+            A list of all answers belonging to the question
 
         """
         get_params = '?no_group' if no_group else ''
@@ -722,7 +506,7 @@ class CaplenaAPI(object):
         else:
             return [Answer.from_json(dat) for dat in r.json()]
 
-    def requestPredictions(self, question_id, **kwargs) -> bool:
+    def requestPredictions(self, question_id, **kwargs):
         """
         API method to request the AI-assistant to train itself based on coded answers of specified question. Only works
         if at least 6 answers have been coded.
@@ -737,13 +521,13 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        success : boolean
+        success : bool
             True if request successful, False otherwise
 
         """
         request_url = '/questions/{}/request-training'.format(question_id)
         if kwargs:
-            parameters = '?' + urllib.parse.urlencode(kwargs)
+            parameters = '?' + urlencode(kwargs)
             request_url += parameters
         r = self._makeRequest('post', request_url)
 
@@ -752,7 +536,7 @@ class CaplenaAPI(object):
         else:
             return True
 
-    def getPredictions(self, question_id) -> Predictions:
+    def getPredictions(self, question_id):
         """
         API method to get AI-coded codes and respective answers. Requires previous call to
         :func:`~caplena_api_demo.CaplenaAPI.requestPredictions`.
@@ -767,9 +551,9 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        result : dict
+        result : Predictions|None
             None if no predictions are available (response code 204)
-            Otherwise contains keys `answers` (with itself has keys `id` and `codes`) which are the predictions, n_trainings (counter), training_completed (iso timestamp), model (meta information on model performance)
+            Otherwise contains keys `answers` (with itself has keys `id` and `codes`) which are the predictions, model (meta information on model performance)
 
         """
         r = self._makeRequest('get', '/questions/{}/codes-predicted'.format(question_id))
@@ -782,7 +566,7 @@ class CaplenaAPI(object):
         else:
             return self._handleBadResponse(r)
 
-    def deleteQuestion(self, question_id) -> bool:
+    def deleteQuestion(self, question_id):
         """
         API method to delete question and its answers.
 
@@ -796,7 +580,7 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        success : boolean
+        success : bool
             True if request successful, False otherwise
 
         """
@@ -807,7 +591,7 @@ class CaplenaAPI(object):
         else:
             return True
 
-    def deleteProject(self, project_id) -> bool:
+    def deleteProject(self, project_id):
         """
         API method to delete projects, its questions and corresponding answers.
 
@@ -821,7 +605,7 @@ class CaplenaAPI(object):
 
         Returns
         -------
-        success : boolean
+        success : bool
             True if request successful, False otherwise
 
         """
@@ -831,6 +615,276 @@ class CaplenaAPI(object):
             return self._handleBadResponse(r)
         else:
             return True
+
+    def upadateProject(self, project, request_training=False):
+        """
+        API method to update projects
+
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
+        required beforehand
+
+        Parameters
+        ----------
+        project : Project
+            modified Project instance
+
+        Returns
+        -------
+        project : Project
+            newly updated Project instance
+
+        """
+        get_params = {'request_training': request_training}
+        get_params = '?' + urlencode(get_params)
+        r = self._makeRequest('patch', '/projects/{}/{}'.format(project.id, get_params), project.to_dict())
+
+        if (r.status_code != 201):
+            return self._handleBadResponse(r)
+        else:
+            return Project.from_json(r.json())
+
+
+class Code(CaplenaObj):
+    """
+    Code object
+
+    Attributes
+    ----------
+    id: int, required
+        Code ID
+    label: str, required
+        Code name
+    category: str, required
+        Code category
+    """
+    def __init__(self, id, label, category, **kwargs):
+        """
+        """
+        self.id = id
+        self.label = label
+        self.category = category
+        super(Code, self).__init__(**kwargs)
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(**json_data)
+
+
+class Question(CaplenaObj):
+    """
+    Question object
+
+    Attributes
+    ----------
+    name : str, required
+        Name of the question.
+    description : str, optional
+        String describing this question
+    group_identical : bool, optional
+        Flag indicating whether to group identical answers in coding view and when listing answers.
+        Default=true
+    group_identical_exclude : str, optional
+        All answer texts matching this regular expression won't be grouped. Default=''
+    smart_sort: bool, optional
+        If the smart sorting feature should be enabled. Default=true
+    codebook : list(:class:`.Code`), optional
+        List of codes (dictionaries), each containing the keys `id`, `label` and `category`
+        Can also be an empty list.
+    inherits_from : int, optional
+        ID of another question of this user, that the model should be based on.
+        The codebook of that question should be *identical* or *almost* identical
+        in order for the AI to deliver good results.
+
+    """
+    def __init__(
+        self,
+        name,
+        description='',
+        codebook=[],
+        group_identical=True,
+        group_identical_exclude='',
+        smart_sort=False,
+        inherits_from=None,
+        id=None,
+        **kwargs
+    ):
+        self.name = name
+        self.description = description
+        self.group_identical = group_identical
+        self.group_identical_exclude = group_identical_exclude
+        self.smart_sort = smart_sort
+        self.codebook = codebook
+        self.inherits_from = inherits_from
+        self.id = id
+        super(Question, self).__init__(**kwargs)
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(**json_data)
+
+
+class Answer(CaplenaObj):
+    """
+    Answer object
+
+    Attributes
+    ----------
+    text : str, required
+        Text of the answer.
+    question : str, required
+        The name of the question this answer belongs to
+    reviewed : bool, optional
+        Answers having the "reviewed" are assumed to have all codes correct
+        and will be used to train the AI.
+    codes : list(int), optional
+        List of integers (code IDs). Assigning codes to an answer.
+        Will be used to train the AI.
+    source_language : str, optional
+        ISO Code (2 characters, e.g. 'de' or 'en') specifying in which language the text is written.
+        Relevant for translation, taking precedance over automatic language detection
+
+    """
+    def __init__(self, text, question, source_language='', reviewed=False, codes=[], id=None, **kwargs):
+        self.id = id
+        self.text = text
+        self.question = question
+        self.reviewed = reviewed
+        self.codes = codes
+        self.source_language = source_language
+        super(Answer, self).__init__(**kwargs)
+
+    @classmethod
+    def from_json(cls, json_data):
+        return cls(**json_data)
+
+
+class Row(CaplenaObj):
+    """
+    Row object
+
+    Attributes
+    ----------
+    auxiliary_columns : list(str), required
+        Needs to have the same number of elemenst as the `auxiliary_column_names` field of the project
+        it belongs to
+    answers : list(:class:`.Answer`), required
+        A list of answers, whereby exactly one answer needs to be provided for every question of the project
+        it belongs to
+    """
+    def __init__(self, auxiliary_columns, answers, **kwargs):
+        self.auxiliary_columns = auxiliary_columns
+        self.answers = answers
+        super(Row, self).__init__(**kwargs)
+
+    @classmethod
+    def from_json(cls, json_data):
+        ans = json_data.pop('answers')
+        answers = list(map(Answer.from_json, ans))
+        row = Row(answers=answers, **json_data)
+        json_data['answers'] = ans
+        return row
+
+
+class Project(CaplenaObj):
+    """
+    Project object
+
+    Attributes
+    ----------
+    name : str, required
+        Name of the project.
+    language: str, required
+        Language of question, must be iso tag
+    questions: list(:class:`.Questions`), required
+        Questions belonging to the project
+    auxiliary_column_names: list(str), optional
+        Names of the auxiliary columns
+    translation_engine: str, optional
+        Which translation engine to use, can be either `google` or `deepl
+    translate: bool, optional
+        If true translate answers using translation_engine
+    inherits_from : int, optional
+        ID of another question of this user, that the model should be based on.
+        The codebook of that question should be *identical* or *almost* identical
+        in order for the AI to deliver good results.
+
+    """
+    def __init__(
+        self,
+        name,
+        language,
+        questions,
+        rows=[],
+        auxiliary_column_names=[],
+        translation_engine='google',
+        translate=False,
+        translated=0,
+        id=None,
+        **kwargs
+    ):
+        self.name = name
+        if language not in CaplenaAPI.valid_languages:
+            raise ValueError(
+                "Invalid language '{}', accepted values are {{{}}}".format(
+                    language, ",".join(CaplenaAPI.valid_languages)
+                )
+            )
+        else:
+            self.language = language
+        self.auxiliary_column_names = auxiliary_column_names
+        if translated:
+            self.translate = True if translated else False
+        else:
+            self.translate = translate
+        self.questions = questions
+        self.rows = rows
+        self.translation_engine = translation_engine
+        self.id = id
+        super(Project, self).__init__(**kwargs)
+
+    def to_dict(self):
+        data = {
+            "id": self.id,
+            "name": self.name,
+            "language": self.language,
+            "auxiliary_column_names": self.auxiliary_column_names,
+            "translated": 1 if self.translate else 0,
+            "translation_engine": self.translation_engine,
+            "questions": self.questions,
+            "rows": self.rows
+        }
+        return data
+
+    @classmethod
+    def from_json(cls, json_data):
+        questions = list(map(Question.from_json, json_data.pop('questions')))
+        if 'rows' in json_data.keys():
+            row_data = json_data.pop('rows')
+            rows = list(map(Row.from_json, row_data))
+            proj = Project(rows=rows, questions=questions, **json_data)
+            json_data['rows'] = row_data
+            return proj
+        else:
+            proj = Project(questions=questions, **json_data)
+            return proj
+
+
+class Predictions(CaplenaObj):
+    """
+    answers : list(:class:`.Answer`), required
+        A list of answers, whereby exactly one answer needs to be provided for every question of the project
+        it belongs to
+    model : dict, required
+        Meta information about the model
+    """
+    def __init__(self, answers, model, **kwargs):
+        self.answers = answers
+        self.model = model
+        super(Predictions, self).__init__(**kwargs)
+
+    @classmethod
+    def from_json(cls, json_data):
+        return Predictions(**json_data)
 
 
 if __name__ == '__main__':
@@ -844,8 +898,8 @@ if __name__ == '__main__':
     # >>> password = os.environ["MY_CAPLENA_PASSWORD"]
     ###########################################################
 
-    CAPLENA_EMAIL = 'test@codit.co'
-    CAPLENA_PASSWORD = 'gGhWXRDJ7)CuLY/FPrEEqo8M'
+    CAPLENA_EMAIL = 'your_email@domain.com'
+    CAPLENA_PASSWORD = '*************'
 
     # Instantiate new instance of CaplenaAPI class
     api = CaplenaAPI('en')
@@ -976,9 +1030,8 @@ if __name__ == '__main__':
         Row(
             auxiliary_columns=['ID 3', 'Some other column value 3'],
             answers=[
-                Answer(
-                    text='Answer-text row 3 of question {}'.format(question_number), question=question_id
-                ) for question_id, question_number in zip([question_id_1, question_id_2],range(n_questions))
+                Answer(text='Answer-text row 3 of question {}'.format(question_number), question=question_id)
+                for question_id, question_number in zip([question_id_1, question_id_2], range(n_questions))
             ]
         )
     ]

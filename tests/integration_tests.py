@@ -139,6 +139,9 @@ def test_workflow(run, upload_async):
         request_training=False
     )
     assert isinstance(new_project, Project)
+    new_project.name = "My new project mod name"
+    new_project_mod = api.upadateProject(new_project)
+    assert new_project_mod.name == new_project.name
     try:
         if upload_async:
             time.sleep(40)
@@ -185,7 +188,9 @@ def test_workflow(run, upload_async):
             }
         ]
         new_answers = api.addRowsToProject(
-            new_project.id, [Row.from_json(r) for r in additional_rows], upload_async=upload_async, request_training=False
+            new_project.id, [Row.from_json(r) for r in additional_rows],
+            upload_async=upload_async,
+            request_training=False
         )
         if upload_async:
             time.sleep(30)
