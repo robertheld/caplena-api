@@ -2,7 +2,7 @@ import os, time
 
 import pytest
 
-from src.caplena_api_demo import CaplenaAPI, Question, Row, Answer, Project
+from src.caplena_api_demo import CaplenaAPI, Question, Row, Answer, Project, Code
 
 api = CaplenaAPI('en')
 
@@ -21,6 +21,21 @@ def test_list_projects():
 
 def test_list_inheritable_projects():
     _ = api.listInheritableProjects()
+
+
+def test_update_question():
+    codebook = [Code(id=1, label='test', category='A')]
+    question_name = 'testq'
+    question = Question(name=question_name, codebook=codebook)
+    rows = [Row(auxiliary_columns=[], answers=[Answer(text='test', question=question_name, reviewed=False)])]
+    proj = api.createProject('testproject', 'en', rows=rows, questions=[question], upload_async=False)
+    print(proj.id)
+    print(api.listProjects())
+    q = proj.questions[0]
+    q.inherits_from = 1
+    print(q)
+    q_new = api.updateQuestion(q)
+    assert q_new.inherits_from == 1
 
 
 @pytest.mark.parametrize('run,upload_async', [(1, False), (2, True)])
@@ -139,9 +154,6 @@ def test_workflow(run, upload_async):
         request_training=False
     )
     assert isinstance(new_project, Project)
-    new_project.name = "My new project mod name"
-    new_project_mod = api.upadateProject(new_project)
-    assert new_project_mod.name == new_project.name
     try:
         if upload_async:
             time.sleep(40)

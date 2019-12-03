@@ -204,7 +204,7 @@ class CaplenaAPI(object):
             }, publicmethod=True
         )
 
-        if (r.status_code != 200):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             self.csrftoken = self.sess.cookies['csrftoken']
@@ -232,7 +232,7 @@ class CaplenaAPI(object):
         """
         r = self._makeRequest('get', '/projects/')
 
-        if (r.status_code != 200):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return [Project.from_json(data) for data in r.json()]
@@ -258,7 +258,7 @@ class CaplenaAPI(object):
         """
         r = self._makeRequest('get', '/projects-inheritable/')
 
-        if (r.status_code != 200):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return [Project.from_json(data) for data in r.json()]
@@ -284,7 +284,7 @@ class CaplenaAPI(object):
         """
         r = self._makeRequest('get', '/questions/')
 
-        if (r.status_code != 200):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return [Question.from_json(data) for data in r.json()]
@@ -310,7 +310,7 @@ class CaplenaAPI(object):
         """
         r = self._makeRequest('get', '/questions/{}'.format(question_id))
 
-        if (r.status_code != 200):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return Question.from_json(r.json())
@@ -336,7 +336,7 @@ class CaplenaAPI(object):
         """
         r = self._makeRequest('get', '/projects/{}'.format(project_id))
 
-        if (r.status_code != 200):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return Project.from_json(r.json())
@@ -410,7 +410,7 @@ class CaplenaAPI(object):
         get_params = '?' + urlencode(get_params)
         r = self._makeRequest('post', '/projects/{}'.format(get_params), proj.to_dict())
 
-        if (r.status_code != 201):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return Project.from_json(r.json())
@@ -447,7 +447,7 @@ class CaplenaAPI(object):
             'post', '/projects/{}/rows{}'.format(project_id, get_params), [row.to_dict() for row in rows]
         )
 
-        if (r.status_code != 201):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return [Row.from_json(dat) for dat in r.json()]
@@ -472,7 +472,7 @@ class CaplenaAPI(object):
         """
         r = self._makeRequest('get', '/projects/{}/rows'.format(project_id))
 
-        if (r.status_code != 200):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return [Row.from_json(dat) for dat in r.json()]
@@ -501,7 +501,7 @@ class CaplenaAPI(object):
         get_params = '?no_group' if no_group else ''
         r = self._makeRequest('get', '/questions/{}/answers{}'.format(question_id, get_params))
 
-        if (r.status_code != 200):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return [Answer.from_json(dat) for dat in r.json()]
@@ -531,7 +531,7 @@ class CaplenaAPI(object):
             request_url += parameters
         r = self._makeRequest('post', request_url)
 
-        if (r.status_code != 200):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
             return True
@@ -616,32 +616,32 @@ class CaplenaAPI(object):
         else:
             return True
 
-    def upadateProject(self, project, request_training=False):
+    def updateQuestion(self, question, request_training=False):
         """
-        API method to update projects
+        API method to update question
 
         *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
         required beforehand
 
         Parameters
         ----------
-        project : Project
-            modified Project instance
+        question: question
+            modified question instance
 
         Returns
         -------
-        project : Project
-            newly updated Project instance
+        question: Question
+            newly updated question instance
 
         """
         get_params = {'request_training': request_training}
         get_params = '?' + urlencode(get_params)
-        r = self._makeRequest('patch', '/projects/{}/{}'.format(project.id, get_params), project.to_dict())
+        r = self._makeRequest('patch', '/questions/{}{}'.format(question.id, get_params), question.to_dict())
 
-        if (r.status_code != 201):
+        if (not r.ok):
             return self._handleBadResponse(r)
         else:
-            return Project.from_json(r.json())
+            return Question.from_json(r.json())
 
 
 class Code(CaplenaObj):

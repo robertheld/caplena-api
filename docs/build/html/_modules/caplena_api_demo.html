@@ -93,258 +93,6 @@
 <span class="kn">from</span> <span class="nn">src.utils</span> <span class="k">import</span> <span class="n">CaplenaObj</span><span class="p">,</span> <span class="n">ComplexEncoder</span>
 
 
-<div class="viewcode-block" id="Code"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Code">[docs]</a><span class="k">class</span> <span class="nc">Code</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Code object</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    id: int, required</span>
-<span class="sd">        Code ID</span>
-<span class="sd">    label: str, required</span>
-<span class="sd">        Code name</span>
-<span class="sd">    category: str, required</span>
-<span class="sd">        Code category</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">category</span> <span class="o">=</span> <span class="n">category</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Code</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Code.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Code.from_json">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">json_data</span><span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="Question"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Question">[docs]</a><span class="k">class</span> <span class="nc">Question</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Question object</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    name : str, required</span>
-<span class="sd">        Name of the question.</span>
-<span class="sd">    description : str, optional</span>
-<span class="sd">        String describing this question</span>
-<span class="sd">    group_identical : bool, optional</span>
-<span class="sd">        Flag indicating whether to group identical answers in coding view and when listing answers.</span>
-<span class="sd">        Default=true</span>
-<span class="sd">    group_identical_exclude : str, optional</span>
-<span class="sd">        All answer texts matching this regular expression won&#39;t be grouped. Default=&#39;&#39;</span>
-<span class="sd">    smart_sort: bool, optional</span>
-<span class="sd">        If the smart sorting feature should be enabled. Default=true</span>
-<span class="sd">    codebook : list(:class:`.Code`), optional</span>
-<span class="sd">        List of codes (dictionaries), each containing the keys `id`, `label` and `category`</span>
-<span class="sd">        Can also be an empty list.</span>
-<span class="sd">    inherits_from : int, optional</span>
-<span class="sd">        ID of another question of this user, that the model should be based on.</span>
-<span class="sd">        The codebook of that question should be *identical* or *almost* identical</span>
-<span class="sd">        in order for the AI to deliver good results.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">,</span>
-        <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="n">codebook</span> <span class="o">=</span> <span class="p">[],</span>
-        <span class="n">group_identical</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="n">group_identical_exclude</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="n">smart_sort</span><span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">inherits_from</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="nb">id</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">group_identical</span> <span class="o">=</span> <span class="n">group_identical</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">group_identical_exclude</span> <span class="o">=</span> <span class="n">group_identical_exclude</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">smart_sort</span> <span class="o">=</span> <span class="n">smart_sort</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">codebook</span> <span class="o">=</span> <span class="n">codebook</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inherits_from</span> <span class="o">=</span> <span class="n">inherits_from</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Question.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Question.from_json">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">json_data</span><span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="Answer"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Answer">[docs]</a><span class="k">class</span> <span class="nc">Answer</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Answer object</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    text : str, required</span>
-<span class="sd">        Text of the answer.</span>
-<span class="sd">    question : str, required</span>
-<span class="sd">        The name of the question this answer belongs to</span>
-<span class="sd">    reviewed : bool, optional</span>
-<span class="sd">        Answers having the &quot;reviewed&quot; are assumed to have all codes correct</span>
-<span class="sd">        and will be used to train the AI.</span>
-<span class="sd">    codes : list(int), optional</span>
-<span class="sd">        List of integers (code IDs). Assigning codes to an answer.</span>
-<span class="sd">        Will be used to train the AI.</span>
-<span class="sd">    source_language : str, optional</span>
-<span class="sd">        ISO Code (2 characters, e.g. &#39;de&#39; or &#39;en&#39;) specifying in which language the text is written.</span>
-<span class="sd">        Relevant for translation, taking precedance over automatic language detection</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">text</span><span class="p">,</span>
-        <span class="n">question</span><span class="p">,</span>
-        <span class="n">source_language</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="n">reviewed</span><span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">codes</span><span class="o">=</span> <span class="p">[],</span>
-        <span class="nb">id</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">question</span> <span class="o">=</span> <span class="n">question</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reviewed</span> <span class="o">=</span> <span class="n">reviewed</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">codes</span> <span class="o">=</span> <span class="n">codes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_language</span> <span class="o">=</span> <span class="n">source_language</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Answer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Answer.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Answer.from_json">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">json_data</span><span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="Row"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Row">[docs]</a><span class="k">class</span> <span class="nc">Row</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Row object</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    auxiliary_columns : list(str), required</span>
-<span class="sd">        Needs to have the same number of elemenst as the `auxiliary_column_names` field of the project</span>
-<span class="sd">        it belongs to</span>
-<span class="sd">    answers : list(:class:`.Answer`), required</span>
-<span class="sd">        A list of answers, whereby exactly one answer needs to be provided for every question of the project</span>
-<span class="sd">        it belongs to</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auxiliary_columns</span><span class="p">,</span> <span class="n">answers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary_columns</span> <span class="o">=</span> <span class="n">auxiliary_columns</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">answers</span> <span class="o">=</span> <span class="n">answers</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Row</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Row.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Row.from_json">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
-        <span class="n">ans</span> <span class="o">=</span> <span class="n">json_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;answers&#39;</span><span class="p">)</span>
-        <span class="n">answers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Answer</span><span class="o">.</span><span class="n">from_json</span><span class="p">,</span> <span class="n">ans</span><span class="p">))</span>
-        <span class="n">row</span> <span class="o">=</span> <span class="n">Row</span><span class="p">(</span><span class="n">answers</span><span class="o">=</span><span class="n">answers</span><span class="p">,</span> <span class="o">**</span><span class="n">json_data</span><span class="p">)</span>
-        <span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;answers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span>
-        <span class="k">return</span> <span class="n">row</span></div></div>
-
-
-<div class="viewcode-block" id="Project"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Project">[docs]</a><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Project object</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    name : str, required</span>
-<span class="sd">        Name of the project.</span>
-<span class="sd">    language: str, required</span>
-<span class="sd">        Language of question, must be iso tag</span>
-<span class="sd">    questions: list(:class:`.Questions`), required</span>
-<span class="sd">        Questions belonging to the project</span>
-<span class="sd">    auxiliary_column_names: list(str), optional</span>
-<span class="sd">        Names of the auxiliary columns</span>
-<span class="sd">    translation_engine: str, optional</span>
-<span class="sd">        Which translation engine to use, can be either `google` or `deepl</span>
-<span class="sd">    translate: bool, optional</span>
-<span class="sd">        If true translate answers using translation_engine</span>
-<span class="sd">    inherits_from : int, optional</span>
-<span class="sd">        ID of another question of this user, that the model should be based on.</span>
-<span class="sd">        The codebook of that question should be *identical* or *almost* identical</span>
-<span class="sd">        in order for the AI to deliver good results.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">,</span>
-        <span class="n">language</span><span class="p">,</span>
-        <span class="n">questions</span><span class="p">,</span>
-        <span class="n">rows</span><span class="o">=</span> <span class="p">[],</span>
-        <span class="n">auxiliary_column_names</span><span class="o">=</span> <span class="p">[],</span>
-        <span class="n">translation_engine</span><span class="o">=</span> <span class="s1">&#39;google&#39;</span><span class="p">,</span>
-        <span class="n">translate</span><span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">translated</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="nb">id</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="k">if</span> <span class="n">language</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CaplenaAPI</span><span class="o">.</span><span class="n">valid_languages</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid language &#39;</span><span class="si">{}</span><span class="s2">&#39;, accepted values are {{</span><span class="si">{}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">language</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CaplenaAPI</span><span class="o">.</span><span class="n">valid_languages</span><span class="p">)</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">language</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary_column_names</span> <span class="o">=</span> <span class="n">auxiliary_column_names</span>
-        <span class="k">if</span> <span class="n">translated</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">translated</span> <span class="k">else</span> <span class="kc">False</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="n">translate</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">questions</span> <span class="o">=</span> <span class="n">questions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="n">rows</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">translation_engine</span> <span class="o">=</span> <span class="n">translation_engine</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Project</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Project.to_dict"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Project.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">language</span><span class="p">,</span>
-            <span class="s2">&quot;auxiliary_column_names&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary_column_names</span><span class="p">,</span>
-            <span class="s2">&quot;translated&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;translation_engine&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation_engine</span><span class="p">,</span>
-            <span class="s2">&quot;questions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">questions</span><span class="p">,</span>
-            <span class="s2">&quot;rows&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">data</span></div>
-
-<div class="viewcode-block" id="Project.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Project.from_json">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
-        <span class="n">questions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Question</span><span class="o">.</span><span class="n">from_json</span><span class="p">,</span> <span class="n">json_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;questions&#39;</span><span class="p">)))</span>
-        <span class="k">if</span> <span class="s1">&#39;rows&#39;</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">row_data</span> <span class="o">=</span> <span class="n">json_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;rows&#39;</span><span class="p">)</span>
-            <span class="n">rows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Row</span><span class="o">.</span><span class="n">from_json</span><span class="p">,</span> <span class="n">row_data</span><span class="p">))</span>
-            <span class="n">proj</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="n">questions</span><span class="o">=</span><span class="n">questions</span><span class="p">,</span> <span class="o">**</span><span class="n">json_data</span><span class="p">)</span>
-            <span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row_data</span>
-            <span class="k">return</span> <span class="n">proj</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">proj</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">questions</span><span class="o">=</span><span class="n">questions</span><span class="p">,</span> <span class="o">**</span><span class="n">json_data</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">proj</span></div></div>
-
-
-<div class="viewcode-block" id="Predictions"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Predictions">[docs]</a><span class="k">class</span> <span class="nc">Predictions</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    answers : list(:class:`.Answer`), required</span>
-<span class="sd">        A list of answers, whereby exactly one answer needs to be provided for every question of the project</span>
-<span class="sd">        it belongs to</span>
-<span class="sd">    model : dict, required</span>
-<span class="sd">        Meta information about the model</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">answers</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">answers</span> <span class="o">=</span> <span class="n">answers</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Predictions</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Predictions.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Predictions.from_json">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Predictions</span><span class="p">(</span><span class="o">**</span><span class="n">json_data</span><span class="p">)</span></div></div>
-
-
 <div class="viewcode-block" id="CaplenaAPI"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI">[docs]</a><span class="k">class</span> <span class="nc">CaplenaAPI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Class enabling interaction with (parts of) the Caplena.co API</span>
 
@@ -443,7 +191,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR (status code </span><span class="si">{}</span><span class="s2">): </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">_makeRequest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">apiURI</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">publicmethod</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_makeRequest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">apiURI</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">publicmethod</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Internal function to make the API call.</span>
 
@@ -479,8 +227,11 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
                 <span class="s2">&quot;CSRF-Token / authentication not set. Call login(..) before invoking other API calls&quot;</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="p">,</span>
-                       <span class="n">method</span><span class="p">)(</span><span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span><span class="p">,</span> <span class="n">apiURI</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">ComplexEncoder</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getHeaders</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="p">,</span> <span class="n">method</span><span class="p">)(</span>
+            <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span><span class="p">,</span> <span class="n">apiURI</span><span class="p">),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">ComplexEncoder</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getHeaders</span><span class="p">()</span>
+        <span class="p">)</span>
 
 <div class="viewcode-block" id="CaplenaAPI.login"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.login">[docs]</a>    <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -512,7 +263,7 @@
             <span class="p">},</span> <span class="n">publicmethod</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">csrftoken</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;csrftoken&#39;</span><span class="p">]</span>
@@ -540,7 +291,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">Project</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div>
@@ -566,7 +317,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects-inheritable/&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">Project</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div>
@@ -592,7 +343,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">Question</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div>
@@ -618,7 +369,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_id</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Question</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
@@ -644,7 +395,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Project</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
@@ -654,12 +405,12 @@
         <span class="n">name</span><span class="p">,</span>
         <span class="n">language</span><span class="p">,</span>
         <span class="n">translate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">auxiliary_column_names</span><span class="o">=</span> <span class="p">[],</span>
-        <span class="n">questions</span><span class="o">=</span> <span class="p">[],</span>
-        <span class="n">rows</span><span class="o">=</span> <span class="p">[],</span>
-        <span class="n">translation_engine</span><span class="o">=</span> <span class="s1">&#39;GT&#39;</span><span class="p">,</span>
-        <span class="n">upload_async</span><span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">request_training</span><span class="o">=</span> <span class="kc">True</span>
+        <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">questions</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">rows</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">translation_engine</span><span class="o">=</span><span class="s1">&#39;GT&#39;</span><span class="p">,</span>
+        <span class="n">upload_async</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">request_training</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to create a new project</span>
@@ -718,14 +469,12 @@
         <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">get_params</span><span class="p">)</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">get_params</span><span class="p">),</span> <span class="n">proj</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Project</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="CaplenaAPI.addRowsToProject"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.addRowsToProject">[docs]</a>    <span class="k">def</span> <span class="nf">addRowsToProject</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">upload_async</span><span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">request_training</span><span class="o">=</span> <span class="kc">True</span>
-    <span class="p">):</span>
+<div class="viewcode-block" id="CaplenaAPI.addRowsToProject"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.addRowsToProject">[docs]</a>    <span class="k">def</span> <span class="nf">addRowsToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">upload_async</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">request_training</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to add rows to a previously created project.</span>
 
@@ -757,7 +506,7 @@
             <span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">/rows</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="p">,</span> <span class="n">get_params</span><span class="p">),</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">Row</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div>
@@ -782,12 +531,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">/rows&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">Row</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div>
 
-<div class="viewcode-block" id="CaplenaAPI.listAnswers"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.listAnswers">[docs]</a>    <span class="k">def</span> <span class="nf">listAnswers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question_id</span><span class="p">,</span> <span class="n">no_group</span><span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CaplenaAPI.listAnswers"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.listAnswers">[docs]</a>    <span class="k">def</span> <span class="nf">listAnswers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question_id</span><span class="p">,</span> <span class="n">no_group</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to list all answers of a specific question.</span>
 
@@ -811,7 +560,7 @@
         <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?no_group&#39;</span> <span class="k">if</span> <span class="n">no_group</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">/answers</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_id</span><span class="p">,</span> <span class="n">get_params</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">Answer</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div>
@@ -841,7 +590,7 @@
             <span class="n">request_url</span> <span class="o">+=</span> <span class="n">parameters</span>
         <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="n">request_url</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span></div>
@@ -926,33 +675,275 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span></div>
 
-
-<div class="viewcode-block" id="CaplenaAPI.upadateProject"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.upadateProject">[docs]</a>    <span class="k">def</span> <span class="nf">upadateProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">request_training</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="CaplenaAPI.updateQuestion"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.updateQuestion">[docs]</a>    <span class="k">def</span> <span class="nf">updateQuestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">request_training</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        API method to update projects</span>
+<span class="sd">        API method to update question</span>
 
 <span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
 <span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        project : Project</span>
-<span class="sd">            modified Project instance</span>
+<span class="sd">        question: question</span>
+<span class="sd">            modified question instance</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        project : Project</span>
-<span class="sd">            newly updated Project instance</span>
+<span class="sd">        question: Question</span>
+<span class="sd">            newly updated question instance</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">get_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;request_training&#39;</span><span class="p">:</span> <span class="n">request_training</span><span class="p">}</span>
         <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">get_params</span><span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;patch&#39;</span><span class="p">,</span> <span class="s1">&#39;/projects/</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">get_params</span><span class="p">),</span> <span class="n">project</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span><span class="s1">&#39;patch&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">get_params</span><span class="p">),</span> <span class="n">question</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">Project</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div></div>
+            <span class="k">return</span> <span class="n">Question</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div></div>
+
+
+<div class="viewcode-block" id="Code"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Code">[docs]</a><span class="k">class</span> <span class="nc">Code</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Code object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id: int, required</span>
+<span class="sd">        Code ID</span>
+<span class="sd">    label: str, required</span>
+<span class="sd">        Code name</span>
+<span class="sd">    category: str, required</span>
+<span class="sd">        Code category</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">category</span> <span class="o">=</span> <span class="n">category</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Code</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Code.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Code.from_json">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">json_data</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Question"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Question">[docs]</a><span class="k">class</span> <span class="nc">Question</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Question object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str, required</span>
+<span class="sd">        Name of the question.</span>
+<span class="sd">    description : str, optional</span>
+<span class="sd">        String describing this question</span>
+<span class="sd">    group_identical : bool, optional</span>
+<span class="sd">        Flag indicating whether to group identical answers in coding view and when listing answers.</span>
+<span class="sd">        Default=true</span>
+<span class="sd">    group_identical_exclude : str, optional</span>
+<span class="sd">        All answer texts matching this regular expression won&#39;t be grouped. Default=&#39;&#39;</span>
+<span class="sd">    smart_sort: bool, optional</span>
+<span class="sd">        If the smart sorting feature should be enabled. Default=true</span>
+<span class="sd">    codebook : list(:class:`.Code`), optional</span>
+<span class="sd">        List of codes (dictionaries), each containing the keys `id`, `label` and `category`</span>
+<span class="sd">        Can also be an empty list.</span>
+<span class="sd">    inherits_from : int, optional</span>
+<span class="sd">        ID of another question of this user, that the model should be based on.</span>
+<span class="sd">        The codebook of that question should be *identical* or *almost* identical</span>
+<span class="sd">        in order for the AI to deliver good results.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">codebook</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">group_identical</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">group_identical_exclude</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">smart_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">inherits_from</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group_identical</span> <span class="o">=</span> <span class="n">group_identical</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group_identical_exclude</span> <span class="o">=</span> <span class="n">group_identical_exclude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smart_sort</span> <span class="o">=</span> <span class="n">smart_sort</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codebook</span> <span class="o">=</span> <span class="n">codebook</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inherits_from</span> <span class="o">=</span> <span class="n">inherits_from</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Question.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Question.from_json">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">json_data</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Answer"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Answer">[docs]</a><span class="k">class</span> <span class="nc">Answer</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Answer object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    text : str, required</span>
+<span class="sd">        Text of the answer.</span>
+<span class="sd">    question : str, required</span>
+<span class="sd">        The name of the question this answer belongs to</span>
+<span class="sd">    reviewed : bool, optional</span>
+<span class="sd">        Answers having the &quot;reviewed&quot; are assumed to have all codes correct</span>
+<span class="sd">        and will be used to train the AI.</span>
+<span class="sd">    codes : list(int), optional</span>
+<span class="sd">        List of integers (code IDs). Assigning codes to an answer.</span>
+<span class="sd">        Will be used to train the AI.</span>
+<span class="sd">    source_language : str, optional</span>
+<span class="sd">        ISO Code (2 characters, e.g. &#39;de&#39; or &#39;en&#39;) specifying in which language the text is written.</span>
+<span class="sd">        Relevant for translation, taking precedance over automatic language detection</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">source_language</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">reviewed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">codes</span><span class="o">=</span><span class="p">[],</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">question</span> <span class="o">=</span> <span class="n">question</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reviewed</span> <span class="o">=</span> <span class="n">reviewed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">codes</span> <span class="o">=</span> <span class="n">codes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_language</span> <span class="o">=</span> <span class="n">source_language</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Answer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Answer.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Answer.from_json">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">json_data</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Row"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Row">[docs]</a><span class="k">class</span> <span class="nc">Row</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Row object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    auxiliary_columns : list(str), required</span>
+<span class="sd">        Needs to have the same number of elemenst as the `auxiliary_column_names` field of the project</span>
+<span class="sd">        it belongs to</span>
+<span class="sd">    answers : list(:class:`.Answer`), required</span>
+<span class="sd">        A list of answers, whereby exactly one answer needs to be provided for every question of the project</span>
+<span class="sd">        it belongs to</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auxiliary_columns</span><span class="p">,</span> <span class="n">answers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary_columns</span> <span class="o">=</span> <span class="n">auxiliary_columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">answers</span> <span class="o">=</span> <span class="n">answers</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Row</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Row.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Row.from_json">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">json_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;answers&#39;</span><span class="p">)</span>
+        <span class="n">answers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Answer</span><span class="o">.</span><span class="n">from_json</span><span class="p">,</span> <span class="n">ans</span><span class="p">))</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">Row</span><span class="p">(</span><span class="n">answers</span><span class="o">=</span><span class="n">answers</span><span class="p">,</span> <span class="o">**</span><span class="n">json_data</span><span class="p">)</span>
+        <span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;answers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span>
+        <span class="k">return</span> <span class="n">row</span></div></div>
+
+
+<div class="viewcode-block" id="Project"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Project">[docs]</a><span class="k">class</span> <span class="nc">Project</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Project object</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str, required</span>
+<span class="sd">        Name of the project.</span>
+<span class="sd">    language: str, required</span>
+<span class="sd">        Language of question, must be iso tag</span>
+<span class="sd">    questions: list(:class:`.Questions`), required</span>
+<span class="sd">        Questions belonging to the project</span>
+<span class="sd">    auxiliary_column_names: list(str), optional</span>
+<span class="sd">        Names of the auxiliary columns</span>
+<span class="sd">    translation_engine: str, optional</span>
+<span class="sd">        Which translation engine to use, can be either `google` or `deepl</span>
+<span class="sd">    translate: bool, optional</span>
+<span class="sd">        If true translate answers using translation_engine</span>
+<span class="sd">    inherits_from : int, optional</span>
+<span class="sd">        ID of another question of this user, that the model should be based on.</span>
+<span class="sd">        The codebook of that question should be *identical* or *almost* identical</span>
+<span class="sd">        in order for the AI to deliver good results.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">language</span><span class="p">,</span>
+        <span class="n">questions</span><span class="p">,</span>
+        <span class="n">rows</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">auxiliary_column_names</span><span class="o">=</span><span class="p">[],</span>
+        <span class="n">translation_engine</span><span class="o">=</span><span class="s1">&#39;google&#39;</span><span class="p">,</span>
+        <span class="n">translate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">translated</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">language</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CaplenaAPI</span><span class="o">.</span><span class="n">valid_languages</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid language &#39;</span><span class="si">{}</span><span class="s2">&#39;, accepted values are {{</span><span class="si">{}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">language</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CaplenaAPI</span><span class="o">.</span><span class="n">valid_languages</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">language</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary_column_names</span> <span class="o">=</span> <span class="n">auxiliary_column_names</span>
+        <span class="k">if</span> <span class="n">translated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">translated</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="n">translate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">questions</span> <span class="o">=</span> <span class="n">questions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="n">rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">translation_engine</span> <span class="o">=</span> <span class="n">translation_engine</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Project</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Project.to_dict"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Project.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">language</span><span class="p">,</span>
+            <span class="s2">&quot;auxiliary_column_names&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary_column_names</span><span class="p">,</span>
+            <span class="s2">&quot;translated&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;translation_engine&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation_engine</span><span class="p">,</span>
+            <span class="s2">&quot;questions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">questions</span><span class="p">,</span>
+            <span class="s2">&quot;rows&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="Project.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Project.from_json">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
+        <span class="n">questions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Question</span><span class="o">.</span><span class="n">from_json</span><span class="p">,</span> <span class="n">json_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;questions&#39;</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="s1">&#39;rows&#39;</span> <span class="ow">in</span> <span class="n">json_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">row_data</span> <span class="o">=</span> <span class="n">json_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;rows&#39;</span><span class="p">)</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Row</span><span class="o">.</span><span class="n">from_json</span><span class="p">,</span> <span class="n">row_data</span><span class="p">))</span>
+            <span class="n">proj</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="n">questions</span><span class="o">=</span><span class="n">questions</span><span class="p">,</span> <span class="o">**</span><span class="n">json_data</span><span class="p">)</span>
+            <span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row_data</span>
+            <span class="k">return</span> <span class="n">proj</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">proj</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">questions</span><span class="o">=</span><span class="n">questions</span><span class="p">,</span> <span class="o">**</span><span class="n">json_data</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">proj</span></div></div>
+
+
+<div class="viewcode-block" id="Predictions"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Predictions">[docs]</a><span class="k">class</span> <span class="nc">Predictions</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    answers : list(:class:`.Answer`), required</span>
+<span class="sd">        A list of answers, whereby exactly one answer needs to be provided for every question of the project</span>
+<span class="sd">        it belongs to</span>
+<span class="sd">    model : dict, required</span>
+<span class="sd">        Meta information about the model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">answers</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">answers</span> <span class="o">=</span> <span class="n">answers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Predictions</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Predictions.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Predictions.from_json">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Predictions</span><span class="p">(</span><span class="o">**</span><span class="n">json_data</span><span class="p">)</span></div></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -966,8 +957,8 @@
     <span class="c1"># &gt;&gt;&gt; password = os.environ[&quot;MY_CAPLENA_PASSWORD&quot;]</span>
     <span class="c1">###########################################################</span>
 
-    <span class="n">CAPLENA_EMAIL</span> <span class="o">=</span> <span class="s1">&#39;test@codit.co&#39;</span>
-    <span class="n">CAPLENA_PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;gGhWXRDJ7)CuLY/FPrEEqo8M&#39;</span>
+    <span class="n">CAPLENA_EMAIL</span> <span class="o">=</span> <span class="s1">&#39;your_email@domain.com&#39;</span>
+    <span class="n">CAPLENA_PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;*************&#39;</span>
 
     <span class="c1"># Instantiate new instance of CaplenaAPI class</span>
     <span class="n">api</span> <span class="o">=</span> <span class="n">CaplenaAPI</span><span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">)</span>
@@ -1098,9 +1089,8 @@
         <span class="n">Row</span><span class="p">(</span>
             <span class="n">auxiliary_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ID 3&#39;</span><span class="p">,</span> <span class="s1">&#39;Some other column value 3&#39;</span><span class="p">],</span>
             <span class="n">answers</span><span class="o">=</span><span class="p">[</span>
-                <span class="n">Answer</span><span class="p">(</span>
-                    <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Answer-text row 3 of question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">),</span> <span class="n">question</span><span class="o">=</span><span class="n">question_id</span>
-                <span class="p">)</span> <span class="k">for</span> <span class="n">question_id</span><span class="p">,</span> <span class="n">question_number</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">question_id_1</span><span class="p">,</span> <span class="n">question_id_2</span><span class="p">],</span><span class="nb">range</span><span class="p">(</span><span class="n">n_questions</span><span class="p">))</span>
+                <span class="n">Answer</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">&#39;Answer-text row 3 of question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">),</span> <span class="n">question</span><span class="o">=</span><span class="n">question_id</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">question_id</span><span class="p">,</span> <span class="n">question_number</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">question_id_1</span><span class="p">,</span> <span class="n">question_id_2</span><span class="p">],</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_questions</span><span class="p">))</span>
             <span class="p">]</span>
         <span class="p">)</span>
     <span class="p">]</span>
