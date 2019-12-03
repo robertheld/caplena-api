@@ -5,7 +5,7 @@ Client libraries for [Caplena](https://caplena.com)
 
 ## Prerequisites
 
-Make sure you have python version >= 2.7 and to install the requests library `pip install requests`
+Make sure you have python version >= 2.7 and to install the dependencies using `pip install -r requirements.txt`
 
 ## Installing
 
