@@ -65,19 +65,17 @@ def parse_codebook(filepath) -> List[Code]:
             'name': 'code_name_col',
             'message': 'Please enter the name of the column containing the code names',
             'default': 'Code Name'
-        },
-        {
+        }, {
             'type': 'input',
             'name': 'cat_name_col',
             'message': 'Please enter the name of the column containing the category names, if your codebook'
-                'does not contain categories, just enter none and we create a default category "CODES" for you',
+            'does not contain categories, just enter none and we create a default category "CODES" for you',
             'default': 'Code Category'
-        },
-        {
+        }, {
             'type': 'input',
             'name': 'code_id_col',
             'message': 'Please enter the name of the column containing the code id, if your codebook does not'
-                'contain ids, just enter none and we create default code ids',
+            'contain ids, just enter none and we create default code ids',
             'default': 'Code ID'
         }
     ]
@@ -93,7 +91,7 @@ def parse_codebook(filepath) -> List[Code]:
         if code_id_col:
             code_id = row[code_id_col]
         else:
-            code_id = i+1
+            code_id = i + 1
         code = Code(id=code_id, label=row[code_name_col], category=cat)
         codebook.append(code)
 
@@ -111,7 +109,8 @@ def parse_binary_codes_format(df_answers, codebook, codes_cols, codes_col='codes
     code_ids = [code.id for code in codebook]
 
     def codes_from_binary(row):
-        codes = [code_ids[i] for i, el in enumerate(row) if isinstance(el, int)]
+        codes = [code_ids[i] for i, el in enumerate(row) if isinstance(el, int) and el != 0]
+        print([type(el) for el in row])
         return codes
 
     df_answers[codes_col] = df_answers[codes_col].apply(codes_from_binary)
@@ -132,19 +131,15 @@ def parse_list_codes_format(df_answers, code_id_substr: str, codebook: List[Code
 
     def _check_if_code_exists(code_id):
         if not code_id in valid_code_ids:
-            raise ValueError(
-                'Code with ID {} was found in answers but not in Codebook'.format(code_id)
-            )
+            raise ValueError('Code with ID {} was found in answers but not in Codebook'.format(code_id))
         else:
             return code_id
 
     codes_cols = [col for col in df_answers.columns if code_id_substr in col]
     df_answers[codes_col] = df_answers[codes_cols].values.tolist()
     df_answers[codes_col] = df_answers[codes_col].apply(
-        lambda x: [
-            _check_if_code_exists(int(it)) for it in x
-            if (not pd.isnull(it) and str(it).strip() and it != 0)
-        ]
+        lambda x:
+        [_check_if_code_exists(int(it)) for it in x if (not pd.isnull(it) and str(it).strip() and it != 0)]
     )
     return df_answers, codes_cols
 
@@ -171,7 +166,7 @@ def parse_reviewed(df_answers, codebook: List[Code]):
         # parse codebook from column names
         code_id_clean_regex = re.compile('Code ID ')
         code_name_clean_regex = re.compile('Code Name |\'')
-        code_category_clean_regex = re.compile('Code category|\'')
+        code_category_clean_regex = re.compile('Code Category|\'')
         codes_cols = [col for col in df_answers.columns if len(col.split('|')) == 3]
         print('Found the following code columns: ', codes_cols)
         for i, code_str in enumerate(codes_cols):
@@ -183,7 +178,9 @@ def parse_reviewed(df_answers, codebook: List[Code]):
         df_answers = parse_binary_codes_format(df_answers, codebook, codes_cols, codes_col)
 
     elif answers['codes_format'] == 'caplena.com_list':
-        df_answers, codes_cols = parse_list_codes_format(df_answers, code_id_substr='Code ID', codebook=codebook)
+        df_answers, codes_cols = parse_list_codes_format(
+            df_answers, code_id_substr='Code ID', codebook=codebook
+        )
         code_name_and_cat_cols = [
             col for col in df_answers.columns
             if 'Code Name' in col or 'Code Kategorie' in col or 'Code Category' in col
@@ -230,7 +227,6 @@ if __name__ == "__main__":
     df_answers = parse_file(answers['filepath'])
 
     print('Found {} responses in provided file'.format(len(df_answers)))
-
 
     question = [
         {
@@ -293,7 +289,6 @@ if __name__ == "__main__":
     for i, answer in df_answers.iterrows():
         aux_column = answer.pop('auxiliary_columns')
         row_data.append({'auxiliary_columns': aux_column, 'answers': [answer.to_dict()]})
-
     time.sleep(2)
     # parse credentials from environment variables
     email = os.environ.get('CAPLENA_EMAIL', None)
@@ -347,7 +342,9 @@ if __name__ == "__main__":
     rows = []
     for dat in row_data:
         dat['answers'][0]['question'] = question_id
-        rows.append(Row(auxiliary_columns=dat['auxiliary_columns'], answers=[Answer.from_json(dat['answers'][0])]))
+        rows.append(
+            Row(auxiliary_columns=dat['auxiliary_columns'], answers=[Answer.from_json(dat['answers'][0])])
+        )
     print('Adding {} answers to question {} in project {}'.format(len(rows), question_id, project_id))
     # batch answers for large surveys in order not to hit the limit
     if len(rows) < BATCH_SIZE:
