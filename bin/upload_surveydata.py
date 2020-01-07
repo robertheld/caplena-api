@@ -109,8 +109,7 @@ def parse_binary_codes_format(df_answers, codebook, codes_cols, codes_col='codes
     code_ids = [code.id for code in codebook]
 
     def codes_from_binary(row):
-        codes = [code_ids[i] for i, el in enumerate(row) if isinstance(el, int) and el != 0]
-        print([type(el) for el in row])
+        codes = [code_ids[i] for i, el in enumerate(row) if (isinstance(el, int) or el == 'x') and el != 0]
         return codes
 
     df_answers[codes_col] = df_answers[codes_col].apply(codes_from_binary)
@@ -153,7 +152,7 @@ def parse_reviewed(df_answers, codebook: List[Code]):
     question = [
         {
             'type': 'list',
-            'choices': ['caplena.com_list', 'caplena.com_binary'],
+            'choices': ['caplena.com_list', 'caplena.com_binary', 'generic_binary'],
             'name': 'codes_format',
             'message': 'In what format are the codes of the reviewed answers?',
             'default': 'caplena.com_list'
@@ -176,7 +175,30 @@ def parse_reviewed(df_answers, codebook: List[Code]):
             label = code_name_clean_regex.sub('', label).strip()
             codebook.append(Code(label=label, category=cat.upper(), id=id))
         df_answers = parse_binary_codes_format(df_answers, codebook, codes_cols, codes_col)
-
+    elif answers['codes_format'] == 'generic_binary':
+        question = [
+            {
+                'type':
+                'input',
+                'name':
+                'start_idx',
+                'message':
+                'Please enter the index of the first column containing codes (index starts from 0, code columns are assumed to be contiguous)',
+            }, {
+                'type':
+                'input',
+                'name':
+                'end_idx',
+                'message':
+                'Please enter the index of the last column containing codes (index starts from 0, code columns are assumed to be contiguous)',
+            }
+        ]
+        answers = prompt(question)
+        codes_cols = list(df_answers.columns[int(answers['start_idx']):int(answers['end_idx'])])
+        print('Found the following code columns: ', codes_cols)
+        for i, code_str in enumerate(codes_cols):
+            codebook.append(Code(label=code_str, category='CODES', id=i))
+        df_answers = parse_binary_codes_format(df_answers, codebook, codes_cols, codes_col)
     elif answers['codes_format'] == 'caplena.com_list':
         df_answers, codes_cols = parse_list_codes_format(
             df_answers, code_id_substr='Code ID', codebook=codebook
@@ -268,7 +290,6 @@ if __name__ == "__main__":
     else:
         df_answers['reviewed'] = False
         answer_cols = [text_col, 'reviewed', 'source_language']
-
     auxiliary_col_names = [col_name for col_name in df_answers.columns if col_name not in answer_cols]
     print("Adding {} auxiliary columns: {}".format(len(auxiliary_col_names), auxiliary_col_names))
 
