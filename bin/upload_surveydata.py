@@ -84,6 +84,10 @@ def parse_codebook(filepath) -> List[Code]:
     code_category_col = prompt_answers['cat_name_col']
     code_id_col = prompt_answers['code_id_col']
     for i, row in df_codebook.iterrows():
+        code_name = row[code_name_col]
+        if pd.isna(code_name):
+            print('WARNING: Empty code name in row {}, skipping'.format(i))
+            continue
         if code_category_col:
             cat = row[code_category_col]
         else:
@@ -94,7 +98,6 @@ def parse_codebook(filepath) -> List[Code]:
             code_id = i + 1
         code = Code(id=code_id, label=row[code_name_col], category=cat)
         codebook.append(code)
-
     print('Successfully parsed codebook with {} codes'.format(len(codebook)))
     return codebook
 
@@ -152,7 +155,7 @@ def parse_reviewed(df_answers, codebook: List[Code]):
     question = [
         {
             'type': 'list',
-            'choices': ['caplena.com_list', 'caplena.com_binary', 'generic_binary'],
+            'choices': ['caplena.com_list', 'caplena.com_binary', 'generic_binary', 'generic_list'],
             'name': 'codes_format',
             'message': 'In what format are the codes of the reviewed answers?',
             'default': 'caplena.com_list'
@@ -208,6 +211,19 @@ def parse_reviewed(df_answers, codebook: List[Code]):
             if 'Code Name' in col or 'Code Kategorie' in col or 'Code Category' in col
         ]
         df_answers = df_answers.drop(code_name_and_cat_cols, axis=1)
+    elif answers['codes_format'] == 'generic_list':
+        question = {
+            'type':
+            'input',
+            'name':
+            'code_substring',
+            'message':
+            'Please enter the substring that defines code columns (i.e. if your Code columns are "Code_1", "Code_2", etc. enter "Code").',
+        }
+        answers = prompt(question)
+        df_answers, codes_cols = parse_list_codes_format(
+            df_answers, code_id_substr=answers['code_substring'], codebook=codebook
+        )
     else:
         raise ValueError('Invalid codes_format')
     df_answers['reviewed'] = ~df_answers[codes_cols].isnull().all(1)
