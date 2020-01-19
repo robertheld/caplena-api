@@ -706,6 +706,7 @@ class Question(CaplenaObj):
         smart_sort=False,
         inherits_from=None,
         id=None,
+        question_category='NO',
         **kwargs
     ):
         self.name = name
@@ -716,6 +717,7 @@ class Question(CaplenaObj):
         self.codebook = codebook
         self.inherits_from = inherits_from
         self.id = id
+        self.question_category = question_category
         super(Question, self).__init__(**kwargs)
 
     @classmethod

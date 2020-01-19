@@ -20,6 +20,8 @@ parser = argparse.ArgumentParser(
     'Script to create a new project with one question and their answers with codes from Excel or CSV \n'
 )
 
+CODES_COL = 'codes'
+
 
 class FileExistsValidator(Validator):
     def validate(self, document):
@@ -28,6 +30,17 @@ class FileExistsValidator(Validator):
             raise ValidationError(
                 message='Please enter a valid file path', cursor_position=len(document.text)
             )  # Move cursor to end
+
+
+class ListFileExistsOrNoneValidator(Validator):
+    def validate(self, document):
+        if document.text:
+            for fp in document.text.split(','):
+                ok = os.path.exists(fp)
+                if not ok:
+                    raise ValidationError(
+                        message='Please enter valid file paths', cursor_position=len(document.text)
+                    )  # Move cursor to end
 
 
 class FileExistsOrNoneValidator(FileExistsValidator):
@@ -83,6 +96,7 @@ def parse_codebook(filepath) -> List[Code]:
     code_name_col = prompt_answers['code_name_col']
     code_category_col = prompt_answers['cat_name_col']
     code_id_col = prompt_answers['code_id_col']
+    codebook = []
     for i, row in df_codebook.iterrows():
         code_name = row[code_name_col]
         if pd.isna(code_name):
@@ -163,7 +177,6 @@ def parse_reviewed(df_answers, codebook: List[Code]):
     ]
     answers = prompt(question)
 
-    codes_col = 'codes'
     if answers['codes_format'] == 'caplena.com_binary':
         # parse codebook from column names
         code_id_clean_regex = re.compile('Code ID ')
@@ -201,7 +214,7 @@ def parse_reviewed(df_answers, codebook: List[Code]):
         print('Found the following code columns: ', codes_cols)
         for i, code_str in enumerate(codes_cols):
             codebook.append(Code(label=code_str, category='CODES', id=i))
-        df_answers = parse_binary_codes_format(df_answers, codebook, codes_cols, codes_col)
+        df_answers = parse_binary_codes_format(df_answers, codebook, codes_cols, CODES_COL)
     elif answers['codes_format'] == 'caplena.com_list':
         df_answers, codes_cols = parse_list_codes_format(
             df_answers, code_id_substr='Code ID', codebook=codebook
@@ -227,30 +240,112 @@ def parse_reviewed(df_answers, codebook: List[Code]):
     else:
         raise ValueError('Invalid codes_format')
     df_answers['reviewed'] = ~df_answers[codes_cols].isnull().all(1)
-    answer_cols = [text_col, codes_cols, codes_col, 'reviewed', 'source_language']
+    answer_cols = [text_col, codes_cols, CODES_COL, 'reviewed', 'source_language']
     df_answers = df_answers.drop(codes_cols, axis=1)
+    return df_answers, answer_cols
+
+
+def parse_reviewed_multi_question(df_answers, codebooks: List[List[Code]]):
+    """
+    Parse reviewed responses from multiple questions
+    :param df_answers:
+    :param codebooks:
+    :return:
+    """
+    question = [
+        {
+            'type': 'list',
+            'choices': ['generic_list'],
+            'name': 'codes_format',
+            'message': 'In what format are the codes of the reviewed answers?',
+            'default': 'generic_list'
+        }
+    ]
+    answers = prompt(question)
+    if answers['codes_format'] == 'generic_list':
+        question = {
+            'type':
+            'input',
+            'name':
+            'code_substrings',
+            'message':
+            'Please enter the substrings that defines code columns per question separated by "," in the same order as the codebooks (i.e. if your Code columns are "Code_1", "Code_2", etc. enter "Code").',
+        }
+        answers = prompt(question)
+        code_id_substrings = answers['code_substrings'].split(',')
+        all_code_cols = []
+        code_col_names = []
+        for i, (code_id_substr, codebook) in enumerate(zip(code_id_substrings, codebooks)):
+            print('Parsing Codes with substring {}'.format(code_id_substr))
+            df_answers, codes_cols = parse_list_codes_format(
+                df_answers, code_id_substr=code_id_substr, codebook=codebook
+            )
+            all_code_cols.extend(codes_cols)
+            code_col_name = '{}_{}'.format(CODES_COL, i)
+            code_col_names.append(code_col_name)
+            df_answers = df_answers.rename(columns={CODES_COL: code_col_name})
+        df_answers['reviewed'] = ~df_answers[all_code_cols].isnull().all(1)
+        answer_cols = [all_code_cols, *code_col_names, 'reviewed', 'source_language']
+        df_answers = df_answers.drop(all_code_cols, axis=1)
+    else:
+        answer_cols = None
     return df_answers, answer_cols
 
 
 if __name__ == "__main__":
 
-    # PARSE INPUT
     question = [
         {
-            'type': 'input',
-            'name': 'filepath',
-            'message':
-            'Please enter the file path to the Excel file containing your codebook. If no codebook is available, hit enter',
-            'validate': FileExistsOrNoneValidator
+            'type': 'confirm',
+            'name': 'has_multi_questions',
+            'message': 'Does your project have multiple open questions?'
         }
     ]
+    has_multi_questions = prompt(question)['has_multi_questions']
+    if not has_multi_questions:
+        question = [
+            {
+                'type': 'input',
+                'name': 'filepath',
+                'message':
+                'Please enter the file path to the Excel file containing your codebook. If no codebook is available, hit enter',
+                'validate': FileExistsOrNoneValidator
+            }
+        ]
 
-    answers = prompt(question)
+        answers = prompt(question)
 
-    codebook = []
-    fp = answers.get('filepath')
-    if fp:
-        codebook = parse_codebook(fp)
+        codebook = []
+        fp = answers.get('filepath')
+        if fp:
+            codebook = parse_codebook(fp)
+
+        def parse_reviewed_fn(x):
+            return parse_reviewed(x, codebook)
+    else:
+        question = [
+            {
+                'type': 'input',
+                'name': 'filepaths',
+                'message':
+                'Please enter the file paths to the Excel file containing your codebooks separated by ",". If no codebook is available, hit enter',
+                'validate': ListFileExistsOrNoneValidator
+            }
+        ]
+
+        answers = prompt(question)
+
+        codebooks = []
+        fps = answers.get('filepaths').split(',')
+        if fps:
+            for fp in fps:
+                print('Parsing codebook {}'.format(fp))
+                codebook = parse_codebook(fp)
+                codebooks.append(codebook)
+
+        def parse_reviewed_fn(x):
+            return parse_reviewed_multi_question(x, codebooks)
+
     question = [
         {
             'type': 'input',
@@ -266,12 +361,42 @@ if __name__ == "__main__":
 
     print('Found {} responses in provided file'.format(len(df_answers)))
 
+    if not has_multi_questions:
+        question = [
+            {
+                'type': 'input',
+                'name': 'text_col',
+                'message': 'Please enter the name of the column containing the text'
+            },
+        ]
+
+        answers = prompt(question)
+
+        text_col = answers['text_col']
+        if text_col not in df_answers.columns:
+            raise ValueError('Column {} does not exist'.format(text_col))
+        text_cols = [text_col]
+    else:
+        question = [
+            {
+                'type':
+                'input',
+                'name':
+                'text_cols',
+                'message':
+                'Please enter the name of the columns containing the text separated by "," in the same order as the codebooks'
+            },
+        ]
+
+        answers = prompt(question)
+
+        text_cols = answers['text_cols'].split(',')
+        for text_col in text_cols:
+            if text_col not in df_answers.columns:
+                raise ValueError('Column {} does not exist'.format(text_col))
+
     question = [
         {
-            'type': 'input',
-            'name': 'text_col',
-            'message': 'Please enter the name of the column containing the text'
-        }, {
             'type':
             'input',
             'name':
@@ -280,12 +405,7 @@ if __name__ == "__main__":
             'Please enter the name of the column containing the source language (ISO codes). Hit enter if not available.'
         }
     ]
-
     answers = prompt(question)
-
-    text_col = answers['text_col']
-    if text_col not in df_answers.columns:
-        raise ValueError('Column {} does not exist'.format(text_col))
     sourcelang_col = answers['sourcelang_col']
     if sourcelang_col:
         if sourcelang_col not in df_answers.columns:
@@ -302,10 +422,11 @@ if __name__ == "__main__":
     ]
     answers = prompt(question)
     if answers['has_reviewed']:
-        df_answers, answer_cols = parse_reviewed(df_answers, codebook)
+        df_answers, answer_cols = parse_reviewed_fn(df_answers)
+        answer_cols.extend(text_cols)
     else:
         df_answers['reviewed'] = False
-        answer_cols = [text_col, 'reviewed', 'source_language']
+        answer_cols = [*text_cols, 'reviewed', 'source_language']
     auxiliary_col_names = [col_name for col_name in df_answers.columns if col_name not in answer_cols]
     print("Adding {} auxiliary columns: {}".format(len(auxiliary_col_names), auxiliary_col_names))
 
@@ -316,8 +437,8 @@ if __name__ == "__main__":
         if not np.issubdtype(auxiliary_cols[col_name].dtype, np.number):
             auxiliary_cols[col_name] = auxiliary_cols[col_name].astype(str, copy=False)
     # Force conversion to string
-    df_answers[text_col] = df_answers[text_col].astype(str, copy=False)
-    df_answers = df_answers.rename(columns={text_col: 'text'})
+    for text_col in text_cols:
+        df_answers[text_col] = df_answers[text_col].astype(str, copy=False)
 
     # preparing request data
     df_answers = df_answers.drop(auxiliary_cols, axis=1)
@@ -325,7 +446,21 @@ if __name__ == "__main__":
     row_data = []
     for i, answer in df_answers.iterrows():
         aux_column = answer.pop('auxiliary_columns')
-        row_data.append({'auxiliary_columns': aux_column, 'answers': [answer.to_dict()]})
+        if has_multi_questions:
+            answers_up = []
+            for j, text_col in enumerate(text_cols):
+                code_col = '{}_{}'.format(CODES_COL, j)
+                answer_up = {
+                    'text': answer[text_col],
+                    'codes': answer[code_col],
+                    'reviewed': answer['reviewed'],
+                    'question': text_col
+                }
+                answers_up.append(answer_up)
+        else:
+            answers_up = [answer.to_dict()]
+        row_data.append({'auxiliary_columns': aux_column, 'answers': answers_up})
+    print(row_data[:10])
     time.sleep(2)
     # parse credentials from environment variables
     email = os.environ.get('CAPLENA_EMAIL', None)
@@ -362,7 +497,13 @@ if __name__ == "__main__":
     answers = prompt(question)
     project_name = answers['project_name']
     language = answers['language']
-    new_questions = [Question(name=text_col, codebook=codebook)]
+    if has_multi_questions:
+        new_questions = []
+        for text_col, codebook in zip(text_cols, codebooks):
+            print(text_col, codebook)
+            new_questions.append(Question(name=text_col, codebook=codebook))
+    else:
+        new_questions = [Question(name=text_cols[0], codebook=codebook)]
     new_project = api.createProject(
         project_name,
         language=language,
@@ -375,19 +516,31 @@ if __name__ == "__main__":
 
     project = new_project
     project_id = project.id
-    question_id = project.questions[0].id
     rows = []
     for dat in row_data:
-        dat['answers'][0]['question'] = question_id
-        rows.append(
-            Row(auxiliary_columns=dat['auxiliary_columns'], answers=[Answer.from_json(dat['answers'][0])])
-        )
+        if not has_multi_questions:
+            question_id = project.questions[0].id
+            dat['answers'][0]['question'] = question_id
+            rows.append(
+                Row(
+                    auxiliary_columns=dat['auxiliary_columns'], answers=[Answer.from_json(dat['answers'][0])]
+                )
+            )
+        else:
+            answers = []
+            for ans_dat, question in zip(dat['answers'], new_project.questions):
+                ans_dat['question'] = question.id
+                ans = Answer.from_json(ans_dat)
+                print(ans)
+                answers.append(ans)
+            rows.append(Row(auxiliary_columns=dat['auxiliary_columns'], answers=answers))
+
     print('Adding {} answers to question {} in project {}'.format(len(rows), question_id, project_id))
     # batch answers for large surveys in order not to hit the limit
     if len(rows) < BATCH_SIZE:
         new_answers = api.addRowsToProject(project_id, rows)
         if new_answers is not False:
-            print("Added {} new answers to question {}".format(len(new_answers), question_id))
+            print("Added {} new rows to project {}".format(len(new_answers), project_id))
         else:
             print('error', new_answers)
     else:
