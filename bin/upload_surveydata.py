@@ -448,18 +448,18 @@ if __name__ == "__main__":
     row_data = []
     for i, answer in df_answers.iterrows():
         aux_column = answer.pop('auxiliary_columns')
-        if has_multi_questions:
-            answers_up = []
-            for j, text_col in enumerate(text_cols):
+        answers_up = []
+        for j, text_col in enumerate(text_cols):
+            if has_multi_questions:
                 code_col = '{}_{}'.format(CODES_COL, j)
-                answer_up = {'text': answer[text_col], 'reviewed': answer['reviewed'], 'question': text_col}
-                if 'codes' in answer.keys():
-                    answer_up['codes'] = answer[code_col]
-                if 'source_language' in answer.keys():
-                    answer_up['source_language'] = answer['source_language']
-                answers_up.append(answer_up)
-        else:
-            answers_up = [answer.to_dict()]
+            else:
+                code_col = CODES_COL
+            answer_up = {'text': answer[text_col], 'reviewed': answer['reviewed'], 'question': text_col}
+            if 'codes' in answer.keys():
+                answer_up['codes'] = answer[code_col]
+            if 'source_language' in answer.keys():
+                answer_up['source_language'] = answer['source_language']
+            answers_up.append(answer_up)
         row_data.append({'auxiliary_columns': aux_column, 'answers': answers_up})
     print(row_data[:10])
     time.sleep(2)
