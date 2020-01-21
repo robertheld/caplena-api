@@ -336,8 +336,9 @@ if __name__ == "__main__":
         answers = prompt(question)
 
         codebooks = []
-        fps = answers.get('filepaths').split(',')
+        fps = answers.get('filepaths')
         if fps:
+            fps = fps.split(',')
             for fp in fps:
                 print('Parsing codebook {}'.format(fp))
                 codebook = parse_codebook(fp)
@@ -410,7 +411,7 @@ if __name__ == "__main__":
     if sourcelang_col:
         if sourcelang_col not in df_answers.columns:
             raise ValueError('Column {} does not exist'.format(sourcelang_col))
-        df_answers['source_language'] = df_answers[sourcelang_col]
+        df_answers['source_language'] = df_answers[sourcelang_col].apply(lambda x: x.lower())
 
     question = [
         {
@@ -438,6 +439,7 @@ if __name__ == "__main__":
             auxiliary_cols[col_name] = auxiliary_cols[col_name].astype(str, copy=False)
     # Force conversion to string
     for text_col in text_cols:
+        df_answers[text_col] = df_answers[text_col].apply(lambda x: '' if pd.isna(x) else x)
         df_answers[text_col] = df_answers[text_col].astype(str, copy=False)
 
     # preparing request data
@@ -450,12 +452,11 @@ if __name__ == "__main__":
             answers_up = []
             for j, text_col in enumerate(text_cols):
                 code_col = '{}_{}'.format(CODES_COL, j)
-                answer_up = {
-                    'text': answer[text_col],
-                    'codes': answer[code_col],
-                    'reviewed': answer['reviewed'],
-                    'question': text_col
-                }
+                answer_up = {'text': answer[text_col], 'reviewed': answer['reviewed'], 'question': text_col}
+                if 'codes' in answer.keys():
+                    answer_up['codes'] = answer[code_col]
+                if 'source_language' in answer.keys():
+                    answer_up['source_language'] = answer['source_language']
                 answers_up.append(answer_up)
         else:
             answers_up = [answer.to_dict()]
@@ -499,6 +500,9 @@ if __name__ == "__main__":
     language = answers['language']
     if has_multi_questions:
         new_questions = []
+        if len(codebooks) == 0:
+            for text_col in text_cols:
+                new_questions.append(Question(name=text_col, codebook=[]))
         for text_col, codebook in zip(text_cols, codebooks):
             print(text_col, codebook)
             new_questions.append(Question(name=text_col, codebook=codebook))
@@ -531,11 +535,10 @@ if __name__ == "__main__":
             for ans_dat, question in zip(dat['answers'], new_project.questions):
                 ans_dat['question'] = question.id
                 ans = Answer.from_json(ans_dat)
-                print(ans)
                 answers.append(ans)
             rows.append(Row(auxiliary_columns=dat['auxiliary_columns'], answers=answers))
 
-    print('Adding {} answers to question {} in project {}'.format(len(rows), question_id, project_id))
+    print('Adding {} answers to project {}'.format(len(rows), project_id))
     # batch answers for large surveys in order not to hit the limit
     if len(rows) < BATCH_SIZE:
         new_answers = api.addRowsToProject(project_id, rows)
@@ -554,8 +557,8 @@ if __name__ == "__main__":
             j = max_idx
             if new_answers is not False:
                 print(
-                    "Added batch {} with {} new rows to question {}".format(
-                        batch_number, len(new_answers), question_id
+                    "Added batch {} with {} new rows to project {}".format(
+                        batch_number, len(new_answers), project_id
                     )
                 )
             else:
