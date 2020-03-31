@@ -644,6 +644,34 @@ class CaplenaAPI(object):
             return Question.from_json(r.json())
 
 
+    def updateAnswers(self, answers, question, request_training=False):
+        """
+        API method to update question
+
+        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
+        required beforehand
+
+        Parameters
+        ----------
+        question: question
+            modified question instance
+
+        Returns
+        -------
+        question: Question
+            newly updated question instance
+
+        """
+        get_params = {'request_training': request_training}
+        get_params = '?' + urlencode(get_params)
+        r = self._makeRequest('patch', '/questions/{}/answers{}'.format(question.id, get_params), [ans.to_dict() for ans in answers])
+
+        if (not r.ok):
+            return self._handleBadResponse(r)
+        else:
+            return [Answer.from_json(el) for el in r.json()]
+
+
 class Code(CaplenaObj):
     """
     Code object

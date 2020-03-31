@@ -190,7 +190,7 @@ def parse_reviewed(df_answers, codebook: List[Code]):
             cat = code_category_clean_regex.sub('', cat).strip()
             label = code_name_clean_regex.sub('', label).strip()
             codebook.append(Code(label=label, category=cat.upper(), id=id))
-        df_answers = parse_binary_codes_format(df_answers, codebook, codes_cols, codes_col)
+        df_answers = parse_binary_codes_format(df_answers, codebook, codes_cols, CODES_COL)
     elif answers['codes_format'] == 'generic_binary':
         question = [
             {
