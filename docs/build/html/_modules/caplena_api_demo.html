@@ -29,6 +29,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Codit API Demo</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
@@ -65,7 +68,7 @@
 <span class="sd">    $ python --version</span>
 <span class="sd">2. Make sure you have installed the requests library (if not, install using `pip install requests`)</span>
 <span class="sd">    $ pip install requests</span>
-<span class="sd">3. Adapt the `CODIT_EMAIL` and `CODIT_PASSWORD` variables at the bottom of this script</span>
+<span class="sd">3. Set the `CAPLENA_API_KEY` variable at the bottom of this script</span>
 <span class="sd">4. Call the script</span>
 <span class="sd">    $ python caplena_api_demo.py</span>
 
@@ -96,9 +99,7 @@
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
 <span class="sd">    To call an API instantiate a CaplenaAPI object and then call its methods</span>
-<span class="sd">        &gt;&gt;&gt; api = CaplenaAPI(&#39;de&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; api.login(&#39;my_username&#39;, &#39;my_password&#39;)</span>
-<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; api = CaplenaAPI(&#39;de&#39;, &#39;$(API_KEY)&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; api.listProjects()</span>
 <span class="sd">        [{&quot;name&quot;: &quot;project 1&quot;,</span>
 <span class="sd">         &quot;questions&quot;: [{&quot;name&quot;: &quot;question A&quot;}, ...]},</span>
@@ -106,9 +107,9 @@
 <span class="sd">        ]</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">valid_languages</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="s1">&#39;de&#39;</span><span class="p">,</span> <span class="s1">&#39;es&#39;</span><span class="p">,</span> <span class="s1">&#39;pt&#39;</span><span class="p">,</span> <span class="s1">&#39;fr&#39;</span><span class="p">]</span>
+    <span class="n">valid_languages</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="s1">&#39;de&#39;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">,</span> <span class="n">api_key</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API Class Initializer.</span>
 
@@ -120,13 +121,15 @@
 <span class="sd">        ----------</span>
 <span class="sd">        language : str</span>
 <span class="sd">            Content-Language for API calls (mainly relevant for error messages), either &quot;de&quot; or &quot;en&quot;</span>
+<span class="sd">        api_key: str</span>
+<span class="sd">            API key to authenticate to the Caplena API, if you don&#39;t have a key, please contact support@caplena.com</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CaplenaAPI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">csrftoken</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">authenticated</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span> <span class="o">=</span> <span class="s2">&quot;https://api.caplena.com/api&quot;</span>
 
@@ -166,7 +169,7 @@
             <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Accept-Language&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">language</span><span class="p">,</span>
-            <span class="s2">&quot;X-CSRFTOKEN&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">csrftoken</span><span class="p">,</span>
+            <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="s2">&quot;apikey </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">),</span>
             <span class="s2">&quot;Referer&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">headers</span>
@@ -209,7 +212,7 @@
 <span class="sd">            Can contain all kind of JSON-serializeable objects, i.e. (in python terms)</span>
 <span class="sd">            string|float|int|long|list|dictionary|bool|none</span>
 <span class="sd">        publicmethod : bool</span>
-<span class="sd">            Flag indicating if authentication / csrftoken is required for this API method.</span>
+<span class="sd">            Flag indicating if authentication is required for this API method.</span>
 <span class="sd">            Only set to True for public endpoints, such as `login`</span>
 <span class="sd">            (optional)</span>
 
@@ -220,52 +223,13 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">publicmethod</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csrftoken</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">authenticated</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="s2">&quot;CSRF-Token / authentication not set. Call login(..) before invoking other API calls&quot;</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">publicmethod</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;API key not provided. Provide valid API key when instantiating CaplenaAPI&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="p">,</span> <span class="n">method</span><span class="p">)(</span>
             <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">baseURI</span><span class="p">,</span> <span class="n">apiURI</span><span class="p">),</span>
             <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">ComplexEncoder</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getHeaders</span><span class="p">()</span>
         <span class="p">)</span>
-
-<div class="viewcode-block" id="CaplenaAPI.login"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.login">[docs]</a>    <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        API method to authenticate user.</span>
-
-<span class="sd">        Validates email &amp; password credentials with server.</span>
-<span class="sd">        If the login is successful, all subsequent API calls will be made as this user.</span>
-<span class="sd">        The email &amp; password are not saved, for authentication the session cookie is relevant.</span>
-<span class="sd">        We also use this function to retrieve the CSRF-Token from the cookies.</span>
-<span class="sd">        (see `_getHeaders()` for more information on the CSRF-Token)</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        email : str</span>
-<span class="sd">            Email of the user to be logged in</span>
-<span class="sd">        password : str</span>
-<span class="sd">            Password of the user to be logged in</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        success : bool</span>
-<span class="sd">            True if login was successful, `False` otherwise</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span>
-            <span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;/auth/login/&#39;</span><span class="p">,</span> <span class="p">{</span>
-                <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">email</span><span class="p">,</span>
-                <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="n">password</span>
-            <span class="p">},</span> <span class="n">publicmethod</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">csrftoken</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;csrftoken&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">authenticated</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="CaplenaAPI.listProjects"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.listProjects">[docs]</a>    <span class="k">def</span> <span class="nf">listProjects</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -274,8 +238,6 @@
 <span class="sd">        List all projects of the user.</span>
 
 <span class="sd">        *Note:* The returned projects contain global meta information of the projects *and* their questions, but not the response texts.</span>
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -300,8 +262,6 @@
 <span class="sd">        List contains all projects belonging to user, as well as Caplena provided models.</span>
 
 <span class="sd">        *Note:* The returned projects only contain basic meta information on the project and their questions, but not the response texts. To get more detailed information about a certain project call the `listprojects` method.</span>
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -326,8 +286,6 @@
 <span class="sd">        List all questions of the user.</span>
 
 <span class="sd">        *Note:* The returned questions only contain global meta information of the questions and not the response texts.</span>
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -352,8 +310,6 @@
 <span class="sd">        Get question by ID.</span>
 
 <span class="sd">        *Note:* The returned questions only contain meta information of the question and not the response texts.</span>
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -378,8 +334,6 @@
 <span class="sd">        Get project by ID.</span>
 
 <span class="sd">        *Note:* The returned questions only contain meta information of the question and not the response texts.</span>
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -413,8 +367,6 @@
 <span class="sd">        API method to create a new project</span>
 
 <span class="sd">        *Note:*</span>
-<span class="sd">        * For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 <span class="sd">        * When creating a new project you can also create questions and rows belonging to it.</span>
 <span class="sd">        * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an</span>
 <span class="sd">        existing project.</span>
@@ -475,8 +427,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to add rows to a previously created project.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -512,8 +462,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to list all rows of a specific project.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -537,8 +485,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to list all answers of a specific question.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -567,8 +513,6 @@
 <span class="sd">        API method to request the AI-assistant to train itself based on coded answers of specified question. Only works</span>
 <span class="sd">        if at least 6 answers have been coded.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -597,8 +541,6 @@
 <span class="sd">        API method to get AI-coded codes and respective answers. Requires previous call to</span>
 <span class="sd">        :func:`~caplena_api_demo.CaplenaAPI.requestPredictions`.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -626,8 +568,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to delete question and its answers.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -651,8 +591,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to delete projects, its questions and corresponding answers.</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -676,8 +614,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to update question</span>
 
-<span class="sd">        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is</span>
-<span class="sd">        required beforehand</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -697,7 +633,35 @@
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">Question</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div></div>
+            <span class="k">return</span> <span class="n">Question</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="CaplenaAPI.updateAnswers"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.updateAnswers">[docs]</a>    <span class="k">def</span> <span class="nf">updateAnswers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">answers</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">request_training</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        API method to update question</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        question: question</span>
+<span class="sd">            modified question instance</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        question: Question</span>
+<span class="sd">            newly updated question instance</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">get_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;request_training&#39;</span><span class="p">:</span> <span class="n">request_training</span><span class="p">}</span>
+        <span class="n">get_params</span> <span class="o">=</span> <span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">get_params</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_makeRequest</span><span class="p">(</span>
+            <span class="s1">&#39;patch&#39;</span><span class="p">,</span> <span class="s1">&#39;/questions/</span><span class="si">{}</span><span class="s1">/answers</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">get_params</span><span class="p">),</span>
+            <span class="p">[</span><span class="n">ans</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">ans</span> <span class="ow">in</span> <span class="n">answers</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">r</span><span class="o">.</span><span class="n">ok</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handleBadResponse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">Answer</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">el</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div></div>
 
 
 <div class="viewcode-block" id="Code"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Code">[docs]</a><span class="k">class</span> <span class="nc">Code</span><span class="p">(</span><span class="n">CaplenaObj</span><span class="p">):</span>
@@ -762,6 +726,7 @@
         <span class="n">smart_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">inherits_from</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">question_category</span><span class="o">=</span><span class="s1">&#39;NO&#39;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -772,6 +737,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">codebook</span> <span class="o">=</span> <span class="n">codebook</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inherits_from</span> <span class="o">=</span> <span class="n">inherits_from</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">question_category</span> <span class="o">=</span> <span class="n">question_category</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Question.from_json"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.Question.from_json">[docs]</a>    <span class="nd">@classmethod</span>
@@ -879,14 +845,7 @@
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="k">if</span> <span class="n">language</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CaplenaAPI</span><span class="o">.</span><span class="n">valid_languages</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid language &#39;</span><span class="si">{}</span><span class="s2">&#39;, accepted values are {{</span><span class="si">{}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">language</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CaplenaAPI</span><span class="o">.</span><span class="n">valid_languages</span><span class="p">)</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">language</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">language</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auxiliary_column_names</span> <span class="o">=</span> <span class="n">auxiliary_column_names</span>
         <span class="k">if</span> <span class="n">translated</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">translated</span> <span class="k">else</span> <span class="kc">False</span>
@@ -954,18 +913,10 @@
     <span class="c1"># &gt;&gt;&gt; password = os.environ[&quot;MY_CAPLENA_PASSWORD&quot;]</span>
     <span class="c1">###########################################################</span>
 
-    <span class="n">CAPLENA_EMAIL</span> <span class="o">=</span> <span class="s1">&#39;your_email@domain.com&#39;</span>
-    <span class="n">CAPLENA_PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;*************&#39;</span>
+    <span class="n">CAPLENA_API_KEY</span> <span class="o">=</span> <span class="s1">&#39;*******&#39;</span>
 
     <span class="c1"># Instantiate new instance of CaplenaAPI class</span>
-    <span class="n">api</span> <span class="o">=</span> <span class="n">CaplenaAPI</span><span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">)</span>
-
-    <span class="c1"># Call the login method before doing anything else</span>
-    <span class="c1"># This sets all session parameters required for further calls</span>
-    <span class="n">login_success</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">CAPLENA_EMAIL</span><span class="p">,</span> <span class="n">CAPLENA_PASSWORD</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">login_success</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Login Successful!&quot;</span><span class="p">)</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">CaplenaAPI</span><span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="n">CAPLENA_API_KEY</span><span class="p">)</span>
 
     <span class="c1">###########################################################</span>
     <span class="c1"># LIST PROJECTS: Get all existing projects of this user</span>
@@ -979,25 +930,6 @@
     <span class="c1"># CREATE PROJECT: Create new project with two questions and two rows (=&gt; 4 answers)</span>
     <span class="c1">###########################################################</span>
     <span class="n">n_questions</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="c1">#new_questions = [</span>
-    <span class="c1">#    {</span>
-    <span class="c1">#        &#39;name&#39;:</span>
-    <span class="c1">#        &#39;My new question {}&#39;.format(question_number),</span>
-    <span class="c1">#        &#39;description&#39;:</span>
-    <span class="c1">#        &#39;Some description of question {}&#39;.format(question_number),</span>
-    <span class="c1">#        &#39;codebook&#39;: [</span>
-    <span class="c1">#            {</span>
-    <span class="c1">#                &#39;id&#39;: 1,</span>
-    <span class="c1">#                &#39;label&#39;: &#39;Code 1 of question {}&#39;.format(question_number),</span>
-    <span class="c1">#                &#39;category&#39;: &#39;CATEGORY 1&#39;</span>
-    <span class="c1">#            }, {</span>
-    <span class="c1">#                &#39;id&#39;: 20,</span>
-    <span class="c1">#                &#39;label&#39;: &#39;Code 2 of question {}&#39;.format(question_number),</span>
-    <span class="c1">#                &#39;category&#39;: &#39;CATEGORY 2&#39;</span>
-    <span class="c1">#            }</span>
-    <span class="c1">#        ]</span>
-    <span class="c1">#    } for question_number in range(n_questions)</span>
-    <span class="c1">#]</span>
     <span class="n">new_questions</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">Question</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="s1">&#39;My new question </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question_number</span><span class="p">),</span>
@@ -1016,30 +948,6 @@
         <span class="p">)</span> <span class="k">for</span> <span class="n">question_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_questions</span><span class="p">)</span>
     <span class="p">]</span>
 
-    <span class="c1">#new_rows = [</span>
-    <span class="c1">#    # Row 1</span>
-    <span class="c1">#    {</span>
-    <span class="c1">#        # The values of the additional columns: Needs to be in same order as auxiliary_column_names of project</span>
-    <span class="c1">#        &#39;auxiliary_columns&#39;: [&#39;ID 1&#39;, &#39;Some other column value 1&#39;],</span>
-    <span class="c1">#        &#39;answers&#39;: [</span>
-    <span class="c1">#            {</span>
-    <span class="c1">#                &#39;text&#39;: &#39;Answer-text row 1 of question {}&#39;.format(question_number),</span>
-    <span class="c1">#                # We need to define to which question the answer belongs to</span>
-    <span class="c1">#                &#39;question&#39;: &#39;My new question {}&#39;.format(question_number)</span>
-    <span class="c1">#            } for question_number in range(n_questions)</span>
-    <span class="c1">#        ]</span>
-    <span class="c1">#    },</span>
-    <span class="c1">#    # Row 2</span>
-    <span class="c1">#    {</span>
-    <span class="c1">#        &#39;auxiliary_columns&#39;: [&#39;ID 2&#39;, &#39;Some other column value 2&#39;],</span>
-    <span class="c1">#        &#39;answers&#39;: [</span>
-    <span class="c1">#            {</span>
-    <span class="c1">#                &#39;text&#39;: &#39;Answer-text row 2 of question {}&#39;.format(question_number),</span>
-    <span class="c1">#                &#39;question&#39;: &#39;My new question {}&#39;.format(question_number)</span>
-    <span class="c1">#            } for question_number in range(n_questions)</span>
-    <span class="c1">#        ]</span>
-    <span class="c1">#    }</span>
-    <span class="c1">#]</span>
     <span class="n">new_rows</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">Row</span><span class="p">(</span>
             <span class="n">auxiliary_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ID 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Some other column value 1&#39;</span><span class="p">],</span>
@@ -1091,20 +999,6 @@
             <span class="p">]</span>
         <span class="p">)</span>
     <span class="p">]</span>
-    <span class="c1">#further_rows = [</span>
-    <span class="c1">#    {</span>
-    <span class="c1">#        &#39;auxiliary_columns&#39;: [&#39;ID 3&#39;, &#39;Some other column value 3&#39;],</span>
-    <span class="c1">#        &#39;answers&#39;: [</span>
-    <span class="c1">#            {</span>
-    <span class="c1">#                &#39;text&#39;: &#39;Answer-text row 3 of question 1&#39;,</span>
-    <span class="c1">#                &#39;question&#39;: question_id_1</span>
-    <span class="c1">#            }, {</span>
-    <span class="c1">#                &#39;text&#39;: &#39;Answer-text row 3 of question 2&#39;,</span>
-    <span class="c1">#                &#39;question&#39;: question_id_2</span>
-    <span class="c1">#            }</span>
-    <span class="c1">#        ]</span>
-    <span class="c1">#    }</span>
-    <span class="c1">#]</span>
 
     <span class="n">further_rows_result</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">addRowsToProject</span><span class="p">(</span><span class="n">new_project</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">further_rows</span><span class="p">,</span> <span class="n">request_training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">further_rows_result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
@@ -1142,9 +1036,9 @@
     <span class="c1">###########################################################</span>
 
     <span class="c1"># In a practical setting, there needs to be some time in between requesting the predictions</span>
-    <span class="c1"># and getting them back. In most cases, they will be ready within ~20s, but to be sure a value</span>
-    <span class="c1"># of around 250s is recommended</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+    <span class="c1"># and getting them back. In most cases, they will be ready within ~200s, but to be sure a value</span>
+    <span class="c1"># of around 600s is recommended</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">600</span><span class="p">)</span>
 
     <span class="n">predictions</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">getPredictions</span><span class="p">(</span><span class="n">question_id_1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">predictions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1168,6 +1062,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Codit API Demo</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
