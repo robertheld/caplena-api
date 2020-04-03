@@ -14,21 +14,12 @@ parser = argparse.ArgumentParser(
 )
 
 # parse credentials from environment variables
-email = os.environ.get('CAPLENA_EMAIL', None)
-pw = os.environ.get('CAPLENA_PW', None)
+caplena_api_key = os.environ.get('CAPLENA_API_KEY')
 
 # LOGIN
 print('Logging you in to Caplena.com')
 time.sleep(1)
-api = CaplenaAPI('en')
-
-if email is None:
-    email = input('Enter your email: ')
-if pw is None:
-    pw = getpass.getpass(prompt='Enter your password (not displayed): ')
-
-login = api.login(email, pw)
-print('Login successful')
+api = CaplenaAPI('en', api_key)
 
 
 class ProjectExistsValidator(Validator):

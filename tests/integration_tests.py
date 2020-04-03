@@ -4,15 +4,17 @@ import pytest
 
 from src.caplena_api_demo import CaplenaAPI, Question, Row, Answer, Project, Code
 
-api = CaplenaAPI('en')
+caplena_api_key = os.environ.get('CAPLENA_API_KEY')
+api = CaplenaAPI('en', caplena_api_key)
 
 baseuri = os.environ.get('BASEURI')
-caplena_email = os.environ.get('CAPLENA_EMAIL')
-caplena_pw = os.environ.get('CAPLENA_PW')
 
 if baseuri:
     api.baseURI = baseuri
-api.login(caplena_email, caplena_pw)
+
+if os.environ.get('REPORT_ERRORS', False):
+    import sentry_sdk
+    sentry_sdk.init(os.environ.get('SENTRY_ENDPOINT'))
 
 
 def test_list_projects():
@@ -27,15 +29,20 @@ def test_update_question():
     codebook = [Code(id=1, label='test', category='A')]
     question_name = 'testq'
     question = Question(name=question_name, codebook=codebook)
-    rows = [Row(auxiliary_columns=[], answers=[Answer(text='test', question=question_name, reviewed=False)])]
-    proj = api.createProject('testproject', 'en', rows=rows, questions=[question], upload_async=False)
-    print(proj.id)
+    rows = [
+        Row(auxiliary_columns=[], answers=[Answer(text='test', question=question_name, reviewed=False)]),
+        Row(auxiliary_columns=[], answers=[Answer(text='test2', question=question_name, reviewed=False)])
+    ]
+    proj1 = api.createProject('testproject', 'en', rows=rows, questions=[question], upload_async=False)
+    proj2 = api.createProject('testproject', 'en', rows=rows, questions=[question], upload_async=False)
+    print(proj1.id)
+    print(proj2.id)
     print(api.listProjects())
-    q = proj.questions[0]
-    q.inherits_from = 1
+    q = proj2.questions[0]
+    q.inherits_from = proj1.questions[0].id
     print(q)
     q_new = api.updateQuestion(q)
-    assert q_new.inherits_from == 1
+    assert q_new.inherits_from == proj1.questions[0].id
 
 
 @pytest.mark.parametrize('run,upload_async', [(1, False), (2, True)])
@@ -167,7 +174,7 @@ def test_workflow(run, upload_async):
             _ = api.requestPredictions(question_id, request_svm_now=True)
 
             # wait for the predictions to arrive
-            MAX_PRED_TIME = 35
+            MAX_PRED_TIME = 600
             delay = 0
             predictions = None
             while predictions is None and delay <= MAX_PRED_TIME:

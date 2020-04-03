@@ -9,7 +9,7 @@ Steps to run:
     $ python --version
 2. Make sure you have installed the requests library (if not, install using `pip install requests`)
     $ pip install requests
-3. Adapt the `CODIT_EMAIL` and `CODIT_PASSWORD` variables at the bottom of this script
+3. Set the `CAPLENA_API_KEY` variable at the bottom of this script
 4. Call the script
     $ python caplena_api_demo.py
 
@@ -40,9 +40,7 @@ class CaplenaAPI(object):
     Example
     -------
     To call an API instantiate a CaplenaAPI object and then call its methods
-        >>> api = CaplenaAPI('de')
-        >>> api.login('my_username', 'my_password')
-        True
+        >>> api = CaplenaAPI('de', '$(API_KEY)')
         >>> api.listProjects()
         [{"name": "project 1",
          "questions": [{"name": "question A"}, ...]},
@@ -50,9 +48,9 @@ class CaplenaAPI(object):
         ]
 
     """
-    valid_languages = ['en', 'de', 'es', 'pt', 'fr']
+    valid_languages = ['en', 'de']
 
-    def __init__(self, language):
+    def __init__(self, language, api_key):
         """
         API Class Initializer.
 
@@ -64,13 +62,15 @@ class CaplenaAPI(object):
         ----------
         language : str
             Content-Language for API calls (mainly relevant for error messages), either "de" or "en"
+        api_key: str
+            API key to authenticate to the Caplena API, if you don't have a key, please contact support@caplena.com
 
         Returns
         -------
 
         """
         super(CaplenaAPI, self).__init__()
-        self.csrftoken = None
+        self.api_key = api_key
         self.authenticated = False
         self.baseURI = "https://api.caplena.com/api"
 
@@ -110,7 +110,7 @@ class CaplenaAPI(object):
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Accept-Language": self.language,
-            "X-CSRFTOKEN": self.csrftoken,
+            "Authorization": "apikey {}".format(self.api_key),
             "Referer": self.baseURI
         }
         return headers
@@ -153,7 +153,7 @@ class CaplenaAPI(object):
             Can contain all kind of JSON-serializeable objects, i.e. (in python terms)
             string|float|int|long|list|dictionary|bool|none
         publicmethod : bool
-            Flag indicating if authentication / csrftoken is required for this API method.
+            Flag indicating if authentication is required for this API method.
             Only set to True for public endpoints, such as `login`
             (optional)
 
@@ -164,52 +164,13 @@ class CaplenaAPI(object):
 
         """
 
-        if not publicmethod and (self.csrftoken is None or not self.authenticated):
-            raise Exception(
-                "CSRF-Token / authentication not set. Call login(..) before invoking other API calls"
-            )
+        if not publicmethod and (self.api_key is None):
+            raise Exception("API key not provided. Provide valid API key when instantiating CaplenaAPI")
         return getattr(self.sess, method)(
             "{}{}".format(self.baseURI, apiURI),
             data=json.dumps(data, cls=ComplexEncoder) if data else None,
             headers=self._getHeaders()
         )
-
-    def login(self, email, password):
-        """
-        API method to authenticate user.
-
-        Validates email & password credentials with server.
-        If the login is successful, all subsequent API calls will be made as this user.
-        The email & password are not saved, for authentication the session cookie is relevant.
-        We also use this function to retrieve the CSRF-Token from the cookies.
-        (see `_getHeaders()` for more information on the CSRF-Token)
-
-        Parameters
-        ----------
-        email : str
-            Email of the user to be logged in
-        password : str
-            Password of the user to be logged in
-
-        Returns
-        -------
-        success : bool
-            True if login was successful, `False` otherwise
-
-        """
-        r = self._makeRequest(
-            'post', '/auth/login/', {
-                "email": email,
-                "password": password
-            }, publicmethod=True
-        )
-
-        if (not r.ok):
-            return self._handleBadResponse(r)
-        else:
-            self.csrftoken = self.sess.cookies['csrftoken']
-            self.authenticated = True
-            return True
 
     def listProjects(self):
         """
@@ -218,8 +179,6 @@ class CaplenaAPI(object):
         List all projects of the user.
 
         *Note:* The returned projects contain global meta information of the projects *and* their questions, but not the response texts.
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -244,8 +203,6 @@ class CaplenaAPI(object):
         List contains all projects belonging to user, as well as Caplena provided models.
 
         *Note:* The returned projects only contain basic meta information on the project and their questions, but not the response texts. To get more detailed information about a certain project call the `listprojects` method.
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -270,8 +227,6 @@ class CaplenaAPI(object):
         List all questions of the user.
 
         *Note:* The returned questions only contain global meta information of the questions and not the response texts.
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -296,8 +251,6 @@ class CaplenaAPI(object):
         Get question by ID.
 
         *Note:* The returned questions only contain meta information of the question and not the response texts.
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -322,8 +275,6 @@ class CaplenaAPI(object):
         Get project by ID.
 
         *Note:* The returned questions only contain meta information of the question and not the response texts.
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -357,8 +308,6 @@ class CaplenaAPI(object):
         API method to create a new project
 
         *Note:*
-        * For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
         * When creating a new project you can also create questions and rows belonging to it.
         * Creating new questions is _only_ possible when creating a new project. Questions cannot be added to an
         existing project.
@@ -419,8 +368,6 @@ class CaplenaAPI(object):
         """
         API method to add rows to a previously created project.
 
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -456,8 +403,6 @@ class CaplenaAPI(object):
         """
         API method to list all rows of a specific project.
 
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -481,8 +426,6 @@ class CaplenaAPI(object):
         """
         API method to list all answers of a specific question.
 
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -511,8 +454,6 @@ class CaplenaAPI(object):
         API method to request the AI-assistant to train itself based on coded answers of specified question. Only works
         if at least 6 answers have been coded.
 
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -541,8 +482,6 @@ class CaplenaAPI(object):
         API method to get AI-coded codes and respective answers. Requires previous call to
         :func:`~caplena_api_demo.CaplenaAPI.requestPredictions`.
 
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -570,8 +509,6 @@ class CaplenaAPI(object):
         """
         API method to delete question and its answers.
 
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -595,8 +532,6 @@ class CaplenaAPI(object):
         """
         API method to delete projects, its questions and corresponding answers.
 
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -620,8 +555,6 @@ class CaplenaAPI(object):
         """
         API method to update question
 
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -643,13 +576,10 @@ class CaplenaAPI(object):
         else:
             return Question.from_json(r.json())
 
-
     def updateAnswers(self, answers, question, request_training=False):
         """
         API method to update question
 
-        *Note:* For this method to work, a successfull call to :func:`~caplena_api_demo.CaplenaAPI.login` is
-        required beforehand
 
         Parameters
         ----------
@@ -664,7 +594,10 @@ class CaplenaAPI(object):
         """
         get_params = {'request_training': request_training}
         get_params = '?' + urlencode(get_params)
-        r = self._makeRequest('patch', '/questions/{}/answers{}'.format(question.id, get_params), [ans.to_dict() for ans in answers])
+        r = self._makeRequest(
+            'patch', '/questions/{}/answers{}'.format(question.id, get_params),
+            [ans.to_dict() for ans in answers]
+        )
 
         if (not r.ok):
             return self._handleBadResponse(r)
@@ -853,14 +786,7 @@ class Project(CaplenaObj):
         **kwargs
     ):
         self.name = name
-        if language not in CaplenaAPI.valid_languages:
-            raise ValueError(
-                "Invalid language '{}', accepted values are {{{}}}".format(
-                    language, ",".join(CaplenaAPI.valid_languages)
-                )
-            )
-        else:
-            self.language = language
+        self.language = language
         self.auxiliary_column_names = auxiliary_column_names
         if translated:
             self.translate = True if translated else False
@@ -928,18 +854,10 @@ if __name__ == '__main__':
     # >>> password = os.environ["MY_CAPLENA_PASSWORD"]
     ###########################################################
 
-    CAPLENA_EMAIL = 'your_email@domain.com'
-    CAPLENA_PASSWORD = '*************'
+    CAPLENA_API_KEY = '*******'
 
     # Instantiate new instance of CaplenaAPI class
-    api = CaplenaAPI('en')
-
-    # Call the login method before doing anything else
-    # This sets all session parameters required for further calls
-    login_success = api.login(CAPLENA_EMAIL, CAPLENA_PASSWORD)
-
-    if login_success:
-        print("Login Successful!")
+    api = CaplenaAPI('en', CAPLENA_API_KEY)
 
     ###########################################################
     # LIST PROJECTS: Get all existing projects of this user
@@ -953,25 +871,6 @@ if __name__ == '__main__':
     # CREATE PROJECT: Create new project with two questions and two rows (=> 4 answers)
     ###########################################################
     n_questions = 2
-    #new_questions = [
-    #    {
-    #        'name':
-    #        'My new question {}'.format(question_number),
-    #        'description':
-    #        'Some description of question {}'.format(question_number),
-    #        'codebook': [
-    #            {
-    #                'id': 1,
-    #                'label': 'Code 1 of question {}'.format(question_number),
-    #                'category': 'CATEGORY 1'
-    #            }, {
-    #                'id': 20,
-    #                'label': 'Code 2 of question {}'.format(question_number),
-    #                'category': 'CATEGORY 2'
-    #            }
-    #        ]
-    #    } for question_number in range(n_questions)
-    #]
     new_questions = [
         Question(
             name='My new question {}'.format(question_number),
@@ -990,30 +889,6 @@ if __name__ == '__main__':
         ) for question_number in range(n_questions)
     ]
 
-    #new_rows = [
-    #    # Row 1
-    #    {
-    #        # The values of the additional columns: Needs to be in same order as auxiliary_column_names of project
-    #        'auxiliary_columns': ['ID 1', 'Some other column value 1'],
-    #        'answers': [
-    #            {
-    #                'text': 'Answer-text row 1 of question {}'.format(question_number),
-    #                # We need to define to which question the answer belongs to
-    #                'question': 'My new question {}'.format(question_number)
-    #            } for question_number in range(n_questions)
-    #        ]
-    #    },
-    #    # Row 2
-    #    {
-    #        'auxiliary_columns': ['ID 2', 'Some other column value 2'],
-    #        'answers': [
-    #            {
-    #                'text': 'Answer-text row 2 of question {}'.format(question_number),
-    #                'question': 'My new question {}'.format(question_number)
-    #            } for question_number in range(n_questions)
-    #        ]
-    #    }
-    #]
     new_rows = [
         Row(
             auxiliary_columns=['ID 1', 'Some other column value 1'],
@@ -1065,20 +940,6 @@ if __name__ == '__main__':
             ]
         )
     ]
-    #further_rows = [
-    #    {
-    #        'auxiliary_columns': ['ID 3', 'Some other column value 3'],
-    #        'answers': [
-    #            {
-    #                'text': 'Answer-text row 3 of question 1',
-    #                'question': question_id_1
-    #            }, {
-    #                'text': 'Answer-text row 3 of question 2',
-    #                'question': question_id_2
-    #            }
-    #        ]
-    #    }
-    #]
 
     further_rows_result = api.addRowsToProject(new_project.id, further_rows, request_training=False)
     if further_rows_result is not False:
@@ -1116,9 +977,9 @@ if __name__ == '__main__':
     ###########################################################
 
     # In a practical setting, there needs to be some time in between requesting the predictions
-    # and getting them back. In most cases, they will be ready within ~20s, but to be sure a value
-    # of around 250s is recommended
-    time.sleep(400)
+    # and getting them back. In most cases, they will be ready within ~200s, but to be sure a value
+    # of around 600s is recommended
+    time.sleep(600)
 
     predictions = api.getPredictions(question_id_1)
     if predictions is None:
