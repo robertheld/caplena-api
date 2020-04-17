@@ -13,7 +13,7 @@ import time
 
 from src.caplena_api_demo import CaplenaAPI, Project, Question, Answer, Row, Code
 
-BATCH_SIZE = 2000
+BATCH_SIZE = 20000
 
 parser = argparse.ArgumentParser(
     description=
@@ -461,7 +461,6 @@ if __name__ == "__main__":
                 answer_up['source_language'] = answer['source_language']
             answers_up.append(answer_up)
         row_data.append({'auxiliary_columns': aux_column, 'answers': answers_up})
-    print(row_data[:10])
     time.sleep(2)
     # parse credentials from environment variables
     caplena_api_key = os.environ.get('CAPLENA_API_KEY')
@@ -529,11 +528,7 @@ if __name__ == "__main__":
     print('Adding {} answers to project {}'.format(len(rows), project_id))
     # batch answers for large surveys in order not to hit the limit
     if len(rows) < BATCH_SIZE:
-        new_answers = api.addRowsToProject(project_id, rows)
-        if new_answers is not False:
-            print("Added {} new rows to project {}".format(len(new_answers), project_id))
-        else:
-            print('error', new_answers)
+        api.addRowsToProject(project_id, rows)
     else:
         batch_number = 0
         j = 0
@@ -541,14 +536,6 @@ if __name__ == "__main__":
             print('Adding batch {}'.format(batch_number))
             min_idx = j
             max_idx = j + BATCH_SIZE
-            new_answers = api.addRowsToProject(project_id, rows[min_idx:max_idx])
+            api.addRowsToProject(project_id, rows[min_idx:max_idx])
             j = max_idx
-            if new_answers is not False:
-                print(
-                    "Added batch {} with {} new rows to project {}".format(
-                        batch_number, len(new_answers), project_id
-                    )
-                )
-            else:
-                print('error on batch {}: {}'.format(batch_number, new_answers))
             batch_number += 1

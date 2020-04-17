@@ -301,7 +301,7 @@ class CaplenaAPI(object):
         questions=[],
         rows=[],
         translation_engine='GT',
-        upload_async=False,
+        upload_async=True,
         request_training=True
     ):
         """
@@ -333,7 +333,8 @@ class CaplenaAPI(object):
         rows : list(:class:`.Row`)
             List of objects of type Row
         async : bool
-            If true, send async request, required if uploading more than 2000 rows at once
+            If true, send async request, required if uploading more than 20 rows at once or if uploading answers
+            with `reviewed=True`
         request_training : bool
             If true, automatically request training after uploading answers
         translation_engine : str
@@ -364,7 +365,7 @@ class CaplenaAPI(object):
         else:
             return Project.from_json(r.json())
 
-    def addRowsToProject(self, project_id, rows, upload_async=False, request_training=True):
+    def addRowsToProject(self, project_id, rows, upload_async=True, request_training=True):
         """
         API method to add rows to a previously created project.
 
@@ -376,7 +377,8 @@ class CaplenaAPI(object):
         rows : list(:class:`.Row`)
             List of objects of type Row
         async : bool
-            If true, send async request, required if uploading more than 2000 rows at once
+            If true, send async request, required if uploading more than 20 rows at once or if uploading answers
+            with `reviewed=True`
         request_training : bool
             If true, automatically request training after uploading answers
 

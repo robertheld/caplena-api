@@ -45,8 +45,101 @@ def test_update_question():
     assert q_new.inherits_from == proj1.questions[0].id
 
 
-@pytest.mark.parametrize('run,upload_async', [(1, False), (2, True)])
-def test_workflow(run, upload_async):
+def test_sync_workflow():
+    codebook = [
+        {
+            'id': 1,
+            'label': 'Code 1',
+            'category': 'CATEGORY 1'
+        }, {
+            'id': 20,
+            'label': 'Code 2',
+            'category': 'CATEGORY 2'
+        }
+    ]
+    questions = [{'name': 'Question 1', 'codebook': codebook}]
+    # make sure to have at least 15 answers reviewed to enble predictions
+    rows_init = [
+                    {
+                        "answers":
+                            [{
+                                "text": "Answer-text 1",
+                                "question": "Question 1"
+                            }],
+                        "auxiliary_columns": ["ID 1", "Some other column value 1"]
+                        # The values of the additional columns: Needs to be in same order as auxiliary_column_names of survey
+                    },
+                    {
+                        "answers": [{
+                            "text": "Answer-text 2",
+                            "question": "Question 1"
+                        }],
+                        "auxiliary_columns": ["ID 1", "Some other column value 1"]
+                    },
+                    {
+                        "answers": [{
+                            "text": "Answer-text 3",
+                            "question": "Question 1"
+                        }],
+                        "auxiliary_columns": ["ID 1", "Some other column value 1"]
+                    }
+    ]
+    num_projects_before = len(api.listProjects())
+    questions = [Question.from_json(q) for q in questions]
+    rows_init = [Row.from_json(row_init) for row_init in rows_init]
+    new_project = api.createProject(
+        name="My new project",
+        language="de",
+        auxiliary_column_names=['ID', 'some other column'],
+        translate=True,
+        questions=questions,
+        rows=rows_init,
+        upload_async=False,
+        request_training=True
+    )
+    assert isinstance(new_project, Project)
+
+    num_projects_after = len(api.listProjects())
+    assert num_projects_after == num_projects_before + 1
+    assert len(new_project.questions) == 1
+    question_id = new_project.questions[0].id
+    n_not_reviewed = len([row for row in rows_init if not row.answers[0].reviewed])
+    assert new_project.rows is not None
+    assert len(new_project.rows) == len(rows_init)
+
+    additional_rows = [
+        {
+            "answers": [{
+                "text": "Answer-text 1 new data",
+                "question": question_id,
+                "reviewed": False
+            }],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
+            # The values of the additional columns: Needs to be in same order as auxiliary_column_names of survey
+        },
+        {
+            "answers": [{
+                "text": "Answer-text 2 new data",
+                "question": question_id,
+                "reviewed": False
+            }],
+            "auxiliary_columns": ["ID 1", "Some other column value 1"]
+        }
+    ]
+    try:
+        new_answers = api.addRowsToProject(
+            new_project.id, [Row.from_json(r) for r in additional_rows],
+            upload_async=False,
+            request_training=True
+        )
+        answers = api.listAnswers(question_id, no_group=True)
+        assert len(rows_init) + len(additional_rows) == len(answers)
+    finally:
+        _ = api.deleteProject(new_project.id)
+        assert num_projects_before == len(api.listProjects())
+
+
+def test_workflow_async():
     codebook = [
         {
             'id': 1,
@@ -132,8 +225,7 @@ def test_workflow(run, upload_async):
             "answers": [{
                 "text": "Answer-text 8",
                 "question": "Question 1",
-                "codes": [1],
-                "reviewed": True
+                "reviewed": False
             }],
             "auxiliary_columns": ["ID 1", "Some other column value 1"]
         },
@@ -141,12 +233,11 @@ def test_workflow(run, upload_async):
             "answers": [{
                 "text": "Answer-text 9",
                 "question": "Question 1",
-                "codes": [1],
                 "reviewed": False
             }],
             "auxiliary_columns": ["ID 1", "Some other column value 1"]
         }
-    ] * 3
+    ]
     num_projects_before = len(api.listProjects())
     questions = [Question.from_json(q) for q in questions]
     rows_init = [Row.from_json(row_init) for row_init in rows_init]
@@ -157,35 +248,22 @@ def test_workflow(run, upload_async):
         translate=True,
         questions=questions,
         rows=rows_init,
-        upload_async=upload_async,
-        request_training=False
+        upload_async=True,
+        request_training=True
     )
     assert isinstance(new_project, Project)
     try:
-        if upload_async:
-            time.sleep(40)
+        # wait a bit since this is async upload
+        time.sleep(10)
         num_projects_after = len(api.listProjects())
         assert num_projects_after == num_projects_before + 1
         assert len(new_project.questions) == 1
+        created_rows = api.listRows(new_project.id)
         question_id = new_project.questions[0].id
-        # only request training for one workflow as it's exactly the same and creates load
-        if run == 1:
 
-            _ = api.requestPredictions(question_id, request_svm_now=True)
-
-            # wait for the predictions to arrive
-            MAX_PRED_TIME = 600
-            delay = 0
-            predictions = None
-            while predictions is None and delay <= MAX_PRED_TIME:
-                predictions = api.getPredictions(question_id)
-                timestep = 5
-                time.sleep(timestep)
-                delay = delay + timestep
-
-            n_not_reviewed = len([row for row in rows_init if not row.answers[0].reviewed])
-            assert predictions is not None
-            assert len(predictions.answers) == n_not_reviewed
+        n_not_reviewed_init = len([row for row in rows_init if not row.answers[0].reviewed])
+        n_not_reviewed_after_create = len([row for row in created_rows if not row.answers[0].reviewed])
+        assert n_not_reviewed_after_create == n_not_reviewed_init
 
         additional_rows = [
             {
@@ -206,13 +284,14 @@ def test_workflow(run, upload_async):
                 "auxiliary_columns": ["ID 1", "Some other column value 1"]
             }
         ]
-        new_answers = api.addRowsToProject(
+        new_rows = api.addRowsToProject(
             new_project.id, [Row.from_json(r) for r in additional_rows],
-            upload_async=upload_async,
+            upload_async=True,
             request_training=False
         )
-        if upload_async:
-            time.sleep(30)
+        print(new_rows)
+        assert 1 == 0
+        time.sleep(10)
         answers = api.listAnswers(question_id, no_group=True)
         assert len(rows_init) + len(additional_rows) == len(answers)
 

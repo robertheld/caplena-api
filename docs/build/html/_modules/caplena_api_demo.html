@@ -360,7 +360,7 @@
         <span class="n">questions</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">rows</span><span class="o">=</span><span class="p">[],</span>
         <span class="n">translation_engine</span><span class="o">=</span><span class="s1">&#39;GT&#39;</span><span class="p">,</span>
-        <span class="n">upload_async</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">upload_async</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">request_training</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -392,7 +392,8 @@
 <span class="sd">        rows : list(:class:`.Row`)</span>
 <span class="sd">            List of objects of type Row</span>
 <span class="sd">        async : bool</span>
-<span class="sd">            If true, send async request, required if uploading more than 2000 rows at once</span>
+<span class="sd">            If true, send async request, required if uploading more than 20 rows at once or if uploading answers</span>
+<span class="sd">            with `reviewed=True`</span>
 <span class="sd">        request_training : bool</span>
 <span class="sd">            If true, automatically request training after uploading answers</span>
 <span class="sd">        translation_engine : str</span>
@@ -423,7 +424,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Project</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="CaplenaAPI.addRowsToProject"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.addRowsToProject">[docs]</a>    <span class="k">def</span> <span class="nf">addRowsToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">upload_async</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">request_training</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="CaplenaAPI.addRowsToProject"><a class="viewcode-back" href="../caplena_api_demo.html#caplena_api_demo.CaplenaAPI.addRowsToProject">[docs]</a>    <span class="k">def</span> <span class="nf">addRowsToProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">upload_async</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">request_training</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        API method to add rows to a previously created project.</span>
 
@@ -435,7 +436,8 @@
 <span class="sd">        rows : list(:class:`.Row`)</span>
 <span class="sd">            List of objects of type Row</span>
 <span class="sd">        async : bool</span>
-<span class="sd">            If true, send async request, required if uploading more than 2000 rows at once</span>
+<span class="sd">            If true, send async request, required if uploading more than 20 rows at once or if uploading answers</span>
+<span class="sd">            with `reviewed=True`</span>
 <span class="sd">        request_training : bool</span>
 <span class="sd">            If true, automatically request training after uploading answers</span>
 

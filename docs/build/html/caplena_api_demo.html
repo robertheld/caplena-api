@@ -212,7 +212,7 @@ and purposes that are intended by the original author (Caplena GmbH).</p>
 
 <dl class="method">
 <dt id="caplena_api_demo.CaplenaAPI.createProject">
-<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>translation_engine='GT'</em>, <em>upload_async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.createProject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">createProject</code><span class="sig-paren">(</span><em>name</em>, <em>language</em>, <em>translate=False</em>, <em>auxiliary_column_names=[]</em>, <em>questions=[]</em>, <em>rows=[]</em>, <em>translation_engine='GT'</em>, <em>upload_async=True</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.createProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.createProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to create a new project</p>
 <p><em>Note:</em>
 * When creating a new project you can also create questions and rows belonging to it.
@@ -235,7 +235,8 @@ The number of elements in this list must match the number of elements
 in the <cite>auxiliary_columns</cite> field when adding rows.</li>
 <li><strong>questions</strong> (list(<a class="reference internal" href="#caplena_api_demo.Question" title="caplena_api_demo.Question"><code class="xref py py-class docutils literal notranslate"><span class="pre">Question</span></code></a>)) – List of questions to create</li>
 <li><strong>rows</strong> (list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal notranslate"><span class="pre">Row</span></code></a>)) – List of objects of type Row</li>
-<li><strong>async</strong> (<em>bool</em>) – If true, send async request, required if uploading more than 2000 rows at once</li>
+<li><strong>async</strong> (<em>bool</em>) – If true, send async request, required if uploading more than 20 rows at once or if uploading answers
+with <cite>reviewed=True</cite></li>
 <li><strong>request_training</strong> (<em>bool</em>) – If true, automatically request training after uploading answers</li>
 <li><strong>translation_engine</strong> (<em>str</em>) – Choice of translation engine, either ‘GT’ for Google Translate or ‘DL’ for DeepL</li>
 </ul>
@@ -253,7 +254,7 @@ in the <cite>auxiliary_columns</cite> field when adding rows.</li>
 
 <dl class="method">
 <dt id="caplena_api_demo.CaplenaAPI.addRowsToProject">
-<code class="descname">addRowsToProject</code><span class="sig-paren">(</span><em>project_id</em>, <em>rows</em>, <em>upload_async=False</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.addRowsToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.addRowsToProject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addRowsToProject</code><span class="sig-paren">(</span><em>project_id</em>, <em>rows</em>, <em>upload_async=True</em>, <em>request_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caplena_api_demo.html#CaplenaAPI.addRowsToProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caplena_api_demo.CaplenaAPI.addRowsToProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>API method to add rows to a previously created project.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -262,7 +263,8 @@ in the <cite>auxiliary_columns</cite> field when adding rows.</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>project_id</strong> (<em>int</em>) – ID of the project to add the rows to</li>
 <li><strong>rows</strong> (list(<a class="reference internal" href="#caplena_api_demo.Row" title="caplena_api_demo.Row"><code class="xref py py-class docutils literal notranslate"><span class="pre">Row</span></code></a>)) – List of objects of type Row</li>
-<li><strong>async</strong> (<em>bool</em>) – If true, send async request, required if uploading more than 2000 rows at once</li>
+<li><strong>async</strong> (<em>bool</em>) – If true, send async request, required if uploading more than 20 rows at once or if uploading answers
+with <cite>reviewed=True</cite></li>
 <li><strong>request_training</strong> (<em>bool</em>) – If true, automatically request training after uploading answers</li>
 </ul>
 </td>
