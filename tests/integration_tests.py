@@ -1,31 +1,30 @@
 import os, time
 
-import pytest
-
 from src.caplena_api_demo import CaplenaAPI, Question, Row, Answer, Project, Code
 
-caplena_api_key = os.environ.get('CAPLENA_API_KEY')
-api = CaplenaAPI('en', caplena_api_key)
 
-baseuri = os.environ.get('BASEURI')
+@pytest.fixture(scope="session")
+def client():
+    caplena_api_key = os.environ.get('CAPLENA_API_KEY')
+    api = CaplenaAPI('en', caplena_api_key)
 
-if baseuri:
-    api.baseURI = baseuri
+    baseuri = os.environ.get('BASEURI')
 
-if os.environ.get('REPORT_ERRORS', False):
-    import sentry_sdk
-    sentry_sdk.init(os.environ.get('SENTRY_ENDPOINT'))
+    if baseuri:
+        api.baseURI = baseuri
 
-
-def test_list_projects():
-    _ = api.listProjects()
+    return api
 
 
-def test_list_inheritable_projects():
-    _ = api.listInheritableProjects()
+def test_list_projects(client):
+    _ = client.listProjects()
 
 
-def test_update_question():
+def test_list_inheritable_projects(client):
+    _ = client.listInheritableProjects()
+
+
+def test_update_question(client):
     codebook = [Code(id=1, label='test', category='A')]
     question_name = 'testq'
     question = Question(name=question_name, codebook=codebook)
@@ -33,19 +32,15 @@ def test_update_question():
         Row(auxiliary_columns=[], answers=[Answer(text='test', question=question_name, reviewed=False)]),
         Row(auxiliary_columns=[], answers=[Answer(text='test2', question=question_name, reviewed=False)])
     ]
-    proj1 = api.createProject('testproject', 'en', rows=rows, questions=[question], upload_async=False)
-    proj2 = api.createProject('testproject', 'en', rows=rows, questions=[question], upload_async=False)
-    print(proj1.id)
-    print(proj2.id)
-    print(api.listProjects())
+    proj1 = client.createProject('testproject', 'en', rows=rows, questions=[question], upload_async=False)
+    proj2 = client.createProject('testproject', 'en', rows=rows, questions=[question], upload_async=False)
     q = proj2.questions[0]
     q.inherits_from = proj1.questions[0].id
-    print(q)
-    q_new = api.updateQuestion(q)
+    q_new = client.updateQuestion(q)
     assert q_new.inherits_from == proj1.questions[0].id
 
 
-def test_sync_workflow():
+def test_sync_workflow(client):
     codebook = [
         {
             'id': 1,
@@ -84,10 +79,10 @@ def test_sync_workflow():
                         "auxiliary_columns": ["ID 1", "Some other column value 1"]
                     }
     ]
-    num_projects_before = len(api.listProjects())
+    num_projects_before = len(client.listProjects())
     questions = [Question.from_json(q) for q in questions]
     rows_init = [Row.from_json(row_init) for row_init in rows_init]
-    new_project = api.createProject(
+    new_project = client.createProject(
         name="My new project",
         language="de",
         auxiliary_column_names=['ID', 'some other column'],
@@ -99,7 +94,7 @@ def test_sync_workflow():
     )
     assert isinstance(new_project, Project)
 
-    num_projects_after = len(api.listProjects())
+    num_projects_after = len(client.listProjects())
     assert num_projects_after == num_projects_before + 1
     assert len(new_project.questions) == 1
     question_id = new_project.questions[0].id
@@ -127,19 +122,19 @@ def test_sync_workflow():
         }
     ]
     try:
-        new_answers = api.addRowsToProject(
+        new_answers = client.addRowsToProject(
             new_project.id, [Row.from_json(r) for r in additional_rows],
             upload_async=False,
             request_training=True
         )
-        answers = api.listAnswers(question_id, no_group=True)
+        answers = client.listAnswers(question_id, no_group=True)
         assert len(rows_init) + len(additional_rows) == len(answers)
     finally:
-        _ = api.deleteProject(new_project.id)
-        assert num_projects_before == len(api.listProjects())
+        _ = client.deleteProject(new_project.id)
+        assert num_projects_before == len(client.listProjects())
 
 
-def test_workflow_async():
+def test_workflow_async(client):
     codebook = [
         {
             'id': 1,
@@ -238,10 +233,10 @@ def test_workflow_async():
             "auxiliary_columns": ["ID 1", "Some other column value 1"]
         }
     ]
-    num_projects_before = len(api.listProjects())
+    num_projects_before = len(client.listProjects())
     questions = [Question.from_json(q) for q in questions]
     rows_init = [Row.from_json(row_init) for row_init in rows_init]
-    new_project = api.createProject(
+    new_project = client.createProject(
         name="My new project",
         language="de",
         auxiliary_column_names=['ID', 'some other column'],
@@ -255,10 +250,10 @@ def test_workflow_async():
     try:
         # wait a bit since this is async upload
         time.sleep(10)
-        num_projects_after = len(api.listProjects())
+        num_projects_after = len(client.listProjects())
         assert num_projects_after == num_projects_before + 1
         assert len(new_project.questions) == 1
-        created_rows = api.listRows(new_project.id)
+        created_rows = client.listRows(new_project.id)
         question_id = new_project.questions[0].id
 
         n_not_reviewed_init = len([row for row in rows_init if not row.answers[0].reviewed])
@@ -284,17 +279,16 @@ def test_workflow_async():
                 "auxiliary_columns": ["ID 1", "Some other column value 1"]
             }
         ]
-        new_rows = api.addRowsToProject(
+        new_rows = client.addRowsToProject(
             new_project.id, [Row.from_json(r) for r in additional_rows],
             upload_async=True,
             request_training=False
         )
         print(new_rows)
-        assert 1 == 0
         time.sleep(10)
-        answers = api.listAnswers(question_id, no_group=True)
+        answers = client.listAnswers(question_id, no_group=True)
         assert len(rows_init) + len(additional_rows) == len(answers)
 
     finally:
-        _ = api.deleteProject(new_project.id)
-        assert num_projects_before == len(api.listProjects())
+        _ = client.deleteProject(new_project.id)
+        assert num_projects_before == len(client.listProjects())

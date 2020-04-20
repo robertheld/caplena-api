@@ -22,4 +22,4 @@ This project is licensed under the MIT License - see the [license](LICENSE.md) f
 
 # Copyright
 
-Copyright 2018 Caplena GmbH, Zurich.
+Copyright 2020 Caplena GmbH, Zurich.

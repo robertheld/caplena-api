@@ -154,7 +154,7 @@ class CaplenaAPI(object):
             string|float|int|long|list|dictionary|bool|none
         publicmethod : bool
             Flag indicating if authentication is required for this API method.
-            Only set to True for public endpoints, such as `login`
+            Only set to True for public endpoints
             (optional)
 
         Returns
