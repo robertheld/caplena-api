@@ -19,7 +19,7 @@ This script is not intended to be shared with third parties.
 Every receiving party agrees to use it solely for own purposes
 and purposes that are intended by the original author (Caplena GmbH).
 
-Copyright 2018 Caplena GmbH, Zurich.
+Copyright 2020 Caplena GmbH, Zurich.
 """
 import requests
 import time
