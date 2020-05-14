@@ -943,7 +943,7 @@ if __name__ == '__main__':
         )
     ]
 
-    further_rows_result = api.addRowsToProject(new_project.id, further_rows, request_training=False)
+    further_rows_result = api.addRowsToProject(new_project.id, further_rows, upload_async=False, request_training=False)
     if further_rows_result is not False:
         print("Added {} new row to project {}".format(len(further_rows), new_project.id))
 
