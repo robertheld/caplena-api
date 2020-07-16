@@ -19,15 +19,12 @@ caplena_api_key = os.environ.get('CAPLENA_API_KEY')
 # LOGIN
 print('Logging you in to Caplena.com')
 time.sleep(1)
-api = CaplenaAPI('en', api_key)
+api = CaplenaAPI('en', caplena_api_key)
 
 
 class ProjectExistsValidator(Validator):
     def validate(self, document):
-        try:
-            project_id = int(document.text)
-        except TypeError as e:
-            raise TypeError('Project ID must be an integer')
+        project_id = document.text
         _ = api.getProject(project_id)
 
 
