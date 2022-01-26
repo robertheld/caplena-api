@@ -1,6 +1,10 @@
 # caplena-api
 Client libraries for [Caplena](https://caplena.com)
 
+## IMPORTANT: DEPRECATION NOTICE
+This client library uses endpoints provided by the Caplena v1 API.
+__This version of the API is deprecated and will no longer be supported in the future. Visit our docs for the v2 API to benefit from additional funcitonality and long term stability and support: https://developers.caplena.com/__
+
 # Getting started
 
 ## Prerequisites
@@ -22,4 +26,4 @@ This project is licensed under the MIT License - see the [license](LICENSE.md) f
 
 # Copyright
 
-Copyright 2018 Caplena GmbH, Zurich.
+Copyright 2022 Caplena AG, Zurich.
